@@ -1,0 +1,212 @@
+// EDUKKARE - Schema do Banco de Dados
+// Sistema Inteligente para Educação Infantil
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum UserRole {
+  PROFESSOR
+  COORDENADOR
+  GESTOR
+  ADMIN
+}
+
+enum StudentShift {
+  MANHA
+  TARDE
+  INTEGRAL
+}
+
+enum EvidenceType {
+  FOTO
+  AUDIO
+  VIDEO
+  NOTA
+}
+
+enum EvaluationLevel {
+  NAO_REALIZOU     // 0-33%
+  PARCIALMENTE     // 34-66%
+  REALIZOU         // 67-100%
+}
+
+// Modelos
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  password      String
+  name          String
+  role          UserRole  @default(PROFESSOR)
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  classes       Class[]
+  evaluations   Evaluation[]
+  evidences     Evidence[]
+  
+  @@map("users")
+}
+
+model Student {
+  id            Int           @id @default(autoincrement())
+  name          String
+  birthDate     DateTime
+  responsavel   String
+  telefone      String?
+  email         String?
+  shift         StudentShift
+  active        Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  classId       Int
+  class         Class         @relation(fields: [classId], references: [id])
+  
+  evaluations   Evaluation[]
+  evidences     Evidence[]
+  aiInsights    AIInsight[]
+  
+  @@map("students")
+}
+
+model Class {
+  id            Int       @id @default(autoincrement())
+  name          String
+  age_group     String    // "Berçário I", "Infantil II", etc
+  shift         StudentShift
+  year          Int
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  teacherId     Int
+  teacher       User      @relation(fields: [teacherId], references: [id])
+  
+  students      Student[]
+  activities    Activity[]
+  
+  @@map("classes")
+}
+
+model BNCCCode {
+  id            Int       @id @default(autoincrement())
+  code          String    @unique // "EI02TS02"
+  name          String    // "Traços, sons, cores e formas"
+  description   String
+  field         String    // "Traços, sons, cores e formas"
+  age_group     String    // "Crianças pequenas (2-3 anos)"
+  createdAt     DateTime  @default(now())
+
+  activities    Activity[]
+  evaluations   Evaluation[]
+  
+  @@map("bncc_codes")
+}
+
+model Activity {
+  id            Int       @id @default(autoincrement())
+  title         String
+  description   String
+  duration      Int       // em minutos
+  materials     String?   // JSON com lista de materiais
+  objectives    String    // JSON com objetivos
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  bnccCodeId    Int
+  bnccCode      BNCCCode  @relation(fields: [bnccCodeId], references: [id])
+  
+  classId       Int?
+  class         Class?    @relation(fields: [classId], references: [id])
+  
+  evaluations   Evaluation[]
+  
+  @@map("activities")
+}
+
+model Evaluation {
+  id            Int             @id @default(autoincrement())
+  level         EvaluationLevel
+  percentage    Int             // 0-100
+  observations  String?
+  date          DateTime        @default(now())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  studentId     Int
+  student       Student         @relation(fields: [studentId], references: [id])
+  
+  activityId    Int
+  activity      Activity        @relation(fields: [activityId], references: [id])
+  
+  bnccCodeId    Int
+  bnccCode      BNCCCode        @relation(fields: [bnccCodeId], references: [id])
+  
+  teacherId     Int
+  teacher       User            @relation(fields: [teacherId], references: [id])
+  
+  evidences     Evidence[]
+  
+  @@map("evaluations")
+}
+
+model Evidence {
+  id            Int           @id @default(autoincrement())
+  type          EvidenceType
+  filename      String
+  filepath      String
+  filesize      Int?
+  mimeType      String?
+  transcription String?       // Para áudios
+  aiAnalysis    String?       // JSON com análise da IA
+  createdAt     DateTime      @default(now())
+
+  studentId     Int
+  student       Student       @relation(fields: [studentId], references: [id])
+  
+  teacherId     Int
+  teacher       User          @relation(fields: [teacherId], references: [id])
+  
+  evaluationId  Int?
+  evaluation    Evaluation?   @relation(fields: [evaluationId], references: [id])
+  
+  @@map("evidences")
+}
+
+model AIInsight {
+  id            Int       @id @default(autoincrement())
+  type          String    // "ATENCAO", "SUGESTAO", "MENSAGEM_FAMILIA"
+  title         String
+  content       String
+  priority      Int       @default(1)
+  accepted      Boolean   @default(false)
+  viewed        Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+
+  studentId     Int?
+  student       Student?  @relation(fields: [studentId], references: [id])
+  
+  @@map("ai_insights")
+}
+
+model DashboardMetric {
+  id            Int       @id @default(autoincrement())
+  metric        String    // "total_students", "bncc_coverage", etc
+  value         String
+  trend         String?
+  period        String    // "daily", "weekly", "monthly"
+  date          DateTime  @default(now())
+  metadata      String?   // JSON adicional
+
+  @@map("dashboard_metrics")
+}
