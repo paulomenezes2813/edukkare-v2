@@ -1,5 +1,5 @@
 import api from './api';
-import { Student, ApiResponse } from '../types';
+import type { Student, ApiResponse } from '../types';
 
 export const studentService = {
   async getAll(filters?: { classId?: number; shift?: string; active?: boolean }) {
