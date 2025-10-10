@@ -49,23 +49,19 @@ function App() {
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsLoggedIn(true);
-      loadActivities();
-      loadStudents();
-    }
+    // 🔓 LOGIN DESABILITADO - ACESSO DIRETO
+    // Simula login automático
+    localStorage.setItem('token', 'fake-token-dev');
+    localStorage.setItem('user', JSON.stringify({ name: 'Professor Dev', role: 'ADMIN' }));
+    setIsLoggedIn(true);
+    loadActivities();
+    loadStudents();
   }, []);
 
   const loadActivities = async () => {
     try {
-      const token = localStorage.getItem('token');
-      console.log('🔄 Carregando atividades... Token:', token ? 'OK' : 'Não encontrado');
-      const response = await fetch('/api/activities', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      console.log('🔄 Carregando atividades... (modo dev sem auth)');
+      const response = await fetch('/api/activities');
       const data = await response.json();
       console.log('📚 Resposta de atividades:', data);
       if (data.success) {
@@ -73,26 +69,52 @@ function App() {
         setActivities(data.data);
       } else {
         console.error('❌ Erro na resposta:', data);
+        // Em modo dev, cria dados fake se não conseguir carregar
+        console.log('📝 Criando atividades fake para desenvolvimento...');
+        setActivities([
+          { id: 1, title: 'Atividade de Teste 1', description: 'Descrição teste 1', duration: 30 },
+          { id: 2, title: 'Atividade de Teste 2', description: 'Descrição teste 2', duration: 45 },
+        ]);
       }
     } catch (err) {
       console.error('❌ Erro ao carregar atividades:', err);
+      // Em modo dev, cria dados fake
+      setActivities([
+        { id: 1, title: 'Atividade de Teste 1', description: 'Descrição teste 1', duration: 30 },
+        { id: 2, title: 'Atividade de Teste 2', description: 'Descrição teste 2', duration: 45 },
+      ]);
     }
   };
 
   const loadStudents = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('/api/students', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      console.log('🔄 Carregando alunos... (modo dev sem auth)');
+      const response = await fetch('/api/students');
       const data = await response.json();
       if (data.success) {
         setStudents(data.data);
+        console.log(`✅ ${data.data.length} alunos carregados`);
+      } else {
+        // Em modo dev, cria dados fake
+        console.log('📝 Criando alunos fake para desenvolvimento...');
+        setStudents([
+          { id: 1, name: 'João Pedro', birthDate: '2022-03-15', shift: 'MANHA' },
+          { id: 2, name: 'Maria Silva', birthDate: '2022-07-22', shift: 'TARDE' },
+          { id: 3, name: 'Lucas Santos', birthDate: '2023-01-10', shift: 'MANHA' },
+          { id: 4, name: 'Ana Julia', birthDate: '2022-05-18', shift: 'MANHA' },
+          { id: 5, name: 'Pedro Henrique', birthDate: '2022-09-30', shift: 'TARDE' },
+        ]);
       }
     } catch (err) {
-      console.error('Erro ao carregar alunos:', err);
+      console.error('❌ Erro ao carregar alunos:', err);
+      // Em modo dev, cria dados fake
+      setStudents([
+        { id: 1, name: 'João Pedro', birthDate: '2022-03-15', shift: 'MANHA' },
+        { id: 2, name: 'Maria Silva', birthDate: '2022-07-22', shift: 'TARDE' },
+        { id: 3, name: 'Lucas Santos', birthDate: '2023-01-10', shift: 'MANHA' },
+        { id: 4, name: 'Ana Julia', birthDate: '2022-05-18', shift: 'MANHA' },
+        { id: 5, name: 'Pedro Henrique', birthDate: '2022-09-30', shift: 'TARDE' },
+      ]);
     }
   };
 
