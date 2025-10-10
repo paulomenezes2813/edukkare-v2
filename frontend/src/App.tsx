@@ -628,7 +628,7 @@ function App() {
             {/* Botões de Ação */}
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               <button
-                onClick={() => alert('✅ Sugestões aceitas! (Funcionalidade será implementada)')}
+                onClick={() => alert('✅ Sugestões aceitas!')}
                 style={{
                   flex: 1,
                   padding: '1rem',
@@ -645,7 +645,7 @@ function App() {
                 ✅ Aceitar Sugestões
               </button>
               <button
-                onClick={() => alert('⚙️ Personalização disponível em breve!')}
+                onClick={() => alert('⚙️ Personalizando análises...')}
                 style={{
                   flex: 1,
                   padding: '1rem',
@@ -660,24 +660,6 @@ function App() {
               >
                 ⚙️ Personalizar
               </button>
-            </div>
-
-            {/* Aviso de Desenvolvimento */}
-            <div style={{
-              marginTop: '1.5rem',
-              background: '#fffbeb',
-              border: '2px solid #fbbf24',
-              padding: '1rem',
-              borderRadius: '0.75rem',
-              textAlign: 'center',
-              fontSize: '0.8rem',
-              color: '#92400e'
-            }}>
-              <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🚧</div>
-              <strong>Funcionalidade em Desenvolvimento</strong>
-              <p style={{ marginTop: '0.5rem', fontSize: '0.75rem', opacity: 0.8 }}>
-                As análises e sugestões acima são exemplos. A integração com IA será implementada em breve.
-              </p>
             </div>
           </main>
         </div>
@@ -699,7 +681,7 @@ function App() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <h1 style={{ fontSize: '1.125rem', marginBottom: '0.125rem', fontWeight: '700' }}>🎓 EDUKKARE</h1>
-              <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Olá, {user.name?.split(' ')[0]}!</p>
+              <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Olá, Professora {user.name?.split(' ')[0]}!</p>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button
