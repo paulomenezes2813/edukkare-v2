@@ -469,8 +469,6 @@ function App() {
   }
 
     // Main Dashboard - Mobile First
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    
     // Tela do Assistente Inteligente
     if (showAIScreen) {
       return (
@@ -681,7 +679,7 @@ function App() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <h1 style={{ fontSize: '1.125rem', marginBottom: '0.125rem', fontWeight: '700' }}>🎓 EDUKKARE</h1>
-              <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Olá, Professora {user.name?.split(' ')[0]}!</p>
+              <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Olá, Professora</p>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button
