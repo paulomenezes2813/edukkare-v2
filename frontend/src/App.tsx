@@ -44,6 +44,7 @@ function App() {
   const [showNoteModal, setShowNoteModal] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const [capturedPhoto, setCapturedPhoto] = useState<CapturedPhoto | null>(null);
+  const [showAIScreen, setShowAIScreen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -467,43 +468,276 @@ function App() {
     );
   }
 
-  // Main Dashboard - Mobile First
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  
-  return (
-    <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
-      {/* Mobile Header - Fixed */}
-      <header style={{
-        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-        color: 'white',
-        padding: '1rem',
-        boxShadow: '0 2px 10px rgba(139, 92, 246, 0.3)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h1 style={{ fontSize: '1.125rem', marginBottom: '0.125rem', fontWeight: '700' }}>🎓 EDUKKARE</h1>
-            <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Olá, {user.name?.split(' ')[0]}!</p>
-          </div>
-          <button
-            onClick={handleLogout}
-            style={{
-              background: 'rgba(255,255,255,0.2)',
-              color: 'white',
-              border: 'none',
-              padding: '0.5rem 0.875rem',
-              borderRadius: '0.5rem',
-              cursor: 'pointer',
+    // Main Dashboard - Mobile First
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    
+    // Tela do Assistente Inteligente
+    if (showAIScreen) {
+      return (
+        <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
+          {/* Header */}
+          <header style={{
+            background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+            color: 'white',
+            padding: '1rem',
+            boxShadow: '0 2px 10px rgba(139, 92, 246, 0.3)',
+            position: 'sticky',
+            top: 0,
+            zIndex: 100
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <button
+                onClick={() => setShowAIScreen(false)}
+                style={{
+                  background: 'rgba(255,255,255,0.2)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.5rem',
+                  borderRadius: '0.5rem',
+                  cursor: 'pointer',
+                  fontSize: '1.125rem'
+                }}
+              >
+                ←
+              </button>
+              <h1 style={{ fontSize: '1.125rem', fontWeight: '700' }}>🤖 Assistente Inteligente</h1>
+              <div style={{ width: '2.5rem' }}></div>
+            </div>
+          </header>
+
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            {/* Análise da Semana */}
+            <div style={{
+              background: 'white',
+              padding: '1rem',
+              borderRadius: '1rem',
+              border: '2px solid #e2e8f0',
+              marginBottom: '1rem',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                <div style={{
+                  background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                  width: '3rem',
+                  height: '3rem',
+                  borderRadius: '1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.5rem'
+                }}>
+                  📊
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ color: '#1e293b', fontSize: '1rem', fontWeight: '700', marginBottom: '0.25rem' }}>
+                    Análise da Semana
+                  </h3>
+                  <p style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                    Baseado em 23 atividades registradas
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Atenção Necessária */}
+            <div style={{
+              background: 'white',
+              padding: '1rem',
+              borderRadius: '1rem',
+              border: '2px solid #fbbf24',
+              marginBottom: '1rem',
+              boxShadow: '0 2px 8px rgba(251, 191, 36, 0.2)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                <span style={{ fontSize: '1.25rem' }}>⚠️</span>
+                <h3 style={{ color: '#92400e', fontSize: '0.95rem', fontWeight: '700' }}>
+                  Atenção Necessária
+                </h3>
+              </div>
+              <p style={{ fontSize: '0.85rem', color: '#1e293b', lineHeight: '1.5' }}>
+                3 alunos (<strong>João Pedro</strong>, <strong>Maria Silva</strong>, <strong>Lucas Santos</strong>) 
+                demonstraram dificuldade em atividades de linguagem esta semana. Recomenda-se reforço com atividades de 
+                contação de histórias e jogos de vocabulário.
+              </p>
+            </div>
+
+            {/* Sugestão para Amanhã */}
+            <div style={{
+              background: 'white',
+              padding: '1rem',
+              borderRadius: '1rem',
+              border: '2px solid #10b981',
+              marginBottom: '1rem',
+              boxShadow: '0 2px 8px rgba(16, 185, 129, 0.2)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                <span style={{ fontSize: '1.25rem' }}>💡</span>
+                <h3 style={{ color: '#065f46', fontSize: '0.95rem', fontWeight: '700' }}>
+                  Sugestão para Amanhã
+                </h3>
+              </div>
+              <p style={{ fontSize: '0.85rem', color: '#1e293b', lineHeight: '1.5', marginBottom: '0.5rem' }}>
+                Com base no progresso atual, sugerimos a atividade <strong>"Caixa Sensorial"</strong> para trabalhar 
+                as habilidades <strong>EI02TS01</strong> e <strong>EI02CG02</strong>, focando no desenvolvimento 
+                tátil e coordenação motora.
+              </p>
+              <div style={{
+                background: '#f0fdf4',
+                padding: '0.75rem',
+                borderRadius: '0.5rem',
+                marginTop: '0.75rem'
+              }}>
+                <div style={{ fontSize: '0.75rem', color: '#065f46', fontWeight: '600', marginBottom: '0.25rem' }}>
+                  📖 Campo: Traços, sons, cores e formas
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#065f46' }}>
+                  ⏱️ Duração: 30-40 minutos
+                </div>
+              </div>
+            </div>
+
+            {/* Mensagem para Famílias */}
+            <div style={{
+              background: 'white',
+              padding: '1rem',
+              borderRadius: '1rem',
+              border: '2px solid #6366f1',
+              marginBottom: '1.5rem',
+              boxShadow: '0 2px 8px rgba(99, 102, 241, 0.2)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                <span style={{ fontSize: '1.25rem' }}>📧</span>
+                <h3 style={{ color: '#3730a3', fontSize: '0.95rem', fontWeight: '700' }}>
+                  Mensagem para Famílias
+                </h3>
+              </div>
+              <div style={{
+                background: '#eef2ff',
+                padding: '0.875rem',
+                borderRadius: '0.75rem',
+                fontSize: '0.85rem',
+                color: '#1e293b',
+                lineHeight: '1.6',
+                fontStyle: 'italic'
+              }}>
+                "João demonstrou grande evolução na coordenação motora fina! Sugerimos continuar com atividades de 
+                pintura e desenho em casa. Usar giz de cera grosso ajuda no desenvolvimento da pegada do lápis."
+              </div>
+            </div>
+
+            {/* Botões de Ação */}
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <button
+                onClick={() => alert('✅ Sugestões aceitas! (Funcionalidade será implementada)')}
+                style={{
+                  flex: 1,
+                  padding: '1rem',
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '0.75rem',
+                  fontSize: '0.95rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
+                }}
+              >
+                ✅ Aceitar Sugestões
+              </button>
+              <button
+                onClick={() => alert('⚙️ Personalização disponível em breve!')}
+                style={{
+                  flex: 1,
+                  padding: '1rem',
+                  background: 'white',
+                  color: '#64748b',
+                  border: '2px solid #e2e8f0',
+                  borderRadius: '0.75rem',
+                  fontSize: '0.95rem',
+                  fontWeight: '700',
+                  cursor: 'pointer'
+                }}
+              >
+                ⚙️ Personalizar
+              </button>
+            </div>
+
+            {/* Aviso de Desenvolvimento */}
+            <div style={{
+              marginTop: '1.5rem',
+              background: '#fffbeb',
+              border: '2px solid #fbbf24',
+              padding: '1rem',
+              borderRadius: '0.75rem',
+              textAlign: 'center',
               fontSize: '0.8rem',
-              fontWeight: '600'
-            }}
-          >
-            Sair
-          </button>
+              color: '#92400e'
+            }}>
+              <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🚧</div>
+              <strong>Funcionalidade em Desenvolvimento</strong>
+              <p style={{ marginTop: '0.5rem', fontSize: '0.75rem', opacity: 0.8 }}>
+                As análises e sugestões acima são exemplos. A integração com IA será implementada em breve.
+              </p>
+            </div>
+          </main>
         </div>
-      </header>
+      );
+    }
+    
+    return (
+      <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
+        {/* Mobile Header - Fixed */}
+        <header style={{
+          background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+          color: 'white',
+          padding: '1rem',
+          boxShadow: '0 2px 10px rgba(139, 92, 246, 0.3)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <h1 style={{ fontSize: '1.125rem', marginBottom: '0.125rem', fontWeight: '700' }}>🎓 EDUKKARE</h1>
+              <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Olá, {user.name?.split(' ')[0]}!</p>
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                onClick={() => setShowAIScreen(true)}
+                style={{
+                  background: 'rgba(255,255,255,0.2)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.5rem 0.875rem',
+                  borderRadius: '0.5rem',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.25rem'
+                }}
+              >
+                🤖
+              </button>
+              <button
+                onClick={handleLogout}
+                style={{
+                  background: 'rgba(255,255,255,0.2)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.5rem 0.875rem',
+                  borderRadius: '0.5rem',
+                  cursor: 'pointer',
+                  fontSize: '0.8rem',
+                  fontWeight: '600'
+                }}
+              >
+                Sair
+              </button>
+            </div>
+          </div>
+        </header>
 
       <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
         {/* Seleção de Atividade - Compacto */}
