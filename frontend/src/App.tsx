@@ -328,7 +328,12 @@ function App() {
 
   const transcribeAudio = async (audioBlob: Blob) => {
     try {
-      // Ativa o modal primeiro (mostrará "Transcrevendo...")
+      // Limpa outros estados para que a transcrição ocupe o espaço
+      setCapturedPhoto(null);
+      setShowCamera(false);
+      setShowNoteModal(false);
+      
+      // Ativa o modal de transcrição (mostrará "Transcrevendo...")
       setShowTranscriptionModal(true);
       setIsTranscribing(true);
       
@@ -1321,11 +1326,11 @@ function App() {
           </div>
         </div>
 
-        {/* Área de Interação - Câmera, Foto ou Anotação */}
-        {(showCamera || capturedPhoto || showNoteModal) && (
+        {/* Área de Interação - Câmera, Foto, Anotação ou Transcrição */}
+        {(showCamera || capturedPhoto || showNoteModal || showTranscriptionModal) && (
           <div style={{ marginBottom: '1.5rem' }}>
             <h2 style={{ marginBottom: '0.75rem', color: '#1e293b', fontSize: '1rem', fontWeight: '700' }}>
-              {showCamera ? '📸 Preview da Câmera' : capturedPhoto ? '📷 Foto Capturada' : '📝 Anotação'}
+              {showCamera ? '📸 Preview da Câmera' : capturedPhoto ? '📷 Foto Capturada' : showTranscriptionModal ? '🎤 Transcrição de Áudio' : '📝 Anotação'}
             </h2>
             
             <div style={{
@@ -1536,7 +1541,7 @@ function App() {
                 </div>
               )}
 
-              {/* Modal de Transcrição */}
+              {/* Transcrição */}
               {!showCamera && !capturedPhoto && showTranscriptionModal && (
                 <div>
                   <div style={{
@@ -1549,7 +1554,7 @@ function App() {
                     alignItems: 'center'
                   }}>
                     <div style={{ color: '#1e40af', fontWeight: '700', fontSize: '0.9rem' }}>
-                      🎤 Transcrição - {selectedStudent?.name}
+                      👶 {selectedStudent?.name}
                     </div>
                     <button
                       onClick={() => {
@@ -1592,7 +1597,8 @@ function App() {
                       <textarea
                         value={audioTranscription}
                         onChange={(e) => setAudioTranscription(e.target.value)}
-                        placeholder="A transcrição aparecerá aqui..."
+                        placeholder="A transcrição aparecerá aqui. Você pode editar se necessário..."
+                        autoFocus
                         style={{
                           width: '100%',
                           padding: '1rem',
