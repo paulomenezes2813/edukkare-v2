@@ -89,7 +89,11 @@ function App() {
 
   const loadActivities = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      // Se estiver no Railway, usa a URL do backend Railway
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
       const token = localStorage.getItem('token');
       console.log('🔄 Carregando atividades de:', `${API_URL}/activities`);
       const response = await fetch(`${API_URL}/activities`, {
@@ -121,7 +125,11 @@ function App() {
 
   const loadStudents = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      // Se estiver no Railway, usa a URL do backend Railway
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
       const token = localStorage.getItem('token');
       console.log('🔄 Carregando alunos de:', `${API_URL}/students`);
       const response = await fetch(`${API_URL}/students`, {
@@ -156,7 +164,11 @@ function App() {
     setLoading(true);
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      // Se estiver no Railway, usa a URL do backend Railway
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
       const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -317,7 +329,12 @@ function App() {
   const transcribeAudio = async (audioBlob: Blob) => {
     setIsTranscribing(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      // Se estiver no Railway, usa a URL do backend Railway
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      
       const token = localStorage.getItem('token');
       
       console.log('🎤 Iniciando transcrição...', {
@@ -325,7 +342,8 @@ function App() {
         blobType: audioBlob.type,
         studentId: selectedStudent?.id,
         activityId: selectedActivity?.id,
-        apiUrl: `${API_URL}/evidence/transcribe`
+        apiUrl: `${API_URL}/evidence/transcribe`,
+        hostname: window.location.hostname
       });
       
       const formData = new FormData();
