@@ -45,6 +45,7 @@ function App() {
   const [showCamera, setShowCamera] = useState(false);
   const [capturedPhoto, setCapturedPhoto] = useState<CapturedPhoto | null>(null);
   const [showAIScreen, setShowAIScreen] = useState(false);
+  const [proficiencyLevel, setProficiencyLevel] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -749,6 +750,7 @@ function App() {
                   const activity = activities.find(a => a.id === Number(e.target.value));
                   setSelectedActivity(activity || null);
                   setSelectedStudent(null);
+                  setProficiencyLevel(null); // Reset avaliação ao trocar de atividade
                 }}
                 style={{
                   width: '100%',
@@ -859,7 +861,10 @@ function App() {
               students.map(student => (
                 <div
                   key={student.id}
-                  onClick={() => setSelectedStudent(student)}
+                  onClick={() => {
+                    setSelectedStudent(student);
+                    setProficiencyLevel(null); // Reset avaliação ao trocar de aluno
+                  }}
                   style={{
                     padding: '0.5rem',
                     background: selectedStudent?.id === student.id ? 'linear-gradient(135deg, #8b5cf6, #ec4899)' : 'white',
@@ -903,6 +908,156 @@ function App() {
             fontWeight: '600'
           }}>
             ✅ {selectedStudent.name}
+          </div>
+        )}
+
+        {/* Avaliação Rápida - Níveis de Proficiência */}
+        {selectedStudent && selectedActivity && (
+          <div style={{ marginBottom: '1.5rem' }}>
+            <h2 style={{ marginBottom: '0.75rem', color: '#1e293b', fontSize: '1rem', fontWeight: '700' }}>
+              ⭐ 3. Avalie o Desempenho
+            </h2>
+            
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: '0.5rem'
+            }}>
+              {/* Realizou por completo */}
+              <div
+                onClick={() => setProficiencyLevel('completo')}
+                style={{
+                  padding: '1rem 0.5rem',
+                  background: proficiencyLevel === 'completo' ? 'linear-gradient(135deg, #10b981, #059669)' : 'white',
+                  border: proficiencyLevel === 'completo' ? 'none' : '2px solid #e2e8f0',
+                  borderRadius: '0.75rem',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  transition: 'all 0.2s',
+                  boxShadow: proficiencyLevel === 'completo' ? '0 4px 12px rgba(16, 185, 129, 0.3)' : '0 1px 3px rgba(0,0,0,0.05)'
+                }}
+              >
+                <div style={{ fontSize: '2.5rem', marginBottom: '0.25rem' }}>😊</div>
+                <div style={{
+                  fontSize: '0.65rem',
+                  fontWeight: '600',
+                  color: proficiencyLevel === 'completo' ? 'white' : '#1e293b',
+                  lineHeight: '1.2'
+                }}>
+                  Realizou<br/>Completo
+                </div>
+              </div>
+
+              {/* Realizou parcialmente */}
+              <div
+                onClick={() => setProficiencyLevel('parcial')}
+                style={{
+                  padding: '1rem 0.5rem',
+                  background: proficiencyLevel === 'parcial' ? 'linear-gradient(135deg, #3b82f6, #2563eb)' : 'white',
+                  border: proficiencyLevel === 'parcial' ? 'none' : '2px solid #e2e8f0',
+                  borderRadius: '0.75rem',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  transition: 'all 0.2s',
+                  boxShadow: proficiencyLevel === 'parcial' ? '0 4px 12px rgba(59, 130, 246, 0.3)' : '0 1px 3px rgba(0,0,0,0.05)'
+                }}
+              >
+                <div style={{ fontSize: '2.5rem', marginBottom: '0.25rem' }}>😐</div>
+                <div style={{
+                  fontSize: '0.65rem',
+                  fontWeight: '600',
+                  color: proficiencyLevel === 'parcial' ? 'white' : '#1e293b',
+                  lineHeight: '1.2'
+                }}>
+                  Realizou<br/>Parcial
+                </div>
+              </div>
+
+              {/* Em desenvolvimento */}
+              <div
+                onClick={() => setProficiencyLevel('desenvolvimento')}
+                style={{
+                  padding: '1rem 0.5rem',
+                  background: proficiencyLevel === 'desenvolvimento' ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'white',
+                  border: proficiencyLevel === 'desenvolvimento' ? 'none' : '2px solid #e2e8f0',
+                  borderRadius: '0.75rem',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  transition: 'all 0.2s',
+                  boxShadow: proficiencyLevel === 'desenvolvimento' ? '0 4px 12px rgba(245, 158, 11, 0.3)' : '0 1px 3px rgba(0,0,0,0.05)'
+                }}
+              >
+                <div style={{ fontSize: '2.5rem', marginBottom: '0.25rem' }}>😟</div>
+                <div style={{
+                  fontSize: '0.65rem',
+                  fontWeight: '600',
+                  color: proficiencyLevel === 'desenvolvimento' ? 'white' : '#1e293b',
+                  lineHeight: '1.2'
+                }}>
+                  Em<br/>Desenvolv.
+                </div>
+              </div>
+
+              {/* Não participou */}
+              <div
+                onClick={() => setProficiencyLevel('ausente')}
+                style={{
+                  padding: '1rem 0.5rem',
+                  background: proficiencyLevel === 'ausente' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 'white',
+                  border: proficiencyLevel === 'ausente' ? 'none' : '2px solid #e2e8f0',
+                  borderRadius: '0.75rem',
+                  cursor: 'pointer',
+                  textAlign: 'center',
+                  transition: 'all 0.2s',
+                  boxShadow: proficiencyLevel === 'ausente' ? '0 4px 12px rgba(239, 68, 68, 0.3)' : '0 1px 3px rgba(0,0,0,0.05)'
+                }}
+              >
+                <div style={{ fontSize: '2.5rem', marginBottom: '0.25rem' }}>❌</div>
+                <div style={{
+                  fontSize: '0.65rem',
+                  fontWeight: '600',
+                  color: proficiencyLevel === 'ausente' ? 'white' : '#1e293b',
+                  lineHeight: '1.2'
+                }}>
+                  Não<br/>Participou
+                </div>
+              </div>
+            </div>
+
+            {/* Descrição da Avaliação Selecionada */}
+            {proficiencyLevel && (
+              <div style={{
+                marginTop: '0.75rem',
+                padding: '0.75rem',
+                background: 
+                  proficiencyLevel === 'completo' ? '#f0fdf4' :
+                  proficiencyLevel === 'parcial' ? '#eff6ff' :
+                  proficiencyLevel === 'desenvolvimento' ? '#fffbeb' :
+                  '#fef2f2',
+                border: `2px solid ${
+                  proficiencyLevel === 'completo' ? '#86efac' :
+                  proficiencyLevel === 'parcial' ? '#93c5fd' :
+                  proficiencyLevel === 'desenvolvimento' ? '#fcd34d' :
+                  '#fca5a5'
+                }`,
+                borderRadius: '0.75rem',
+                fontSize: '0.75rem',
+                color: '#1e293b',
+                lineHeight: '1.5'
+              }}>
+                <strong>
+                  {proficiencyLevel === 'completo' && '😊 Realizou por completo'}
+                  {proficiencyLevel === 'parcial' && '😐 Realizou parcialmente'}
+                  {proficiencyLevel === 'desenvolvimento' && '😟 Em desenvolvimento'}
+                  {proficiencyLevel === 'ausente' && '❌ Não Participou'}
+                </strong>
+                <br />
+                {proficiencyLevel === 'completo' && 'A criança demonstrou interesse e engajamento'}
+                {proficiencyLevel === 'parcial' && 'A criança demonstrou interesse e engajamento parcial'}
+                {proficiencyLevel === 'desenvolvimento' && 'A criança não quis participar e nem engajar, mesmo estimulada'}
+                {proficiencyLevel === 'ausente' && 'A criança estava ausente da atividade/sala de aula'}
+              </div>
+            )}
           </div>
         )}
 
