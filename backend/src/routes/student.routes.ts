@@ -5,7 +5,8 @@ import { authMiddleware } from '../middlewares/auth.middleware';
 const router = Router();
 const studentController = new StudentController();
 
-router.use(authMiddleware);
+// TEMPORARIAMENTE DESABILITADO PARA DESENVOLVIMENTO
+// router.use(authMiddleware);
 
 router.get('/', (req, res) => studentController.list(req, res));
 router.get('/:id', (req, res) => studentController.getById(req, res));

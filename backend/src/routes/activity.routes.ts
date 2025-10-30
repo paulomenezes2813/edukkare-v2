@@ -5,7 +5,8 @@ import { getActivities, getActivityById } from '../controllers/activity.controll
 const router = Router();
 
 // Todas as rotas requerem autenticação
-router.use(authMiddleware);
+// TEMPORARIAMENTE DESABILITADO PARA DESENVOLVIMENTO
+// router.use(authMiddleware);
 
 router.get('/', getActivities);
 router.get('/:id', getActivityById);
