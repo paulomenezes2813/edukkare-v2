@@ -155,7 +155,7 @@ export class EvidenceController {
       if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-')) {
         try {
           console.log('🎤 Iniciando transcrição com Whisper API...');
-          const OpenAI = require('openai');
+          const { OpenAI } = require('openai');
           const fs = require('fs');
           
           const openai = new OpenAI({ 
@@ -164,7 +164,7 @@ export class EvidenceController {
           
           console.log('📁 Arquivo de áudio:', req.file.path);
           
-          // Método oficial da documentação OpenAI para Node.js
+          // Método oficial da documentação OpenAI v4 para Node.js
           const response = await openai.audio.transcriptions.create({
             file: fs.createReadStream(req.file.path),
             model: "whisper-1",
@@ -175,7 +175,7 @@ export class EvidenceController {
           console.log('✅ Transcrição realizada com sucesso:', transcription.substring(0, 50) + '...');
         } catch (whisperError: any) {
           console.error('❌ Erro ao usar Whisper API:', whisperError.message);
-          console.error('❌ Detalhes:', whisperError);
+          console.error('❌ Detalhes do erro completo:', JSON.stringify(whisperError, null, 2));
           transcription = `[Erro na transcrição automática: ${whisperError.message}]\n\nDigite aqui o que foi falado no áudio.`;
         }
       } else {
