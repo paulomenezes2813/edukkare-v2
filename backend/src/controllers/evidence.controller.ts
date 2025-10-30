@@ -155,7 +155,7 @@ export class EvidenceController {
       if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-')) {
         try {
           console.log('🎤 Iniciando transcrição com Whisper API...');
-          const { OpenAI } = require('openai');
+          const OpenAI = require('openai');
           const fs = require('fs');
           
           const openai = new OpenAI({ 
@@ -164,9 +164,14 @@ export class EvidenceController {
           
           console.log('📁 Arquivo de áudio:', req.file.path);
           
-          // Método oficial da documentação OpenAI v4 para Node.js
+          // Usar toFile helper do OpenAI SDK v4 (compatível com Node.js)
+          const audioFile = await OpenAI.toFile(
+            fs.createReadStream(req.file.path),
+            req.file.originalname || 'audio.webm'
+          );
+          
           const response = await openai.audio.transcriptions.create({
-            file: fs.createReadStream(req.file.path),
+            file: audioFile,
             model: "whisper-1",
             language: "pt"
           });
