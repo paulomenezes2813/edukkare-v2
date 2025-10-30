@@ -320,6 +320,14 @@ function App() {
       const API_URL = import.meta.env.VITE_API_URL || '/api';
       const token = localStorage.getItem('token');
       
+      console.log('🎤 Iniciando transcrição...', {
+        blobSize: audioBlob.size,
+        blobType: audioBlob.type,
+        studentId: selectedStudent?.id,
+        activityId: selectedActivity?.id,
+        apiUrl: `${API_URL}/evidence/transcribe`
+      });
+      
       const formData = new FormData();
       formData.append('audio', audioBlob, 'recording.webm');
       formData.append('studentId', selectedStudent?.id.toString() || '');
@@ -333,17 +341,26 @@ function App() {
         body: formData
       });
 
+      console.log('📡 Resposta do servidor:', {
+        status: response.status,
+        ok: response.ok,
+        statusText: response.statusText
+      });
+
       const data = await response.json();
+      console.log('📝 Dados recebidos:', data);
       
-      if (data.success && data.data.transcription) {
+      if (data.success && data.data && data.data.transcription) {
+        console.log('✅ Transcrição bem-sucedida!');
         setAudioTranscription(data.data.transcription);
         setShowTranscriptionModal(true);
       } else {
-        alert('❌ Erro ao transcrever áudio. Tente novamente.');
+        console.error('❌ Erro na resposta:', data);
+        alert(`❌ Erro ao transcrever áudio: ${data.message || 'Resposta inválida do servidor'}`);
       }
-    } catch (err) {
-      console.error('Erro ao transcrever áudio:', err);
-      alert('❌ Erro ao transcrever áudio. Tente novamente.');
+    } catch (err: any) {
+      console.error('❌ Erro ao transcrever áudio:', err);
+      alert(`❌ Erro ao transcrever áudio: ${err.message || 'Erro desconhecido'}`);
     } finally {
       setIsTranscribing(false);
     }
