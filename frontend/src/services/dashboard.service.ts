@@ -1,5 +1,5 @@
 import api from './api';
-import { DashboardMetrics, ApiResponse } from '../types';
+import type { DashboardMetrics, ApiResponse } from '../types';
 
 export const dashboardService = {
   async getMetrics() {

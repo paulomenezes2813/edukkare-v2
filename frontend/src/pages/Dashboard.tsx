@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { dashboardService } from '../services/dashboard.service';
 import { authService } from '../services/auth.service';
-import { DashboardMetrics } from '../types';
+import type { DashboardMetrics } from '../types';
 
 export default function Dashboard() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);

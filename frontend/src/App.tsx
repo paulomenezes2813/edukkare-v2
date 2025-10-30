@@ -31,6 +31,7 @@ interface CapturedPhoto {
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -51,20 +52,28 @@ function App() {
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    // 🔓 LOGIN DESABILITADO - ACESSO DIRETO
-    // Simula login automático
-    localStorage.setItem('token', 'fake-token-dev');
-    localStorage.setItem('user', JSON.stringify({ name: 'Professor Dev', role: 'ADMIN' }));
-    setIsLoggedIn(true);
-    loadActivities();
-    loadStudents();
+    // Verifica se já está logado
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    if (token && userStr) {
+      const user = JSON.parse(userStr);
+      setIsLoggedIn(true);
+      setUserName(user.name || '');
+      loadActivities();
+      loadStudents();
+    }
   }, []);
 
   const loadActivities = async () => {
     try {
       const API_URL = import.meta.env.VITE_API_URL || '/api';
+      const token = localStorage.getItem('token');
       console.log('🔄 Carregando atividades de:', `${API_URL}/activities`);
-      const response = await fetch(`${API_URL}/activities`);
+      const response = await fetch(`${API_URL}/activities`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const data = await response.json();
       console.log('📚 Resposta de atividades:', data);
       if (data.success) {
@@ -92,8 +101,13 @@ function App() {
   const loadStudents = async () => {
     try {
       const API_URL = import.meta.env.VITE_API_URL || '/api';
+      const token = localStorage.getItem('token');
       console.log('🔄 Carregando alunos de:', `${API_URL}/students`);
-      const response = await fetch(`${API_URL}/students`);
+      const response = await fetch(`${API_URL}/students`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const data = await response.json();
       if (data.success) {
         setStudents(data.data);
@@ -141,6 +155,7 @@ function App() {
         localStorage.setItem('token', data.data.token);
         localStorage.setItem('user', JSON.stringify(data.data.user));
         setIsLoggedIn(true);
+        setUserName(data.data.user.name || '');
         await loadActivities();
         await loadStudents();
       } else {
@@ -157,6 +172,7 @@ function App() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     setIsLoggedIn(false);
+    setUserName('');
     setShowLogin(false);
     setSelectedStudent(null);
   };
@@ -683,7 +699,7 @@ function App() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <h1 style={{ fontSize: '1.125rem', marginBottom: '0.125rem', fontWeight: '700' }}>🎓 EDUKKARE</h1>
-              <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Olá, Professora</p>
+              <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Olá, Professora {userName}</p>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button
