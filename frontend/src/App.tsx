@@ -61,8 +61,9 @@ function App() {
 
   const loadActivities = async () => {
     try {
-      console.log('🔄 Carregando atividades... (modo dev sem auth)');
-      const response = await fetch('/api/activities');
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      console.log('🔄 Carregando atividades de:', `${API_URL}/activities`);
+      const response = await fetch(`${API_URL}/activities`);
       const data = await response.json();
       console.log('📚 Resposta de atividades:', data);
       if (data.success) {
@@ -89,8 +90,9 @@ function App() {
 
   const loadStudents = async () => {
     try {
-      console.log('🔄 Carregando alunos... (modo dev sem auth)');
-      const response = await fetch('/api/students');
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      console.log('🔄 Carregando alunos de:', `${API_URL}/students`);
+      const response = await fetch(`${API_URL}/students`);
       const data = await response.json();
       if (data.success) {
         setStudents(data.data);
@@ -125,7 +127,8 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login', {
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
