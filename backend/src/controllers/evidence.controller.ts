@@ -145,10 +145,16 @@ export class EvidenceController {
       }
 
       let transcription = '';
+      
+      // Debug: Verificar se a chave existe
+      const hasApiKey = !!process.env.OPENAI_API_KEY;
+      const apiKeyPrefix = process.env.OPENAI_API_KEY ? process.env.OPENAI_API_KEY.substring(0, 7) : 'não definida';
+      console.log(`🔑 OPENAI_API_KEY: ${hasApiKey ? 'Configurada (' + apiKeyPrefix + '...)' : 'NÃO configurada'}`);
 
       // Tenta usar OpenAI Whisper se a chave estiver configurada
-      if (process.env.OPENAI_API_KEY) {
+      if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-')) {
         try {
+          console.log('🎤 Iniciando transcrição com Whisper API...');
           const OpenAI = require('openai').default;
           const openai = new OpenAI({ 
             apiKey: process.env.OPENAI_API_KEY 
@@ -162,15 +168,16 @@ export class EvidenceController {
           });
           
           transcription = response.text;
-          console.log('✅ Transcrição realizada com Whisper API');
+          console.log('✅ Transcrição realizada com sucesso:', transcription.substring(0, 50) + '...');
         } catch (whisperError: any) {
           console.error('❌ Erro ao usar Whisper API:', whisperError.message);
-          transcription = '[Digite aqui o que foi falado no áudio]\n\nNota: Configure OPENAI_API_KEY no .env para transcrição automática.';
+          console.error('❌ Detalhes:', whisperError);
+          transcription = `[Erro na transcrição automática: ${whisperError.message}]\n\nDigite aqui o que foi falado no áudio.`;
         }
       } else {
         // Sem API key configurada - usuário digita manualmente
         transcription = '[Digite aqui o que foi falado no áudio]\n\nPara transcrição automática, configure a variável OPENAI_API_KEY no arquivo .env do backend.';
-        console.log('ℹ️  OPENAI_API_KEY não configurada - transcrição manual');
+        console.log('ℹ️  OPENAI_API_KEY não configurada ou inválida - transcrição manual');
       }
 
       return ApiResponse.success(res, {
