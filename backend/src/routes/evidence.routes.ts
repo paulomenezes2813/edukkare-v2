@@ -11,6 +11,7 @@ router.use(authMiddleware);
 router.get('/', (req, res) => evidenceController.list(req, res));
 router.get('/:id', (req, res) => evidenceController.getById(req, res));
 router.post('/upload', upload.single('file'), (req, res) => evidenceController.upload(req, res));
+router.post('/transcribe', upload.single('audio'), (req, res) => evidenceController.transcribe(req, res));
 router.delete('/:id', (req, res) => evidenceController.delete(req, res));
 
 export default router;

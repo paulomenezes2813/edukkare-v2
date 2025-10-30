@@ -135,5 +135,37 @@ export class EvidenceController {
       return ApiResponse.serverError(res, error.message);
     }
   }
+
+  async transcribe(req: AuthRequest, res: Response) {
+    try {
+      const { studentId, activityId } = req.body;
+      
+      if (!req.file) {
+        return ApiResponse.badRequest(res, 'Arquivo de áudio não fornecido');
+      }
+
+      // Simula transcrição (em produção, usar API real de transcrição)
+      const transcription = "A criança demonstrou interesse pela atividade e participou ativamente durante toda a execução. Mostrou evolução nas habilidades motoras e cognitivas propostas.";
+
+      // TODO: Implementar integração com serviço de transcrição real
+      // Exemplo com OpenAI Whisper:
+      // const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      // const transcription = await openai.audio.transcriptions.create({
+      //   file: fs.createReadStream(req.file.path),
+      //   model: "whisper-1",
+      //   language: "pt"
+      // });
+
+      return ApiResponse.success(res, {
+        transcription,
+        studentId,
+        activityId,
+        audioFile: req.file.filename
+      });
+    } catch (error: any) {
+      console.error('Erro ao transcrever áudio:', error);
+      return ApiResponse.serverError(res, 'Erro ao processar transcrição');
+    }
+  }
 }
 

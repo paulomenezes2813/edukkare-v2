@@ -47,9 +47,14 @@ function App() {
   const [capturedPhoto, setCapturedPhoto] = useState<CapturedPhoto | null>(null);
   const [showAIScreen, setShowAIScreen] = useState(false);
   const [proficiencyLevel, setProficiencyLevel] = useState<string | null>(null);
+  const [audioTranscription, setAudioTranscription] = useState('');
+  const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
   useEffect(() => {
     // Verifica se já está logado e valida o token
@@ -257,7 +262,7 @@ function App() {
     setCapturedPhoto(null);
   };
 
-  const handleStartRecording = () => {
+  const handleStartRecording = async () => {
     if (!selectedActivity) {
       alert('⚠️ Selecione uma atividade primeiro');
       return;
@@ -266,15 +271,92 @@ function App() {
       alert('⚠️ Selecione uma criança primeiro');
       return;
     }
-    setCapturedPhoto(null); // Limpa foto se houver
-    setShowCamera(false); // Fecha câmera se estiver aberta
-    setShowNoteModal(false); // Fecha anotação se estiver aberta
-    setRecording(!recording);
+
     if (!recording) {
-      alert(`🎤 Iniciando gravação de áudio de ${selectedStudent.name}\n\n(Funcionalidade de gravação será implementada)`);
+      // Iniciar gravação
+      try {
+        setCapturedPhoto(null);
+        setShowCamera(false);
+        setShowNoteModal(false);
+        setShowTranscriptionModal(false);
+
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorderRef.current = mediaRecorder;
+        audioChunksRef.current = [];
+
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunksRef.current.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = async () => {
+          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+          stream.getTracks().forEach(track => track.stop());
+          
+          // Enviar para transcrição
+          await transcribeAudio(audioBlob);
+        };
+
+        mediaRecorder.start();
+        setRecording(true);
+      } catch (err) {
+        console.error('Erro ao acessar microfone:', err);
+        alert('❌ Não foi possível acessar o microfone. Verifique as permissões.');
+      }
     } else {
-      alert('⏹️ Gravação finalizada!');
+      // Parar gravação
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+        mediaRecorderRef.current.stop();
+        setRecording(false);
+      }
     }
+  };
+
+  const transcribeAudio = async (audioBlob: Blob) => {
+    setIsTranscribing(true);
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      const token = localStorage.getItem('token');
+      
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'recording.webm');
+      formData.append('studentId', selectedStudent?.id.toString() || '');
+      formData.append('activityId', selectedActivity?.id.toString() || '');
+
+      const response = await fetch(`${API_URL}/evidence/transcribe`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+      
+      if (data.success && data.data.transcription) {
+        setAudioTranscription(data.data.transcription);
+        setShowTranscriptionModal(true);
+      } else {
+        alert('❌ Erro ao transcrever áudio. Tente novamente.');
+      }
+    } catch (err) {
+      console.error('Erro ao transcrever áudio:', err);
+      alert('❌ Erro ao transcrever áudio. Tente novamente.');
+    } finally {
+      setIsTranscribing(false);
+    }
+  };
+
+  const handleSaveTranscription = () => {
+    if (!audioTranscription.trim()) {
+      alert('⚠️ Não há transcrição para salvar');
+      return;
+    }
+    alert(`✅ Transcrição salva para ${selectedStudent?.name}:\n\n"${audioTranscription}"\n\n(Será salva no backend)`);
+    setAudioTranscription('');
+    setShowTranscriptionModal(false);
   };
 
   const handleSaveNote = () => {
@@ -1405,6 +1487,100 @@ function App() {
                   >
                     ✅ Salvar Anotação
                   </button>
+                </div>
+              )}
+
+              {/* Modal de Transcrição */}
+              {!showCamera && !capturedPhoto && showTranscriptionModal && (
+                <div>
+                  <div style={{
+                    marginBottom: '0.75rem',
+                    padding: '0.75rem',
+                    background: '#eff6ff',
+                    borderRadius: '0.75rem',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <div style={{ color: '#1e40af', fontWeight: '700', fontSize: '0.9rem' }}>
+                      🎤 Transcrição - {selectedStudent?.name}
+                    </div>
+                    <button
+                      onClick={() => {
+                        setShowTranscriptionModal(false);
+                        setAudioTranscription('');
+                      }}
+                      style={{
+                        background: '#fee2e2',
+                        color: '#dc2626',
+                        border: 'none',
+                        padding: '0.5rem 0.75rem',
+                        borderRadius: '0.5rem',
+                        cursor: 'pointer',
+                        fontSize: '0.8rem',
+                        fontWeight: '600'
+                      }}
+                    >
+                      ✕ Cancelar
+                    </button>
+                  </div>
+                  
+                  {isTranscribing ? (
+                    <div style={{
+                      padding: '3rem 1rem',
+                      textAlign: 'center',
+                      background: '#f8fafc',
+                      borderRadius: '0.75rem',
+                      border: '2px dashed #cbd5e1'
+                    }}>
+                      <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>🔄</div>
+                      <div style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: '600' }}>
+                        Transcrevendo áudio...
+                      </div>
+                      <div style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+                        Aguarde alguns segundos
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <textarea
+                        value={audioTranscription}
+                        onChange={(e) => setAudioTranscription(e.target.value)}
+                        placeholder="A transcrição aparecerá aqui..."
+                        style={{
+                          width: '100%',
+                          padding: '1rem',
+                          border: '2px solid #e2e8f0',
+                          borderRadius: '0.75rem',
+                          fontSize: '1rem',
+                          fontFamily: 'inherit',
+                          resize: 'none',
+                          minHeight: '200px',
+                          boxSizing: 'border-box',
+                          background: '#fefce8'
+                        }}
+                      />
+                      
+                      <button
+                        onClick={handleSaveTranscription}
+                        style={{
+                          width: '100%',
+                          marginTop: '1rem',
+                          padding: '1rem',
+                          background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '0.75rem',
+                          fontSize: '1.125rem',
+                          fontWeight: '700',
+                          cursor: 'pointer',
+                          boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                        }}
+                      >
+                        ✅ Salvar Transcrição
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
