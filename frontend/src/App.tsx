@@ -327,8 +327,11 @@ function App() {
   };
 
   const transcribeAudio = async (audioBlob: Blob) => {
-    setIsTranscribing(true);
     try {
+      // Ativa o modal primeiro (mostrará "Transcrevendo...")
+      setShowTranscriptionModal(true);
+      setIsTranscribing(true);
+      
       // Se estiver no Railway, usa a URL do backend Railway
       let API_URL = import.meta.env.VITE_API_URL || '/api';
       if (window.location.hostname.includes('railway.app')) {
@@ -368,19 +371,27 @@ function App() {
       const data = await response.json();
       console.log('📝 Dados recebidos:', data);
       
-      if (data.success && data.data && data.data.transcription) {
-        console.log('✅ Transcrição bem-sucedida!');
-        setAudioTranscription(data.data.transcription);
-        setShowTranscriptionModal(true);
+      if (response.ok && data.success) {
+        const transcription = data.data?.transcription || data.transcription || 'Transcrição não disponível';
+        console.log('✅ Transcrição bem-sucedida:', transcription);
+        setAudioTranscription(transcription);
+        
+        // Debug: Confirmar que o modal está sendo ativado
+        console.log('🔔 Transcrição pronta para exibir!', {
+          transcriptionLength: transcription.length
+        });
       } else {
         console.error('❌ Erro na resposta:', data);
-        alert(`❌ Erro ao transcrever áudio: ${data.message || 'Resposta inválida do servidor'}`);
+        setShowTranscriptionModal(false);
+        alert(`❌ Erro ao transcrever áudio: ${data.message || 'Resposta inválida do servidor'}\n\nStatus: ${response.status}`);
       }
     } catch (err: any) {
       console.error('❌ Erro ao transcrever áudio:', err);
+      setShowTranscriptionModal(false);
       alert(`❌ Erro ao transcrever áudio: ${err.message || 'Erro desconhecido'}`);
     } finally {
       setIsTranscribing(false);
+      console.log('🏁 Finalizou processo de transcrição');
     }
   };
 
