@@ -33,8 +33,12 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: any) => {
     'audio/mp3',
     'audio/wav',
     'audio/m4a',
+    'audio/webm',
+    'audio/ogg',
+    'audio/x-m4a',
     'video/mp4',
     'video/quicktime',
+    'video/webm',
   ];
 
   if (allowedMimes.includes(file.mimetype)) {
