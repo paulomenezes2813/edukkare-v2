@@ -342,7 +342,7 @@ function App() {
         blobType: audioBlob.type,
         studentId: selectedStudent?.id,
         activityId: selectedActivity?.id,
-        apiUrl: `${API_URL}/evidence/transcribe`,
+        apiUrl: `${API_URL}/evidences/transcribe`,
         hostname: window.location.hostname
       });
       
@@ -351,7 +351,7 @@ function App() {
       formData.append('studentId', selectedStudent?.id.toString() || '');
       formData.append('activityId', selectedActivity?.id.toString() || '');
 
-      const response = await fetch(`${API_URL}/evidence/transcribe`, {
+      const response = await fetch(`${API_URL}/evidences/transcribe`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
