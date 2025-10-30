@@ -144,17 +144,34 @@ export class EvidenceController {
         return ApiResponse.error(res, 'Arquivo de áudio não fornecido', 400);
       }
 
-      // Simula transcrição (em produção, usar API real de transcrição)
-      const transcription = "A criança demonstrou interesse pela atividade e participou ativamente durante toda a execução. Mostrou evolução nas habilidades motoras e cognitivas propostas.";
+      let transcription = '';
 
-      // TODO: Implementar integração com serviço de transcrição real
-      // Exemplo com OpenAI Whisper:
-      // const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-      // const transcription = await openai.audio.transcriptions.create({
-      //   file: fs.createReadStream(req.file.path),
-      //   model: "whisper-1",
-      //   language: "pt"
-      // });
+      // Tenta usar OpenAI Whisper se a chave estiver configurada
+      if (process.env.OPENAI_API_KEY) {
+        try {
+          const OpenAI = require('openai').default;
+          const openai = new OpenAI({ 
+            apiKey: process.env.OPENAI_API_KEY 
+          });
+          
+          const fs = require('fs');
+          const response = await openai.audio.transcriptions.create({
+            file: fs.createReadStream(req.file.path),
+            model: "whisper-1",
+            language: "pt"
+          });
+          
+          transcription = response.text;
+          console.log('✅ Transcrição realizada com Whisper API');
+        } catch (whisperError: any) {
+          console.error('❌ Erro ao usar Whisper API:', whisperError.message);
+          transcription = '[Digite aqui o que foi falado no áudio]\n\nNota: Configure OPENAI_API_KEY no .env para transcrição automática.';
+        }
+      } else {
+        // Sem API key configurada - usuário digita manualmente
+        transcription = '[Digite aqui o que foi falado no áudio]\n\nPara transcrição automática, configure a variável OPENAI_API_KEY no arquivo .env do backend.';
+        console.log('ℹ️  OPENAI_API_KEY não configurada - transcrição manual');
+      }
 
       return ApiResponse.success(res, {
         transcription,
