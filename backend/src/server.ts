@@ -1,11 +1,15 @@
 import app from './app';
 import { config } from './config/env';
 import prisma from './config/database';
+import { ensureUploadDirectories } from './utils/ensure-upload-dirs';
 
 const PORT = config.port;
 
 async function startServer() {
   try {
+    // Criar diretórios de upload se não existirem
+    ensureUploadDirectories();
+    
     // Testar conexão com o banco
     await prisma.$connect();
     console.log('✅ Conectado ao banco de dados SQLite');
