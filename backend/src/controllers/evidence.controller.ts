@@ -141,7 +141,7 @@ export class EvidenceController {
       const { studentId, activityId } = req.body;
       
       if (!req.file) {
-        return ApiResponse.badRequest(res, 'Arquivo de áudio não fornecido');
+        return ApiResponse.error(res, 'Arquivo de áudio não fornecido', 400);
       }
 
       // Simula transcrição (em produção, usar API real de transcrição)
