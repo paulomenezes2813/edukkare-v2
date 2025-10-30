@@ -52,16 +52,34 @@ function App() {
   const streamRef = useRef<MediaStream | null>(null);
 
   useEffect(() => {
-    // Verifica se já está logado
-    const token = localStorage.getItem('token');
-    const userStr = localStorage.getItem('user');
-    if (token && userStr) {
-      const user = JSON.parse(userStr);
-      setIsLoggedIn(true);
-      setUserName(user.name || '');
-      loadActivities();
-      loadStudents();
-    }
+    // Verifica se já está logado e valida o token
+    const validateToken = async () => {
+      const token = localStorage.getItem('token');
+      const userStr = localStorage.getItem('user');
+      
+      if (token && userStr && token !== 'fake-token-dev') {
+        try {
+          const user = JSON.parse(userStr);
+          setUserName(user.name || '');
+          setIsLoggedIn(true);
+          await loadActivities();
+          await loadStudents();
+        } catch (err) {
+          // Token inválido, limpa localStorage
+          console.log('❌ Token inválido, limpando sessão...');
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          setIsLoggedIn(false);
+        }
+      } else {
+        // Limpa tokens antigos ou fake
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setIsLoggedIn(false);
+      }
+    };
+    
+    validateToken();
   }, []);
 
   const loadActivities = async () => {
@@ -79,22 +97,20 @@ function App() {
       if (data.success) {
         console.log(`✅ ${data.data.length} atividades carregadas`);
         setActivities(data.data);
+      } else if (data.message === 'Token não fornecido' || data.message === 'Token inválido') {
+        // Token inválido, força logout
+        console.error('❌ Erro de autenticação:', data.message);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setIsLoggedIn(false);
+        setActivities([]);
       } else {
         console.error('❌ Erro na resposta:', data);
-        // Em modo dev, cria dados fake se não conseguir carregar
-        console.log('📝 Criando atividades fake para desenvolvimento...');
-        setActivities([
-          { id: 1, title: 'Atividade de Teste 1', description: 'Descrição teste 1', duration: 30 },
-          { id: 2, title: 'Atividade de Teste 2', description: 'Descrição teste 2', duration: 45 },
-        ]);
+        setActivities([]);
       }
     } catch (err) {
       console.error('❌ Erro ao carregar atividades:', err);
-      // Em modo dev, cria dados fake
-      setActivities([
-        { id: 1, title: 'Atividade de Teste 1', description: 'Descrição teste 1', duration: 30 },
-        { id: 2, title: 'Atividade de Teste 2', description: 'Descrição teste 2', duration: 45 },
-      ]);
+      setActivities([]);
     }
   };
 
@@ -112,27 +128,20 @@ function App() {
       if (data.success) {
         setStudents(data.data);
         console.log(`✅ ${data.data.length} alunos carregados`);
+      } else if (data.message === 'Token não fornecido' || data.message === 'Token inválido') {
+        // Token inválido, força logout
+        console.error('❌ Erro de autenticação:', data.message);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setIsLoggedIn(false);
+        setStudents([]);
       } else {
-        // Em modo dev, cria dados fake
-        console.log('📝 Criando alunos fake para desenvolvimento...');
-        setStudents([
-          { id: 1, name: 'João Pedro', birthDate: '2022-03-15', shift: 'MANHA' },
-          { id: 2, name: 'Maria Silva', birthDate: '2022-07-22', shift: 'TARDE' },
-          { id: 3, name: 'Lucas Santos', birthDate: '2023-01-10', shift: 'MANHA' },
-          { id: 4, name: 'Ana Julia', birthDate: '2022-05-18', shift: 'MANHA' },
-          { id: 5, name: 'Pedro Henrique', birthDate: '2022-09-30', shift: 'TARDE' },
-        ]);
+        console.error('❌ Erro na resposta:', data);
+        setStudents([]);
       }
     } catch (err) {
       console.error('❌ Erro ao carregar alunos:', err);
-      // Em modo dev, cria dados fake
-      setStudents([
-        { id: 1, name: 'João Pedro', birthDate: '2022-03-15', shift: 'MANHA' },
-        { id: 2, name: 'Maria Silva', birthDate: '2022-07-22', shift: 'TARDE' },
-        { id: 3, name: 'Lucas Santos', birthDate: '2023-01-10', shift: 'MANHA' },
-        { id: 4, name: 'Ana Julia', birthDate: '2022-05-18', shift: 'MANHA' },
-        { id: 5, name: 'Pedro Henrique', birthDate: '2022-09-30', shift: 'TARDE' },
-      ]);
+      setStudents([]);
     }
   };
 
