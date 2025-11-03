@@ -21,6 +21,10 @@ export class ApiResponse {
     return this.success(res, data, message, 201);
   }
 
+  static badRequest(res: Response, message: string) {
+    return this.error(res, message, 400);
+  }
+
   static notFound(res: Response, message = 'Recurso não encontrado') {
     return this.error(res, message, 404);
   }
