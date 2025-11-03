@@ -113,9 +113,6 @@ function App() {
     avatarId: ''
   });
   
-  // Lista de avatares disponíveis
-  const [availableAvatars, setAvailableAvatars] = useState<{ id: number; avatar: string }[]>([]);
-  
   // Estados para Teachers
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [showTeacherModal, setShowTeacherModal] = useState(false);
@@ -211,6 +208,8 @@ function App() {
       }
       const token = localStorage.getItem('token');
 
+      console.log('🎭 Carregando avatares de:', API_URL);
+
       const response = await fetch(`${API_URL}/avatars`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -219,10 +218,14 @@ function App() {
 
       if (response.ok) {
         const data = await response.json();
-        setAvailableAvatars(data.data || data || []);
+        const avatarsList = data.data || data || [];
+        console.log('✅ Avatares carregados:', avatarsList.length);
+        setAvatars(avatarsList);
+      } else {
+        console.error('❌ Erro ao carregar avatares, status:', response.status);
       }
     } catch (error) {
-      console.error('Erro ao carregar avatares:', error);
+      console.error('❌ Erro ao carregar avatares:', error);
     }
   };
 
