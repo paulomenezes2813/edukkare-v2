@@ -39,6 +39,16 @@ enum EvaluationLevel {
 
 // Modelos
 
+model Avatar {
+  id            Int       @id @default(autoincrement())
+  avatar        String    // Nome do arquivo do avatar (ex: "alice.png")
+  createdAt     DateTime  @default(now())
+
+  students      Student[]
+  
+  @@map("avatars")
+}
+
 model User {
   id            Int       @id @default(autoincrement())
   email         String    @unique
@@ -70,6 +80,9 @@ model Student {
 
   classId       Int
   class         Class         @relation(fields: [classId], references: [id])
+  
+  avatarId      Int?
+  avatar        Avatar?       @relation(fields: [avatarId], references: [id])
   
   evaluations   Evaluation[]
   evidences     Evidence[]

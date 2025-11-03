@@ -8,6 +8,10 @@ interface Student {
   class?: {
     name: string;
   };
+  avatar?: {
+    id: number;
+    avatar: string;
+  };
 }
 
 interface Activity {
@@ -26,19 +30,25 @@ interface CapturedPhoto {
   dataUrl: string;
   studentName: string;
   studentId: number;
+  studentAvatar?: string;
   timestamp: Date;
 }
 
-// Lista de avatares disponíveis
+// Lista de avatares disponíveis (fallback)
 const AVATARS = [
   'alice.png', 'ana.png', 'arthur.png', 'davi.png', 'gabriel.png',
   'heitor.png', 'helena.png', 'joao.png', 'laura.png', 'lucas.png',
   'maria.png', 'miguel.png', 'pedro.png', 'sofia.png', 'valentina.png'
 ];
 
-// Função para obter avatar baseado no ID do estudante
-const getStudentAvatar = (studentId: number): string => {
-  const avatarIndex = studentId % AVATARS.length;
+// Função para obter avatar (do banco ou fallback)
+const getStudentAvatar = (student: { id: number; avatar?: { avatar: string } }): string => {
+  // Se tem avatar no banco, usa ele
+  if (student.avatar?.avatar) {
+    return `/avatares_edukkare/${student.avatar.avatar}`;
+  }
+  // Fallback: usa sistema cíclico baseado no ID
+  const avatarIndex = student.id % AVATARS.length;
   return `/avatares_edukkare/${AVATARS[avatarIndex]}`;
 };
 
@@ -270,6 +280,7 @@ function App() {
       dataUrl: photoDataUrl,
       studentName: selectedStudent.name,
       studentId: selectedStudent.id,
+      studentAvatar: getStudentAvatar(selectedStudent),
       timestamp: new Date()
     });
 
@@ -1051,7 +1062,7 @@ function App() {
                   }}
                 >
                   <img 
-                    src={getStudentAvatar(student.id)} 
+                    src={getStudentAvatar(student)} 
                     alt={student.name}
                     style={{ 
                       width: '2.5rem', 
@@ -1388,7 +1399,7 @@ function App() {
                     }}>
                       {selectedStudent && (
                         <img 
-                          src={getStudentAvatar(selectedStudent.id)} 
+                          src={getStudentAvatar(selectedStudent)} 
                           alt={selectedStudent.name}
                           style={{ 
                             width: '1.5rem', 
@@ -1477,7 +1488,7 @@ function App() {
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <img 
-                        src={getStudentAvatar(capturedPhoto.studentId)} 
+                        src={capturedPhoto.studentAvatar || '/avatares_edukkare/alice.png'} 
                         alt={capturedPhoto.studentName}
                         style={{ 
                           width: '2rem', 
@@ -1545,7 +1556,7 @@ function App() {
                     }}>
                       {selectedStudent && (
                         <img 
-                          src={getStudentAvatar(selectedStudent.id)} 
+                          src={getStudentAvatar(selectedStudent)} 
                           alt={selectedStudent.name}
                           style={{ 
                             width: '1.5rem', 
@@ -1638,7 +1649,7 @@ function App() {
                     }}>
                       {selectedStudent && (
                         <img 
-                          src={getStudentAvatar(selectedStudent.id)} 
+                          src={getStudentAvatar(selectedStudent)} 
                           alt={selectedStudent.name}
                           style={{ 
                             width: '1.5rem', 

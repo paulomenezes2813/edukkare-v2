@@ -28,6 +28,7 @@ export class StudentController {
               },
             },
           },
+          avatar: true,
         },
         orderBy: {
           name: 'asc',
@@ -48,6 +49,7 @@ export class StudentController {
         where: { id: Number(id) },
         include: {
           class: true,
+          avatar: true,
           evaluations: {
             include: {
               activity: true,
@@ -96,6 +98,7 @@ export class StudentController {
         },
         include: {
           class: true,
+          avatar: true,
         },
       });
 
@@ -124,6 +127,7 @@ export class StudentController {
         },
         include: {
           class: true,
+          avatar: true,
         },
       });
 

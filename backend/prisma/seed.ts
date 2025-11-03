@@ -44,6 +44,27 @@ async function main() {
 
   console.log('✅ Usuários criados');
 
+  // Criar avatares
+  const avatarNames = [
+    'alice.png', 'ana.png', 'arthur.png', 'davi.png', 'gabriel.png',
+    'heitor.png', 'helena.png', 'joao.png', 'laura.png', 'lucas.png',
+    'maria.png', 'miguel.png', 'pedro.png', 'sofia.png', 'valentina.png'
+  ];
+
+  const avatars = [];
+  for (let i = 0; i < avatarNames.length; i++) {
+    const avatar = await prisma.avatar.upsert({
+      where: { id: i + 1 },
+      update: {},
+      create: {
+        avatar: avatarNames[i]
+      }
+    });
+    avatars.push(avatar);
+  }
+
+  console.log('✅ Avatares criados:', avatars.length);
+
   // Criar turmas
   const turma1 = await prisma.class.upsert({
     where: { id: 1 },
@@ -200,14 +221,20 @@ async function main() {
   ];
 
   for (let i = 0; i < students.length; i++) {
+    // Atribui avatar de forma cíclica
+    const avatarId = (i % avatars.length) + 1;
+    
     await prisma.student.upsert({
       where: { id: i + 1 },
       update: {},
-      create: students[i],
+      create: {
+        ...students[i],
+        avatarId
+      },
     });
   }
 
-  console.log('✅ Alunos criados');
+  console.log('✅ Alunos criados com avatares associados');
 
   // Criar algumas avaliações de exemplo
   if (bnccTS02) {
