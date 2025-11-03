@@ -26,6 +26,30 @@ interface Activity {
   };
 }
 
+interface Teacher {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string;
+  specialization?: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  active: boolean;
+}
+
+interface School {
+  id: number;
+  name: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+}
+
 interface CapturedPhoto {
   dataUrl: string;
   studentName: string;
@@ -87,6 +111,49 @@ function App() {
     shift: 'MANHA' as 'MANHA' | 'TARDE' | 'INTEGRAL',
     classId: ''
   });
+  
+  // Estados para Teachers
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [showTeacherModal, setShowTeacherModal] = useState(false);
+  const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
+  const [teacherForm, setTeacherForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    specialization: ''
+  });
+
+  // Estados para Users
+  const [users, setUsers] = useState<User[]>([]);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [userForm, setUserForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'PROFESSOR' as 'PROFESSOR' | 'COORDENADOR' | 'GESTOR' | 'ADMIN'
+  });
+
+  // Estados para Schools
+  const [schools, setSchools] = useState<School[]>([]);
+  const [showSchoolModal, setShowSchoolModal] = useState(false);
+  const [editingSchool, setEditingSchool] = useState<School | null>(null);
+  const [schoolForm, setSchoolForm] = useState({
+    name: '',
+    address: '',
+    phone: '',
+    email: ''
+  });
+
+  // Estados para Activities (complementar)
+  const [showActivityModal, setShowActivityModal] = useState(false);
+  const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
+  const [activityForm, setActivityForm] = useState({
+    title: '',
+    description: '',
+    duration: 30
+  });
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -570,6 +637,181 @@ function App() {
     } catch (error: any) {
       alert(`❌ Erro ao excluir aluno: ${error.message}`);
     }
+  };
+
+  // CRUD de Professores
+  const loadTeachers = async () => {
+    setTeachers([
+      { id: 1, name: 'Maria Silva', email: 'maria.silva@edukkare.com', phone: '(85) 98765-4321', specialization: 'Educação Infantil' },
+      { id: 2, name: 'João Santos', email: 'joao.santos@edukkare.com', phone: '(85) 98765-4322', specialization: 'Pedagogia' },
+    ]);
+  };
+
+  const openTeacherModal = (teacher?: Teacher) => {
+    if (teacher) {
+      setEditingTeacher(teacher);
+      setTeacherForm({
+        name: teacher.name,
+        email: teacher.email,
+        phone: teacher.phone || '',
+        specialization: teacher.specialization || ''
+      });
+    } else {
+      setEditingTeacher(null);
+      setTeacherForm({ name: '', email: '', phone: '', specialization: '' });
+    }
+    setShowTeacherModal(true);
+  };
+
+  const handleSaveTeacher = async () => {
+    if (!teacherForm.name.trim() || !teacherForm.email.trim()) {
+      alert('⚠️ Nome e email são obrigatórios');
+      return;
+    }
+    alert(`✅ Professor ${editingTeacher ? 'atualizado' : 'cadastrado'} com sucesso! (Mock)`);
+    setShowTeacherModal(false);
+    await loadTeachers();
+  };
+
+  const handleDeleteTeacher = async (teacher: Teacher) => {
+    if (!confirm(`⚠️ Tem certeza que deseja excluir ${teacher.name}?`)) return;
+    alert(`✅ Professor excluído com sucesso! (Mock)`);
+    await loadTeachers();
+  };
+
+  // CRUD de Usuários
+  const loadUsers = async () => {
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/users`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUsers(data.data || data || []);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar usuários:', error);
+      // Mock data
+      setUsers([
+        { id: 1, name: 'Admin Sistema', email: 'admin@edukkare.com', role: 'ADMIN', active: true },
+        { id: 2, name: 'Maria Silva', email: 'maria.silva@edukkare.com', role: 'PROFESSOR', active: true },
+      ]);
+    }
+  };
+
+  const openUserModal = (user?: User) => {
+    if (user) {
+      setEditingUser(user);
+      setUserForm({
+        name: user.name,
+        email: user.email,
+        password: '',
+        role: user.role as any
+      });
+    } else {
+      setEditingUser(null);
+      setUserForm({ name: '', email: '', password: '', role: 'PROFESSOR' });
+    }
+    setShowUserModal(true);
+  };
+
+  const handleSaveUser = async () => {
+    if (!userForm.name.trim() || !userForm.email.trim()) {
+      alert('⚠️ Nome e email são obrigatórios');
+      return;
+    }
+    if (!editingUser && !userForm.password.trim()) {
+      alert('⚠️ Senha é obrigatória para novos usuários');
+      return;
+    }
+    alert(`✅ Usuário ${editingUser ? 'atualizado' : 'cadastrado'} com sucesso! (Mock)`);
+    setShowUserModal(false);
+    await loadUsers();
+  };
+
+  const handleDeleteUser = async (user: User) => {
+    if (!confirm(`⚠️ Tem certeza que deseja excluir ${user.name}?`)) return;
+    alert(`✅ Usuário excluído com sucesso! (Mock)`);
+    await loadUsers();
+  };
+
+  // CRUD de Escolas
+  const loadSchools = async () => {
+    setSchools([
+      { id: 1, name: 'Escola Infantil Edukkare', address: 'Rua das Flores, 123', phone: '(85) 3456-7890', email: 'contato@edukkare.com' },
+      { id: 2, name: 'Centro Educacional Alegria', address: 'Av. Principal, 456', phone: '(85) 3456-7891', email: 'alegria@edukkare.com' },
+    ]);
+  };
+
+  const openSchoolModal = (school?: School) => {
+    if (school) {
+      setEditingSchool(school);
+      setSchoolForm({
+        name: school.name,
+        address: school.address || '',
+        phone: school.phone || '',
+        email: school.email || ''
+      });
+    } else {
+      setEditingSchool(null);
+      setSchoolForm({ name: '', address: '', phone: '', email: '' });
+    }
+    setShowSchoolModal(true);
+  };
+
+  const handleSaveSchool = async () => {
+    if (!schoolForm.name.trim()) {
+      alert('⚠️ Nome da escola é obrigatório');
+      return;
+    }
+    alert(`✅ Escola ${editingSchool ? 'atualizada' : 'cadastrada'} com sucesso! (Mock)`);
+    setShowSchoolModal(false);
+    await loadSchools();
+  };
+
+  const handleDeleteSchool = async (school: School) => {
+    if (!confirm(`⚠️ Tem certeza que deseja excluir ${school.name}?`)) return;
+    alert(`✅ Escola excluída com sucesso! (Mock)`);
+    await loadSchools();
+  };
+
+  // CRUD de Atividades (complementar ao existente)
+  const openActivityModal = (activity?: Activity) => {
+    if (activity) {
+      setEditingActivity(activity);
+      setActivityForm({
+        title: activity.title,
+        description: activity.description,
+        duration: activity.duration
+      });
+    } else {
+      setEditingActivity(null);
+      setActivityForm({ title: '', description: '', duration: 30 });
+    }
+    setShowActivityModal(true);
+  };
+
+  const handleSaveActivity = async () => {
+    if (!activityForm.title.trim()) {
+      alert('⚠️ Título da atividade é obrigatório');
+      return;
+    }
+    alert(`✅ Atividade ${editingActivity ? 'atualizada' : 'cadastrada'} com sucesso! (Mock)`);
+    setShowActivityModal(false);
+    await loadActivities();
+  };
+
+  const handleDeleteActivity = async (activity: Activity) => {
+    if (!confirm(`⚠️ Tem certeza que deseja excluir ${activity.title}?`)) return;
+    alert(`✅ Atividade excluída com sucesso! (Mock)`);
+    await loadActivities();
   };
 
   // Home Page - Mobile Optimized
@@ -1158,7 +1400,8 @@ function App() {
             <button
               onClick={() => {
                 setShowSidebar(false);
-                alert('👩‍🏫 Navegando para Professores...');
+                setCurrentScreen('teachers');
+                loadTeachers();
               }}
               style={{
                 width: '100%',
@@ -1193,7 +1436,8 @@ function App() {
             <button
               onClick={() => {
                 setShowSidebar(false);
-                alert('👥 Navegando para Usuários...');
+                setCurrentScreen('users');
+                loadUsers();
               }}
               style={{
                 width: '100%',
@@ -1228,7 +1472,8 @@ function App() {
             <button
               onClick={() => {
                 setShowSidebar(false);
-                alert('🏫 Navegando para Escolas...');
+                setCurrentScreen('schools');
+                loadSchools();
               }}
               style={{
                 width: '100%',
@@ -1263,7 +1508,7 @@ function App() {
             <button
               onClick={() => {
                 setShowSidebar(false);
-                alert('📝 Navegando para Atividades...');
+                setCurrentScreen('activities');
               }}
               style={{
                 width: '100%',
@@ -1811,6 +2056,170 @@ function App() {
                   </div>
                 </div>
               </>
+            )}
+          </main>
+        ) : currentScreen === 'teachers' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>👩‍🏫 Gerenciar Professores</h2>
+                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>{teachers.length} professores cadastrados</p>
+              </div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem', marginBottom: '5rem' }}>
+              {teachers.map((teacher) => (
+                <div key={teacher.id} style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>{teacher.name}</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📧</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{teacher.email}</span></div>
+                    {teacher.phone && <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📱</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{teacher.phone}</span></div>}
+                    {teacher.specialization && <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>🎓</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{teacher.specialization}</span></div>}
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={() => openTeacherModal(teacher)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => handleDeleteTeacher(teacher)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => openTeacherModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            {showTeacherModal && (
+              <><div onClick={() => setShowTeacherModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
+              <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}><h3 style={{ fontSize: '1.5rem', fontWeight: '700' }}>{editingTeacher ? '✏️ Editar Professor' : '➕ Novo Professor'}</h3><button onClick={() => setShowTeacherModal(false)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer' }}>✕</button></div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Nome *</label><input type="text" value={teacherForm.name} onChange={(e) => setTeacherForm({ ...teacherForm, name: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Email *</label><input type="email" value={teacherForm.email} onChange={(e) => setTeacherForm({ ...teacherForm, email: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Telefone</label><input type="tel" value={teacherForm.phone} onChange={(e) => setTeacherForm({ ...teacherForm, phone: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Especialização</label><input type="text" value={teacherForm.specialization} onChange={(e) => setTeacherForm({ ...teacherForm, specialization: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                    <button onClick={() => setShowTeacherModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
+                    <button onClick={handleSaveTeacher} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingTeacher ? 'Salvar' : 'Cadastrar'}</button>
+                  </div>
+                </div>
+              </div></>
+            )}
+          </main>
+        ) : currentScreen === 'users' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div><h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>👥 Gerenciar Usuários</h2><p style={{ fontSize: '0.875rem', color: '#64748b' }}>{users.length} usuários cadastrados</p></div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem', marginBottom: '5rem' }}>
+              {users.map((user) => (
+                <div key={user.id} style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '1rem' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b' }}>{user.name}</h3>
+                    <span style={{ background: user.active ? '#dcfce7' : '#fee2e2', color: user.active ? '#166534' : '#dc2626', padding: '0.25rem 0.75rem', borderRadius: '1rem', fontSize: '0.75rem', fontWeight: '600' }}>{user.active ? 'Ativo' : 'Inativo'}</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📧</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{user.email}</span></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>🎭</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{user.role}</span></div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={() => openUserModal(user)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => handleDeleteUser(user)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => openUserModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            {showUserModal && (
+              <><div onClick={() => setShowUserModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
+              <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}><h3 style={{ fontSize: '1.5rem', fontWeight: '700' }}>{editingUser ? '✏️ Editar Usuário' : '➕ Novo Usuário'}</h3><button onClick={() => setShowUserModal(false)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer' }}>✕</button></div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Nome *</label><input type="text" value={userForm.name} onChange={(e) => setUserForm({ ...userForm, name: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Email *</label><input type="email" value={userForm.email} onChange={(e) => setUserForm({ ...userForm, email: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Senha {!editingUser && '*'}</label><input type="password" value={userForm.password} onChange={(e) => setUserForm({ ...userForm, password: e.target.value })} placeholder={editingUser ? 'Deixe vazio para não alterar' : ''} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Função *</label><select value={userForm.role} onChange={(e) => setUserForm({ ...userForm, role: e.target.value as any })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}><option value="PROFESSOR">Professor</option><option value="COORDENADOR">Coordenador</option><option value="GESTOR">Gestor</option><option value="ADMIN">Admin</option></select></div>
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                    <button onClick={() => setShowUserModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
+                    <button onClick={handleSaveUser} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingUser ? 'Salvar' : 'Cadastrar'}</button>
+                  </div>
+                </div>
+              </div></>
+            )}
+          </main>
+        ) : currentScreen === 'schools' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div><h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>🏫 Gerenciar Escolas</h2><p style={{ fontSize: '0.875rem', color: '#64748b' }}>{schools.length} escolas cadastradas</p></div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem', marginBottom: '5rem' }}>
+              {schools.map((school) => (
+                <div key={school.id} style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>{school.name}</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+                    {school.address && <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📍</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{school.address}</span></div>}
+                    {school.phone && <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📞</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{school.phone}</span></div>}
+                    {school.email && <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📧</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{school.email}</span></div>}
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={() => openSchoolModal(school)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => handleDeleteSchool(school)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => openSchoolModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            {showSchoolModal && (
+              <><div onClick={() => setShowSchoolModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
+              <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}><h3 style={{ fontSize: '1.5rem', fontWeight: '700' }}>{editingSchool ? '✏️ Editar Escola' : '➕ Nova Escola'}</h3><button onClick={() => setShowSchoolModal(false)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer' }}>✕</button></div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Nome *</label><input type="text" value={schoolForm.name} onChange={(e) => setSchoolForm({ ...schoolForm, name: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Endereço</label><input type="text" value={schoolForm.address} onChange={(e) => setSchoolForm({ ...schoolForm, address: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Telefone</label><input type="tel" value={schoolForm.phone} onChange={(e) => setSchoolForm({ ...schoolForm, phone: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Email</label><input type="email" value={schoolForm.email} onChange={(e) => setSchoolForm({ ...schoolForm, email: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                    <button onClick={() => setShowSchoolModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
+                    <button onClick={handleSaveSchool} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingSchool ? 'Salvar' : 'Cadastrar'}</button>
+                  </div>
+                </div>
+              </div></>
+            )}
+          </main>
+        ) : currentScreen === 'activities' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div><h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>📝 Gerenciar Atividades</h2><p style={{ fontSize: '0.875rem', color: '#64748b' }}>{activities.length} atividades cadastradas</p></div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem', marginBottom: '5rem' }}>
+              {activities.map((activity) => (
+                <div key={activity.id} style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>{activity.title}</h3>
+                  <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1rem' }}>{activity.description}</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>⏱️</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{activity.duration} minutos</span></div>
+                    {activity.bnccCode && <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📋</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{activity.bnccCode.code} - {activity.bnccCode.name}</span></div>}
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={() => openActivityModal(activity)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => handleDeleteActivity(activity)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => openActivityModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            {showActivityModal && (
+              <><div onClick={() => setShowActivityModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
+              <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}><h3 style={{ fontSize: '1.5rem', fontWeight: '700' }}>{editingActivity ? '✏️ Editar Atividade' : '➕ Nova Atividade'}</h3><button onClick={() => setShowActivityModal(false)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer' }}>✕</button></div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Título *</label><input type="text" value={activityForm.title} onChange={(e) => setActivityForm({ ...activityForm, title: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Descrição *</label><textarea value={activityForm.description} onChange={(e) => setActivityForm({ ...activityForm, description: e.target.value })} rows={4} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Duração (minutos) *</label><input type="number" value={activityForm.duration} onChange={(e) => setActivityForm({ ...activityForm, duration: parseInt(e.target.value) || 30 })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                    <button onClick={() => setShowActivityModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
+                    <button onClick={handleSaveActivity} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingActivity ? 'Salvar' : 'Cadastrar'}</button>
+                  </div>
+                </div>
+              </div></>
             )}
           </main>
         ) : (
