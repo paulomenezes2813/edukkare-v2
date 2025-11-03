@@ -25,8 +25,22 @@ interface Activity {
 interface CapturedPhoto {
   dataUrl: string;
   studentName: string;
+  studentId: number;
   timestamp: Date;
 }
+
+// Lista de avatares disponíveis
+const AVATARS = [
+  'alice.png', 'ana.png', 'arthur.png', 'davi.png', 'gabriel.png',
+  'heitor.png', 'helena.png', 'joao.png', 'laura.png', 'lucas.png',
+  'maria.png', 'miguel.png', 'pedro.png', 'sofia.png', 'valentina.png'
+];
+
+// Função para obter avatar baseado no ID do estudante
+const getStudentAvatar = (studentId: number): string => {
+  const avatarIndex = studentId % AVATARS.length;
+  return `/avatares_edukkare/${AVATARS[avatarIndex]}`;
+};
 
 function App() {
   const [showLogin, setShowLogin] = useState(false);
@@ -255,6 +269,7 @@ function App() {
     setCapturedPhoto({
       dataUrl: photoDataUrl,
       studentName: selectedStudent.name,
+      studentId: selectedStudent.id,
       timestamp: new Date()
     });
 
@@ -1035,7 +1050,17 @@ function App() {
                     boxShadow: selectedStudent?.id === student.id ? '0 2px 8px rgba(139, 92, 246, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)'
                   }}
                 >
-                  <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>👶</div>
+                  <img 
+                    src={getStudentAvatar(student.id)} 
+                    alt={student.name}
+                    style={{ 
+                      width: '2.5rem', 
+                      height: '2.5rem', 
+                      borderRadius: '50%',
+                      marginBottom: '0.25rem',
+                      objectFit: 'cover'
+                    }} 
+                  />
                   <div style={{ 
                     fontWeight: '600', 
                     fontSize: '0.65rem',
@@ -1353,8 +1378,27 @@ function App() {
                     justifyContent: 'space-between',
                     alignItems: 'center'
                   }}>
-                    <div style={{ color: '#1e40af', fontWeight: '700', fontSize: '0.9rem' }}>
-                      👶 {selectedStudent?.name}
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '0.5rem',
+                      color: '#1e40af', 
+                      fontWeight: '700', 
+                      fontSize: '0.9rem' 
+                    }}>
+                      {selectedStudent && (
+                        <img 
+                          src={getStudentAvatar(selectedStudent.id)} 
+                          alt={selectedStudent.name}
+                          style={{ 
+                            width: '1.5rem', 
+                            height: '1.5rem', 
+                            borderRadius: '50%',
+                            objectFit: 'cover'
+                          }} 
+                        />
+                      )}
+                      {selectedStudent?.name}
                     </div>
                     <button
                       onClick={closeCamera}
@@ -1431,12 +1475,24 @@ function App() {
                     justifyContent: 'space-between',
                     alignItems: 'center'
                   }}>
-                    <div>
-                      <div style={{ color: '#1e40af', fontWeight: '700', fontSize: '0.9rem' }}>
-                        👶 {capturedPhoto.studentName}
-                      </div>
-                      <div style={{ color: '#64748b', fontSize: '0.75rem', marginTop: '0.25rem' }}>
-                        {new Date(capturedPhoto.timestamp).toLocaleString('pt-BR')}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <img 
+                        src={getStudentAvatar(capturedPhoto.studentId)} 
+                        alt={capturedPhoto.studentName}
+                        style={{ 
+                          width: '2rem', 
+                          height: '2rem', 
+                          borderRadius: '50%',
+                          objectFit: 'cover'
+                        }} 
+                      />
+                      <div>
+                        <div style={{ color: '#1e40af', fontWeight: '700', fontSize: '0.9rem' }}>
+                          {capturedPhoto.studentName}
+                        </div>
+                        <div style={{ color: '#64748b', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                          {new Date(capturedPhoto.timestamp).toLocaleString('pt-BR')}
+                        </div>
                       </div>
                     </div>
                     <button
@@ -1479,8 +1535,27 @@ function App() {
                     justifyContent: 'space-between',
                     alignItems: 'center'
                   }}>
-                    <div style={{ color: '#166534', fontWeight: '700', fontSize: '0.9rem' }}>
-                      👶 {selectedStudent?.name}
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '0.5rem',
+                      color: '#166534', 
+                      fontWeight: '700', 
+                      fontSize: '0.9rem' 
+                    }}>
+                      {selectedStudent && (
+                        <img 
+                          src={getStudentAvatar(selectedStudent.id)} 
+                          alt={selectedStudent.name}
+                          style={{ 
+                            width: '1.5rem', 
+                            height: '1.5rem', 
+                            borderRadius: '50%',
+                            objectFit: 'cover'
+                          }} 
+                        />
+                      )}
+                      {selectedStudent?.name}
                     </div>
                     <button
                       onClick={() => {
@@ -1553,8 +1628,27 @@ function App() {
                     justifyContent: 'space-between',
                     alignItems: 'center'
                   }}>
-                    <div style={{ color: '#1e40af', fontWeight: '700', fontSize: '0.9rem' }}>
-                      👶 {selectedStudent?.name}
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '0.5rem',
+                      color: '#1e40af', 
+                      fontWeight: '700', 
+                      fontSize: '0.9rem' 
+                    }}>
+                      {selectedStudent && (
+                        <img 
+                          src={getStudentAvatar(selectedStudent.id)} 
+                          alt={selectedStudent.name}
+                          style={{ 
+                            width: '1.5rem', 
+                            height: '1.5rem', 
+                            borderRadius: '50%',
+                            objectFit: 'cover'
+                          }} 
+                        />
+                      )}
+                      {selectedStudent?.name}
                     </div>
                     <button
                       onClick={() => {
