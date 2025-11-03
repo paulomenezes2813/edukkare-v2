@@ -74,6 +74,7 @@ function App() {
   const [audioTranscription, setAudioTranscription] = useState('');
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -865,9 +866,30 @@ function App() {
           zIndex: 100
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <h1 style={{ fontSize: '1.125rem', marginBottom: '0.125rem', fontWeight: '700' }}>🎓 EDUKKARE</h1>
-              <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Olá, Professora {userName}</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <button
+                onClick={() => setShowSidebar(true)}
+                style={{
+                  background: 'rgba(255,255,255,0.2)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.5rem',
+                  borderRadius: '0.5rem',
+                  fontSize: '1.25rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '2.5rem',
+                  height: '2.5rem'
+                }}
+              >
+                ☰
+              </button>
+              <div>
+                <h1 style={{ fontSize: '1.125rem', marginBottom: '0.125rem', fontWeight: '700' }}>🎓 EDUKKARE</h1>
+                <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Olá, Professora {userName}</p>
+              </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button
@@ -906,6 +928,317 @@ function App() {
             </div>
           </div>
         </header>
+
+        {/* Backdrop - Overlay escuro quando sidebar está aberto */}
+        {showSidebar && (
+          <div
+            onClick={() => setShowSidebar(false)}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 200
+            }}
+          />
+        )}
+
+        {/* Sidebar - Menu Lateral */}
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: showSidebar ? 0 : '-280px',
+            bottom: 0,
+            width: '280px',
+            background: 'white',
+            boxShadow: '2px 0 10px rgba(0, 0, 0, 0.1)',
+            zIndex: 300,
+            transition: 'left 0.3s ease',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden'
+          }}
+        >
+          {/* Sidebar Header */}
+          <div style={{
+            background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+            color: 'white',
+            padding: '1.5rem 1rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.25rem' }}>🎓 EDUKKARE</h2>
+              <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Menu Principal</p>
+            </div>
+            <button
+              onClick={() => setShowSidebar(false)}
+              style={{
+                background: 'rgba(255,255,255,0.2)',
+                color: 'white',
+                border: 'none',
+                padding: '0.5rem',
+                borderRadius: '0.5rem',
+                fontSize: '1.25rem',
+                cursor: 'pointer',
+                width: '2.5rem',
+                height: '2.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Menu Items */}
+          <div style={{ 
+            flex: 1, 
+            overflowY: 'auto',
+            padding: '1rem 0'
+          }}>
+            {/* Alunos */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                alert('📚 Navegando para Alunos...');
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>👶</span>
+              <span>Alunos</span>
+            </button>
+
+            {/* Professores */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                alert('👩‍🏫 Navegando para Professores...');
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>👩‍🏫</span>
+              <span>Professores</span>
+            </button>
+
+            {/* Usuários */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                alert('👥 Navegando para Usuários...');
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>👥</span>
+              <span>Usuários</span>
+            </button>
+
+            {/* Escolas */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                alert('🏫 Navegando para Escolas...');
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>🏫</span>
+              <span>Escolas</span>
+            </button>
+
+            {/* Atividades */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                alert('📝 Navegando para Atividades...');
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>📝</span>
+              <span>Atividades</span>
+            </button>
+
+            {/* Divider */}
+            <div style={{
+              height: '1px',
+              background: '#e2e8f0',
+              margin: '1rem 1.5rem'
+            }} />
+
+            {/* Logout */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                setIsLoggedIn(false);
+                setUserName('');
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#dc2626',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#fef2f2';
+                e.currentTarget.style.borderLeftColor = '#dc2626';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>🚪</span>
+              <span>Sair</span>
+            </button>
+          </div>
+
+          {/* Sidebar Footer */}
+          <div style={{
+            padding: '1rem',
+            borderTop: '1px solid #e2e8f0',
+            background: '#f8fafc'
+          }}>
+            <p style={{ 
+              fontSize: '0.75rem', 
+              color: '#64748b',
+              textAlign: 'center',
+              margin: 0
+            }}>
+              Edukkare v2.0 © 2025
+            </p>
+          </div>
+        </div>
 
       <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
         {/* Seleção de Atividade - Compacto */}
