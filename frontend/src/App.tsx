@@ -682,28 +682,6 @@ function App() {
     }
   };
 
-  // Carregar avatares
-  const loadAvatars = async () => {
-    try {
-      let API_URL = import.meta.env.VITE_API_URL || '/api';
-      if (window.location.hostname.includes('railway.app')) {
-        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
-      }
-      const token = localStorage.getItem('token');
-
-      const response = await fetch(`${API_URL}/avatars`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setAvatars(data.data || data || []);
-      }
-    } catch (error) {
-      console.error('Erro ao carregar avatares:', error);
-    }
-  };
-
   // CRUD de Professores
   const loadTeachers = async () => {
     try {
