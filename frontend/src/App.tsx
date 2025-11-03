@@ -581,16 +581,60 @@ function App() {
 
     if (student) {
       setEditingStudent(student);
-      setStudentForm({
-        name: student.name,
-        birthDate: student.birthDate.split('T')[0],
-        responsavel: '',
-        telefone: '',
-        email: '',
-        shift: student.shift as 'MANHA' | 'TARDE' | 'INTEGRAL',
-        classId: student.class?.name || '',
-        avatarId: student.avatar?.id?.toString() || ''
-      });
+      
+      // Buscar dados completos do aluno do backend
+      try {
+        let API_URL = import.meta.env.VITE_API_URL || '/api';
+        if (window.location.hostname.includes('railway.app')) {
+          API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+        }
+        const token = localStorage.getItem('token');
+        
+        const response = await fetch(`${API_URL}/students/${student.id}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const studentData = data.data || data;
+          
+          setStudentForm({
+            name: studentData.name || '',
+            birthDate: studentData.birthDate ? studentData.birthDate.split('T')[0] : '',
+            responsavel: studentData.responsavel || '',
+            telefone: studentData.telefone || '',
+            email: studentData.email || '',
+            shift: studentData.shift as 'MANHA' | 'TARDE' | 'INTEGRAL',
+            classId: studentData.class?.name || '',
+            avatarId: studentData.avatar?.id?.toString() || ''
+          });
+        } else {
+          // Fallback para dados locais se a chamada falhar
+          setStudentForm({
+            name: student.name,
+            birthDate: student.birthDate.split('T')[0],
+            responsavel: '',
+            telefone: '',
+            email: '',
+            shift: student.shift as 'MANHA' | 'TARDE' | 'INTEGRAL',
+            classId: student.class?.name || '',
+            avatarId: student.avatar?.id?.toString() || ''
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados do aluno:', error);
+        // Fallback para dados locais
+        setStudentForm({
+          name: student.name,
+          birthDate: student.birthDate.split('T')[0],
+          responsavel: '',
+          telefone: '',
+          email: '',
+          shift: student.shift as 'MANHA' | 'TARDE' | 'INTEGRAL',
+          classId: student.class?.name || '',
+          avatarId: student.avatar?.id?.toString() || ''
+        });
+      }
     } else {
       setEditingStudent(null);
       setStudentForm({
@@ -981,19 +1025,79 @@ function App() {
   };
 
   const handleSaveActivity = async () => {
-    if (!activityForm.title.trim()) {
-      alert('⚠️ Título da atividade é obrigatório');
-      return;
+    try {
+      if (!activityForm.title.trim() || !activityForm.description.trim()) {
+        alert('⚠️ Título e descrição da atividade são obrigatórios');
+        return;
+      }
+
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const url = editingActivity 
+        ? `${API_URL}/activities/${editingActivity.id}`
+        : `${API_URL}/activities`;
+      
+      const method = editingActivity ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          title: activityForm.title,
+          description: activityForm.description,
+          duration: activityForm.duration || 30
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Atividade ${editingActivity ? 'atualizada' : 'cadastrada'} com sucesso!`);
+        setShowActivityModal(false);
+        await loadActivities();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao salvar atividade'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao salvar atividade: ${error.message}`);
     }
-    alert(`✅ Atividade ${editingActivity ? 'atualizada' : 'cadastrada'} com sucesso! (Mock)`);
-    setShowActivityModal(false);
-    await loadActivities();
   };
 
   const handleDeleteActivity = async (activity: Activity) => {
     if (!confirm(`⚠️ Tem certeza que deseja excluir ${activity.title}?`)) return;
-    alert(`✅ Atividade excluída com sucesso! (Mock)`);
-    await loadActivities();
+
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/activities/${activity.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Atividade excluída com sucesso!`);
+        await loadActivities();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao excluir atividade'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao excluir atividade: ${error.message}`);
+    }
   };
 
   // CRUD de Avatares
