@@ -99,7 +99,7 @@ function App() {
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars'>('home');
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [studentForm, setStudentForm] = useState({
@@ -160,6 +160,11 @@ function App() {
 
   // Estados para Avatares
   const [avatars, setAvatars] = useState<Array<{id: number, avatar: string}>>([]);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [editingAvatar, setEditingAvatar] = useState<{id: number, avatar: string} | null>(null);
+  const [avatarForm, setAvatarForm] = useState({
+    avatar: ''
+  });
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -1010,6 +1015,90 @@ function App() {
     await loadActivities();
   };
 
+  // CRUD de Avatares
+  const openAvatarModal = (avatar?: {id: number, avatar: string}) => {
+    if (avatar) {
+      setEditingAvatar(avatar);
+      setAvatarForm({ avatar: avatar.avatar });
+    } else {
+      setEditingAvatar(null);
+      setAvatarForm({ avatar: '' });
+    }
+    setShowAvatarModal(true);
+  };
+
+  const handleSaveAvatar = async () => {
+    try {
+      if (!avatarForm.avatar.trim()) {
+        alert('⚠️ Nome do arquivo do avatar é obrigatório');
+        return;
+      }
+
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const url = editingAvatar 
+        ? `${API_URL}/avatars/${editingAvatar.id}`
+        : `${API_URL}/avatars`;
+      
+      const method = editingAvatar ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(avatarForm)
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Avatar ${editingAvatar ? 'atualizado' : 'cadastrado'} com sucesso!`);
+        setShowAvatarModal(false);
+        await loadAvatars();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao salvar avatar'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao salvar avatar: ${error.message}`);
+    }
+  };
+
+  const handleDeleteAvatar = async (avatar: {id: number, avatar: string}) => {
+    if (!confirm(`⚠️ Tem certeza que deseja excluir o avatar ${avatar.avatar}?`)) return;
+
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/avatars/${avatar.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Avatar excluído com sucesso!`);
+        await loadAvatars();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao excluir avatar'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao excluir avatar: ${error.message}`);
+    }
+  };
+
   // Home Page - Mobile Optimized
   if (!showLogin && !isLoggedIn) {
     return (
@@ -1733,6 +1822,42 @@ function App() {
             >
               <span style={{ fontSize: '1.5rem' }}>📝</span>
               <span>Atividades</span>
+            </button>
+
+            {/* Avatares */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                setCurrentScreen('avatars');
+                loadAvatars();
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>🎭</span>
+              <span>Avatares</span>
             </button>
 
             {/* Divider */}
@@ -2460,6 +2585,76 @@ function App() {
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                     <button onClick={() => setShowActivityModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
                     <button onClick={handleSaveActivity} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingActivity ? 'Salvar' : 'Cadastrar'}</button>
+                  </div>
+                </div>
+              </div></>
+            )}
+          </main>
+        ) : currentScreen === 'avatars' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div><h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>🎭 Gerenciar Avatares</h2><p style={{ fontSize: '0.875rem', color: '#64748b' }}>{avatars.length} avatares cadastrados</p></div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '5rem' }}>
+              {avatars.map((avatar) => (
+                <div key={avatar.id} style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', textAlign: 'center' }}>
+                  <img 
+                    src={`/avatares_edukkare/${avatar.avatar}`} 
+                    alt={avatar.avatar}
+                    style={{ 
+                      width: '5rem', 
+                      height: '5rem', 
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '3px solid #8b5cf6',
+                      marginBottom: '1rem'
+                    }}
+                    onError={(e) => {
+                      e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999" font-size="16"%3E?%3C/text%3E%3C/svg%3E';
+                    }}
+                  />
+                  <h3 style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem', wordBreak: 'break-word' }}>{avatar.avatar}</h3>
+                  <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '1rem' }}>ID: {avatar.id}</div>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={() => openAvatarModal(avatar)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => handleDeleteAvatar(avatar)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => openAvatarModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            {showAvatarModal && (
+              <><div onClick={() => setShowAvatarModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
+              <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}><h3 style={{ fontSize: '1.5rem', fontWeight: '700' }}>{editingAvatar ? '✏️ Editar Avatar' : '➕ Novo Avatar'}</h3><button onClick={() => setShowAvatarModal(false)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer' }}>✕</button></div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Nome do Arquivo *</label><input type="text" value={avatarForm.avatar} onChange={(e) => setAvatarForm({ ...avatarForm, avatar: e.target.value })} placeholder="Ex: novo-avatar.png" style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  {avatarForm.avatar && (
+                    <div style={{ marginTop: '0.5rem', textAlign: 'center' }}>
+                      <p style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.5rem' }}>Preview:</p>
+                      <img 
+                        src={`/avatares_edukkare/${avatarForm.avatar}`} 
+                        alt="Preview"
+                        style={{ 
+                          width: '4rem', 
+                          height: '4rem', 
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          border: '2px solid #8b5cf6'
+                        }}
+                        onError={(e) => {
+                          e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23f3f4f6" width="100" height="100"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%236b7280" font-size="12"%3EImagem não encontrada%3C/text%3E%3C/svg%3E';
+                        }}
+                      />
+                    </div>
+                  )}
+                  <div style={{ background: '#eff6ff', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.75rem', color: '#1e40af' }}>
+                    💡 <strong>Dica:</strong> Primeiro faça upload da imagem para a pasta <code>/public/avatares_edukkare/</code> do projeto e depois cadastre aqui com o mesmo nome.
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                    <button onClick={() => setShowAvatarModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
+                    <button onClick={handleSaveAvatar} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingAvatar ? 'Salvar' : 'Cadastrar'}</button>
                   </div>
                 </div>
               </div></>
