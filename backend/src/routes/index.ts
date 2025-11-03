@@ -5,6 +5,9 @@ import activityRoutes from './activity.routes';
 import evaluationRoutes from './evaluation.routes';
 import evidenceRoutes from './evidence.routes';
 import dashboardRoutes from './dashboard.routes';
+import teacherRoutes from './teacher.routes';
+import schoolRoutes from './school.routes';
+import avatarRoutes from './avatar.routes';
 
 const router = Router();
 
@@ -14,6 +17,9 @@ router.use('/activities', activityRoutes);
 router.use('/evaluations', evaluationRoutes);
 router.use('/evidences', evidenceRoutes);
 router.use('/dashboard', dashboardRoutes);
+router.use('/teachers', teacherRoutes);
+router.use('/schools', schoolRoutes);
+router.use('/avatars', avatarRoutes);
 
 // Health check
 router.get('/health', (req, res) => {

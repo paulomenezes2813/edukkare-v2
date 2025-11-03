@@ -84,7 +84,7 @@ export class StudentController {
 
   async create(req: Request, res: Response) {
     try {
-      const { name, birthDate, responsavel, telefone, email, shift, classId } = req.body;
+      const { name, birthDate, responsavel, telefone, email, shift, classId, avatarId } = req.body;
 
       const student = await prisma.student.create({
         data: {
@@ -95,6 +95,7 @@ export class StudentController {
           email,
           shift,
           classId: Number(classId),
+          avatarId: avatarId ? Number(avatarId) : undefined,
         },
         include: {
           class: true,
@@ -111,7 +112,7 @@ export class StudentController {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { name, birthDate, responsavel, telefone, email, shift, classId, active } = req.body;
+      const { name, birthDate, responsavel, telefone, email, shift, classId, active, avatarId } = req.body;
 
       const student = await prisma.student.update({
         where: { id: Number(id) },
@@ -124,6 +125,7 @@ export class StudentController {
           shift,
           classId: classId ? Number(classId) : undefined,
           active,
+          avatarId: avatarId !== undefined ? (avatarId ? Number(avatarId) : null) : undefined,
         },
         include: {
           class: true,

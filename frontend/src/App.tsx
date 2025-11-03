@@ -109,8 +109,12 @@ function App() {
     telefone: '',
     email: '',
     shift: 'MANHA' as 'MANHA' | 'TARDE' | 'INTEGRAL',
-    classId: ''
+    classId: '',
+    avatarId: ''
   });
+  
+  // Lista de avatares disponíveis
+  const [availableAvatars, setAvailableAvatars] = useState<{ id: number; avatar: string }[]>([]);
   
   // Estados para Teachers
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -190,6 +194,29 @@ function App() {
     
     validateToken();
   }, []);
+
+  const loadAvatars = async () => {
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/avatars`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAvailableAvatars(data.data || data || []);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar avatares:', error);
+    }
+  };
 
   const loadActivities = async () => {
     try {
@@ -535,7 +562,12 @@ function App() {
   };
 
   // CRUD de Alunos
-  const openStudentModal = (student?: Student) => {
+  const openStudentModal = async (student?: Student) => {
+    // Carrega avatares se ainda não foram carregados
+    if (availableAvatars.length === 0) {
+      await loadAvatars();
+    }
+
     if (student) {
       setEditingStudent(student);
       setStudentForm({
@@ -545,7 +577,8 @@ function App() {
         telefone: '',
         email: '',
         shift: student.shift as 'MANHA' | 'TARDE' | 'INTEGRAL',
-        classId: student.class?.name || ''
+        classId: student.class?.name || '',
+        avatarId: student.avatar?.id?.toString() || ''
       });
     } else {
       setEditingStudent(null);
@@ -556,7 +589,8 @@ function App() {
         telefone: '',
         email: '',
         shift: 'MANHA',
-        classId: ''
+        classId: '',
+        avatarId: ''
       });
     }
     setShowStudentModal(true);
@@ -641,10 +675,24 @@ function App() {
 
   // CRUD de Professores
   const loadTeachers = async () => {
-    setTeachers([
-      { id: 1, name: 'Maria Silva', email: 'maria.silva@edukkare.com', phone: '(85) 98765-4321', specialization: 'Educação Infantil' },
-      { id: 2, name: 'João Santos', email: 'joao.santos@edukkare.com', phone: '(85) 98765-4322', specialization: 'Pedagogia' },
-    ]);
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/teachers`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setTeachers(data.data || data || []);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar professores:', error);
+    }
   };
 
   const openTeacherModal = (teacher?: Teacher) => {
@@ -668,15 +716,69 @@ function App() {
       alert('⚠️ Nome e email são obrigatórios');
       return;
     }
-    alert(`✅ Professor ${editingTeacher ? 'atualizado' : 'cadastrado'} com sucesso! (Mock)`);
-    setShowTeacherModal(false);
-    await loadTeachers();
+
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const url = editingTeacher 
+        ? `${API_URL}/teachers/${editingTeacher.id}`
+        : `${API_URL}/teachers`;
+      
+      const method = editingTeacher ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(teacherForm)
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Professor ${editingTeacher ? 'atualizado' : 'cadastrado'} com sucesso!`);
+        setShowTeacherModal(false);
+        await loadTeachers();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao salvar professor'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao salvar professor: ${error.message}`);
+    }
   };
 
   const handleDeleteTeacher = async (teacher: Teacher) => {
     if (!confirm(`⚠️ Tem certeza que deseja excluir ${teacher.name}?`)) return;
-    alert(`✅ Professor excluído com sucesso! (Mock)`);
-    await loadTeachers();
+    
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/teachers/${teacher.id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Professor excluído com sucesso!`);
+        await loadTeachers();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao excluir professor'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao excluir professor: ${error.message}`);
+    }
   };
 
   // CRUD de Usuários
@@ -744,10 +846,24 @@ function App() {
 
   // CRUD de Escolas
   const loadSchools = async () => {
-    setSchools([
-      { id: 1, name: 'Escola Infantil Edukkare', address: 'Rua das Flores, 123', phone: '(85) 3456-7890', email: 'contato@edukkare.com' },
-      { id: 2, name: 'Centro Educacional Alegria', address: 'Av. Principal, 456', phone: '(85) 3456-7891', email: 'alegria@edukkare.com' },
-    ]);
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/schools`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSchools(data.data || data || []);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar escolas:', error);
+    }
   };
 
   const openSchoolModal = (school?: School) => {
@@ -771,15 +887,69 @@ function App() {
       alert('⚠️ Nome da escola é obrigatório');
       return;
     }
-    alert(`✅ Escola ${editingSchool ? 'atualizada' : 'cadastrada'} com sucesso! (Mock)`);
-    setShowSchoolModal(false);
-    await loadSchools();
+
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const url = editingSchool 
+        ? `${API_URL}/schools/${editingSchool.id}`
+        : `${API_URL}/schools`;
+      
+      const method = editingSchool ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(schoolForm)
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Escola ${editingSchool ? 'atualizada' : 'cadastrada'} com sucesso!`);
+        setShowSchoolModal(false);
+        await loadSchools();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao salvar escola'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao salvar escola: ${error.message}`);
+    }
   };
 
   const handleDeleteSchool = async (school: School) => {
     if (!confirm(`⚠️ Tem certeza que deseja excluir ${school.name}?`)) return;
-    alert(`✅ Escola excluída com sucesso! (Mock)`);
-    await loadSchools();
+    
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/schools/${school.id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Escola excluída com sucesso!`);
+        await loadSchools();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao excluir escola'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao excluir escola: ${error.message}`);
+    }
   };
 
   // CRUD de Atividades (complementar ao existente)
@@ -2012,6 +2182,53 @@ function App() {
                         <option value="TARDE">Tarde</option>
                         <option value="INTEGRAL">Integral</option>
                       </select>
+                    </div>
+
+                    {/* Avatar */}
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Avatar
+                      </label>
+                      <select
+                        value={studentForm.avatarId}
+                        onChange={(e) => setStudentForm({ ...studentForm, avatarId: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '2px solid #e2e8f0',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          fontFamily: 'inherit'
+                        }}
+                      >
+                        <option value="">Selecione um avatar</option>
+                        {availableAvatars.map((avatar) => (
+                          <option key={avatar.id} value={avatar.id}>
+                            {avatar.avatar.replace('.png', '').replace('-', ' ')}
+                          </option>
+                        ))}
+                      </select>
+                      {studentForm.avatarId && (
+                        <div style={{ marginTop: '0.5rem', textAlign: 'center' }}>
+                          <img 
+                            src={`/avatares_edukkare/${availableAvatars.find(a => a.id === Number(studentForm.avatarId))?.avatar}`}
+                            alt="Preview"
+                            style={{
+                              width: '3rem',
+                              height: '3rem',
+                              borderRadius: '50%',
+                              objectFit: 'cover',
+                              border: '2px solid #8b5cf6'
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
 
                     {/* Botões */}
