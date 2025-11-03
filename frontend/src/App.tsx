@@ -75,6 +75,18 @@ function App() {
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities'>('home');
+  const [showStudentModal, setShowStudentModal] = useState(false);
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null);
+  const [studentForm, setStudentForm] = useState({
+    name: '',
+    birthDate: '',
+    responsavel: '',
+    telefone: '',
+    email: '',
+    shift: 'MANHA' as 'MANHA' | 'TARDE' | 'INTEGRAL',
+    classId: ''
+  });
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -453,6 +465,111 @@ function App() {
     alert(`✅ Anotação salva para ${selectedStudent.name}:\n\n"${note}"\n\n(Será salva no backend)`);
     setNote('');
     setShowNoteModal(false);
+  };
+
+  // CRUD de Alunos
+  const openStudentModal = (student?: Student) => {
+    if (student) {
+      setEditingStudent(student);
+      setStudentForm({
+        name: student.name,
+        birthDate: student.birthDate.split('T')[0],
+        responsavel: '',
+        telefone: '',
+        email: '',
+        shift: student.shift as 'MANHA' | 'TARDE' | 'INTEGRAL',
+        classId: student.class?.name || ''
+      });
+    } else {
+      setEditingStudent(null);
+      setStudentForm({
+        name: '',
+        birthDate: '',
+        responsavel: '',
+        telefone: '',
+        email: '',
+        shift: 'MANHA',
+        classId: ''
+      });
+    }
+    setShowStudentModal(true);
+  };
+
+  const handleSaveStudent = async () => {
+    try {
+      if (!studentForm.name.trim() || !studentForm.birthDate) {
+        alert('⚠️ Nome e data de nascimento são obrigatórios');
+        return;
+      }
+
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const url = editingStudent 
+        ? `${API_URL}/students/${editingStudent.id}`
+        : `${API_URL}/students`;
+      
+      const method = editingStudent ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          ...studentForm,
+          classId: 1 // Por enquanto usa turma padrão
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Aluno ${editingStudent ? 'atualizado' : 'cadastrado'} com sucesso!`);
+        setShowStudentModal(false);
+        await loadStudents(); // Recarrega a lista
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao salvar aluno'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao salvar aluno: ${error.message}`);
+    }
+  };
+
+  const handleDeleteStudent = async (student: Student) => {
+    if (!confirm(`⚠️ Tem certeza que deseja excluir ${student.name}?`)) {
+      return;
+    }
+
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/students/${student.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Aluno excluído com sucesso!`);
+        await loadStudents(); // Recarrega a lista
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao excluir aluno'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao excluir aluno: ${error.message}`);
+    }
   };
 
   // Home Page - Mobile Optimized
@@ -1006,7 +1123,7 @@ function App() {
             <button
               onClick={() => {
                 setShowSidebar(false);
-                alert('📚 Navegando para Alunos...');
+                setCurrentScreen('students');
               }}
               style={{
                 width: '100%',
@@ -1240,8 +1357,465 @@ function App() {
           </div>
         </div>
 
-      <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
-        {/* Seleção de Atividade - Compacto */}
+        {/* Tela de Gerenciamento de Alunos */}
+        {currentScreen === 'students' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            {/* Header da tela de Alunos */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '1.5rem'
+            }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>
+                  👶 Gerenciar Alunos
+                </h2>
+                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>
+                  {students.length} alunos cadastrados
+                </p>
+              </div>
+              <button
+                onClick={() => setCurrentScreen('home')}
+                style={{
+                  background: '#e2e8f0',
+                  color: '#475569',
+                  border: 'none',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '0.5rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  cursor: 'pointer'
+                }}
+              >
+                ← Voltar
+              </button>
+            </div>
+
+            {/* Grid de Alunos */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+              gap: '1rem',
+              marginBottom: '5rem'
+            }}>
+              {students.map((student) => (
+                <div
+                  key={student.id}
+                  style={{
+                    background: 'white',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '1rem',
+                    padding: '1.5rem',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(139, 92, 246, 0.2)';
+                    e.currentTarget.style.borderColor = '#8b5cf6';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+                    e.currentTarget.style.borderColor = '#e2e8f0';
+                  }}
+                >
+                  {/* Avatar e Nome */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1rem',
+                    marginBottom: '1rem'
+                  }}>
+                    <img 
+                      src={getStudentAvatar(student)} 
+                      alt={student.name}
+                      style={{
+                        width: '3.5rem',
+                        height: '3.5rem',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        border: '3px solid #8b5cf6'
+                      }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <h3 style={{
+                        fontSize: '1.125rem',
+                        fontWeight: '700',
+                        color: '#1e293b',
+                        marginBottom: '0.25rem'
+                      }}>
+                        {student.name}
+                      </h3>
+                      <p style={{
+                        fontSize: '0.75rem',
+                        color: '#64748b'
+                      }}>
+                        {student.class?.name || 'Sem turma'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Informações */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.5rem',
+                    marginBottom: '1rem',
+                    paddingTop: '1rem',
+                    borderTop: '1px solid #e2e8f0'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span style={{ fontSize: '1rem' }}>🎂</span>
+                      <span style={{ fontSize: '0.875rem', color: '#475569' }}>
+                        {new Date(student.birthDate).toLocaleDateString('pt-BR')}
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span style={{ fontSize: '1rem' }}>⏰</span>
+                      <span style={{ fontSize: '0.875rem', color: '#475569' }}>
+                        Turno: {student.shift === 'MANHA' ? 'Manhã' : student.shift === 'TARDE' ? 'Tarde' : 'Integral'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Ações */}
+                  <div style={{
+                    display: 'flex',
+                    gap: '0.5rem'
+                  }}>
+                    <button
+                      onClick={() => openStudentModal(student)}
+                      style={{
+                        flex: 1,
+                        background: '#8b5cf6',
+                        color: 'white',
+                        border: 'none',
+                        padding: '0.75rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      ✏️ Editar
+                    </button>
+                    <button
+                      onClick={() => handleDeleteStudent(student)}
+                      style={{
+                        background: '#fee2e2',
+                        color: '#dc2626',
+                        border: 'none',
+                        padding: '0.75rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Botão Flutuante de Adicionar */}
+            <button
+              onClick={() => openStudentModal()}
+              style={{
+                position: 'fixed',
+                bottom: '2rem',
+                right: '2rem',
+                width: '3.5rem',
+                height: '3.5rem',
+                background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '50%',
+                fontSize: '1.5rem',
+                fontWeight: '700',
+                cursor: 'pointer',
+                boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 100,
+                transition: 'transform 0.2s'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              +
+            </button>
+
+            {/* Modal de Formulário */}
+            {showStudentModal && (
+              <>
+                {/* Backdrop */}
+                <div
+                  onClick={() => setShowStudentModal(false)}
+                  style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0, 0, 0, 0.5)',
+                    zIndex: 400
+                  }}
+                />
+
+                {/* Modal */}
+                <div style={{
+                  position: 'fixed',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  background: 'white',
+                  borderRadius: '1rem',
+                  padding: '2rem',
+                  maxWidth: '500px',
+                  width: '90%',
+                  maxHeight: '90vh',
+                  overflowY: 'auto',
+                  zIndex: 500,
+                  boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)'
+                }}>
+                  {/* Header do Modal */}
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '1.5rem'
+                  }}>
+                    <h3 style={{
+                      fontSize: '1.5rem',
+                      fontWeight: '700',
+                      color: '#1e293b'
+                    }}>
+                      {editingStudent ? '✏️ Editar Aluno' : '➕ Novo Aluno'}
+                    </h3>
+                    <button
+                      onClick={() => setShowStudentModal(false)}
+                      style={{
+                        background: '#fee2e2',
+                        color: '#dc2626',
+                        border: 'none',
+                        padding: '0.5rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '1.125rem',
+                        cursor: 'pointer',
+                        width: '2rem',
+                        height: '2rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  {/* Formulário */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1rem'
+                  }}>
+                    {/* Nome */}
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Nome Completo *
+                      </label>
+                      <input
+                        type="text"
+                        value={studentForm.name}
+                        onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })}
+                        placeholder="Ex: Maria Silva Santos"
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '2px solid #e2e8f0',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          fontFamily: 'inherit'
+                        }}
+                      />
+                    </div>
+
+                    {/* Data de Nascimento */}
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Data de Nascimento *
+                      </label>
+                      <input
+                        type="date"
+                        value={studentForm.birthDate}
+                        onChange={(e) => setStudentForm({ ...studentForm, birthDate: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '2px solid #e2e8f0',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          fontFamily: 'inherit'
+                        }}
+                      />
+                    </div>
+
+                    {/* Responsável */}
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Nome do Responsável
+                      </label>
+                      <input
+                        type="text"
+                        value={studentForm.responsavel}
+                        onChange={(e) => setStudentForm({ ...studentForm, responsavel: e.target.value })}
+                        placeholder="Ex: Ana Silva"
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '2px solid #e2e8f0',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          fontFamily: 'inherit'
+                        }}
+                      />
+                    </div>
+
+                    {/* Telefone */}
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Telefone
+                      </label>
+                      <input
+                        type="tel"
+                        value={studentForm.telefone}
+                        onChange={(e) => setStudentForm({ ...studentForm, telefone: e.target.value })}
+                        placeholder="(85) 98765-4321"
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '2px solid #e2e8f0',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          fontFamily: 'inherit'
+                        }}
+                      />
+                    </div>
+
+                    {/* Turno */}
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        color: '#475569',
+                        marginBottom: '0.5rem'
+                      }}>
+                        Turno *
+                      </label>
+                      <select
+                        value={studentForm.shift}
+                        onChange={(e) => setStudentForm({ ...studentForm, shift: e.target.value as 'MANHA' | 'TARDE' | 'INTEGRAL' })}
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '2px solid #e2e8f0',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          fontFamily: 'inherit'
+                        }}
+                      >
+                        <option value="MANHA">Manhã</option>
+                        <option value="TARDE">Tarde</option>
+                        <option value="INTEGRAL">Integral</option>
+                      </select>
+                    </div>
+
+                    {/* Botões */}
+                    <div style={{
+                      display: 'flex',
+                      gap: '0.75rem',
+                      marginTop: '1rem'
+                    }}>
+                      <button
+                        onClick={() => setShowStudentModal(false)}
+                        style={{
+                          flex: 1,
+                          padding: '1rem',
+                          background: '#e2e8f0',
+                          color: '#475569',
+                          border: 'none',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          fontWeight: '600',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Cancelar
+                      </button>
+                      <button
+                        onClick={handleSaveStudent}
+                        style={{
+                          flex: 1,
+                          padding: '1rem',
+                          background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '0.5rem',
+                          fontSize: '1rem',
+                          fontWeight: '600',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {editingStudent ? 'Salvar Alterações' : 'Cadastrar Aluno'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </main>
+        ) : (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            {/* Seleção de Atividade - Compacto */}
         <div style={{ marginBottom: '1.5rem' }}>
           <h2 style={{ marginBottom: '0.75rem', color: '#1e293b', fontSize: '1rem', fontWeight: '700' }}>
             📚 1. Selecione a Atividade
@@ -2093,6 +2667,7 @@ function App() {
           </ul>
         </div>
       </main>
+        )}
     </div>
   );
 }
