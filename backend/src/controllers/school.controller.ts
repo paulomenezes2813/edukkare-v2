@@ -1,18 +1,24 @@
 import { Request, Response } from 'express';
+import prisma from '../config/database';
 import { ApiResponse } from '../utils/response';
 import { AuthRequest } from '../middlewares/auth.middleware';
-
-// Mock data até criar model no Prisma
-const mockSchools = [
-  { id: 1, name: 'Escola Infantil Edukkare', address: 'Rua das Flores, 123', phone: '(85) 3456-7890', email: 'contato@edukkare.com' },
-  { id: 2, name: 'Centro Educacional Alegria', address: 'Av. Principal, 456', phone: '(85) 3456-7891', email: 'alegria@edukkare.com' },
-];
 
 export class SchoolController {
   async list(req: AuthRequest, res: Response) {
     try {
-      // TODO: Substituir por prisma.school.findMany() quando criar model
-      return ApiResponse.success(res, mockSchools);
+      const { active } = req.query;
+
+      const where: any = {};
+      if (active !== undefined) where.active = active === 'true';
+
+      const schools = await prisma.school.findMany({
+        where,
+        orderBy: {
+          name: 'asc',
+        },
+      });
+
+      return ApiResponse.success(res, schools);
     } catch (error: any) {
       return ApiResponse.serverError(res, error.message);
     }
@@ -21,7 +27,10 @@ export class SchoolController {
   async getById(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const school = mockSchools.find(s => s.id === Number(id));
+
+      const school = await prisma.school.findUnique({
+        where: { id: Number(id) },
+      });
 
       if (!school) {
         return ApiResponse.notFound(res, 'Escola não encontrada');
@@ -37,18 +46,21 @@ export class SchoolController {
     try {
       const { name, address, phone, email } = req.body;
 
-      // TODO: Substituir por prisma.school.create()
-      const newSchool = {
-        id: mockSchools.length + 1,
-        name,
-        address,
-        phone,
-        email
-      };
-      
-      mockSchools.push(newSchool);
+      // Validação básica
+      if (!name) {
+        return ApiResponse.badRequest(res, 'Nome é obrigatório');
+      }
 
-      return ApiResponse.created(res, newSchool, 'Escola cadastrada com sucesso');
+      const school = await prisma.school.create({
+        data: {
+          name,
+          address,
+          phone,
+          email,
+        },
+      });
+
+      return ApiResponse.created(res, school, 'Escola cadastrada com sucesso');
     } catch (error: any) {
       return ApiResponse.serverError(res, error.message);
     }
@@ -57,17 +69,29 @@ export class SchoolController {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { name, address, phone, email } = req.body;
+      const { name, address, phone, email, active } = req.body;
 
-      const index = mockSchools.findIndex(s => s.id === Number(id));
-      
-      if (index === -1) {
+      // Verifica se escola existe
+      const existingSchool = await prisma.school.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!existingSchool) {
         return ApiResponse.notFound(res, 'Escola não encontrada');
       }
 
-      mockSchools[index] = { ...mockSchools[index], name, address, phone, email };
+      const school = await prisma.school.update({
+        where: { id: Number(id) },
+        data: {
+          name,
+          address,
+          phone,
+          email,
+          active,
+        },
+      });
 
-      return ApiResponse.success(res, mockSchools[index], 'Escola atualizada com sucesso');
+      return ApiResponse.success(res, school, 'Escola atualizada com sucesso');
     } catch (error: any) {
       return ApiResponse.serverError(res, error.message);
     }
@@ -76,14 +100,19 @@ export class SchoolController {
   async delete(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      
-      const index = mockSchools.findIndex(s => s.id === Number(id));
-      
-      if (index === -1) {
+
+      // Verifica se escola existe
+      const existingSchool = await prisma.school.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!existingSchool) {
         return ApiResponse.notFound(res, 'Escola não encontrada');
       }
 
-      mockSchools.splice(index, 1);
+      await prisma.school.delete({
+        where: { id: Number(id) },
+      });
 
       return ApiResponse.success(res, null, 'Escola removida com sucesso');
     } catch (error: any) {
@@ -91,4 +120,3 @@ export class SchoolController {
     }
   }
 }
-

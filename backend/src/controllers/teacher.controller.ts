@@ -6,18 +6,13 @@ import { AuthRequest } from '../middlewares/auth.middleware';
 export class TeacherController {
   async list(req: AuthRequest, res: Response) {
     try {
-      // Busca usuários com role PROFESSOR
-      const teachers = await prisma.user.findMany({
-        where: {
-          role: 'PROFESSOR'
-        },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          active: true,
-          createdAt: true,
-        },
+      const { active } = req.query;
+
+      const where: any = {};
+      if (active !== undefined) where.active = active === 'true';
+
+      const teachers = await prisma.teacher.findMany({
+        where,
         orderBy: {
           name: 'asc',
         },
@@ -33,14 +28,8 @@ export class TeacherController {
     try {
       const { id } = req.params;
 
-      const teacher = await prisma.user.findUnique({
-        where: { 
-          id: Number(id),
-          role: 'PROFESSOR'
-        },
-        include: {
-          classes: true,
-        },
+      const teacher = await prisma.teacher.findUnique({
+        where: { id: Number(id) },
       });
 
       if (!teacher) {
@@ -53,16 +42,71 @@ export class TeacherController {
     }
   }
 
+  async create(req: Request, res: Response) {
+    try {
+      const { name, email, phone, specialization } = req.body;
+
+      // Validação básica
+      if (!name || !email) {
+        return ApiResponse.badRequest(res, 'Nome e email são obrigatórios');
+      }
+
+      // Verifica se email já existe
+      const existingTeacher = await prisma.teacher.findUnique({
+        where: { email },
+      });
+
+      if (existingTeacher) {
+        return ApiResponse.badRequest(res, 'Email já cadastrado');
+      }
+
+      const teacher = await prisma.teacher.create({
+        data: {
+          name,
+          email,
+          phone,
+          specialization,
+        },
+      });
+
+      return ApiResponse.created(res, teacher, 'Professor cadastrado com sucesso');
+    } catch (error: any) {
+      return ApiResponse.serverError(res, error.message);
+    }
+  }
+
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { name, email, active } = req.body;
+      const { name, email, phone, specialization, active } = req.body;
 
-      const teacher = await prisma.user.update({
+      // Verifica se professor existe
+      const existingTeacher = await prisma.teacher.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!existingTeacher) {
+        return ApiResponse.notFound(res, 'Professor não encontrado');
+      }
+
+      // Se está alterando email, verifica se já existe
+      if (email && email !== existingTeacher.email) {
+        const emailExists = await prisma.teacher.findUnique({
+          where: { email },
+        });
+
+        if (emailExists) {
+          return ApiResponse.badRequest(res, 'Email já cadastrado');
+        }
+      }
+
+      const teacher = await prisma.teacher.update({
         where: { id: Number(id) },
         data: {
           name,
           email,
+          phone,
+          specialization,
           active,
         },
       });
@@ -72,5 +116,27 @@ export class TeacherController {
       return ApiResponse.serverError(res, error.message);
     }
   }
-}
 
+  async delete(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      // Verifica se professor existe
+      const existingTeacher = await prisma.teacher.findUnique({
+        where: { id: Number(id) },
+      });
+
+      if (!existingTeacher) {
+        return ApiResponse.notFound(res, 'Professor não encontrado');
+      }
+
+      await prisma.teacher.delete({
+        where: { id: Number(id) },
+      });
+
+      return ApiResponse.success(res, null, 'Professor removido com sucesso');
+    } catch (error: any) {
+      return ApiResponse.serverError(res, error.message);
+    }
+  }
+}

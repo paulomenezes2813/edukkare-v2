@@ -1,14 +1,26 @@
 import { Router } from 'express';
-import { AvatarController } from '../controllers/avatar.controller';
+import prisma from '../config/database';
+import { ApiResponse } from '../utils/response';
 import { authMiddleware } from '../middlewares/auth.middleware';
 
 const router = Router();
-const avatarController = new AvatarController();
 
-// Todas as rotas requerem autenticação
+// Todas as rotas precisam de autenticação
 router.use(authMiddleware);
 
-router.get('/', (req, res) => avatarController.list(req, res));
+// Listar todos os avatares
+router.get('/', async (req, res) => {
+  try {
+    const avatars = await prisma.avatar.findMany({
+      orderBy: {
+        id: 'asc',
+      },
+    });
+
+    return ApiResponse.success(res, avatars);
+  } catch (error: any) {
+    return ApiResponse.serverError(res, error.message);
+  }
+});
 
 export default router;
-

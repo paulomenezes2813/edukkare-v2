@@ -158,6 +158,9 @@ function App() {
     duration: 30
   });
 
+  // Estados para Avatares
+  const [avatars, setAvatars] = useState<Array<{id: number, avatar: string}>>([]);
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -564,7 +567,7 @@ function App() {
   // CRUD de Alunos
   const openStudentModal = async (student?: Student) => {
     // Carrega avatares se ainda não foram carregados
-    if (availableAvatars.length === 0) {
+    if (avatars.length === 0) {
       await loadAvatars();
     }
 
@@ -623,7 +626,8 @@ function App() {
         },
         body: JSON.stringify({
           ...studentForm,
-          classId: 1 // Por enquanto usa turma padrão
+          classId: 1, // Por enquanto usa turma padrão
+          avatarId: studentForm.avatarId ? Number(studentForm.avatarId) : null
         })
       });
 
@@ -670,6 +674,28 @@ function App() {
       }
     } catch (error: any) {
       alert(`❌ Erro ao excluir aluno: ${error.message}`);
+    }
+  };
+
+  // Carregar avatares
+  const loadAvatars = async () => {
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/avatars`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAvatars(data.data || data || []);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar avatares:', error);
     }
   };
 
@@ -2208,7 +2234,7 @@ function App() {
                         }}
                       >
                         <option value="">Selecione um avatar</option>
-                        {availableAvatars.map((avatar) => (
+                        {avatars.map((avatar) => (
                           <option key={avatar.id} value={avatar.id}>
                             {avatar.avatar.replace('.png', '').replace('-', ' ')}
                           </option>
@@ -2217,7 +2243,7 @@ function App() {
                       {studentForm.avatarId && (
                         <div style={{ marginTop: '0.5rem', textAlign: 'center' }}>
                           <img 
-                            src={`/avatares_edukkare/${availableAvatars.find(a => a.id === Number(studentForm.avatarId))?.avatar}`}
+                            src={`/avatares_edukkare/${avatars.find(a => a.id === Number(studentForm.avatarId))?.avatar}`}
                             alt="Preview"
                             style={{
                               width: '3rem',

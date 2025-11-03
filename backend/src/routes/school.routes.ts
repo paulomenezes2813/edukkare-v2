@@ -5,7 +5,7 @@ import { authMiddleware } from '../middlewares/auth.middleware';
 const router = Router();
 const schoolController = new SchoolController();
 
-// Todas as rotas requerem autenticação
+// Todas as rotas precisam de autenticação
 router.use(authMiddleware);
 
 router.get('/', (req, res) => schoolController.list(req, res));
@@ -15,4 +15,3 @@ router.put('/:id', (req, res) => schoolController.update(req, res));
 router.delete('/:id', (req, res) => schoolController.delete(req, res));
 
 export default router;
-
