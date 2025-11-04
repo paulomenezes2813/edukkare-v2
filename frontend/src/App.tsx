@@ -1149,10 +1149,24 @@ function App() {
   };
 
   const openClassModal = async (classData?: Class) => {
-    // Carrega usuários (professores) se ainda não foram carregados
+    // Carrega usuários (professores) e professores se ainda não foram carregados
+    console.log('🎓 Abrindo modal de turma...');
+    
     if (users.length === 0) {
+      console.log('👥 Carregando usuários...');
       await loadUsers();
     }
+    
+    if (teachers.length === 0) {
+      console.log('👨‍🏫 Carregando professores...');
+      await loadTeachers();
+    }
+
+    console.log('✅ Usuários carregados:', users.length);
+    console.log('✅ Professores carregados:', teachers.length);
+    
+    const professoresUsers = users.filter(u => u.role === 'PROFESSOR' || u.role === 'ADMIN');
+    console.log('👨‍🏫 Professores (users):', professoresUsers.length, professoresUsers);
 
     if (classData) {
       setEditingClass(classData);
@@ -2913,7 +2927,32 @@ function App() {
                   <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Faixa Etária *</label><input type="text" value={classForm.age_group} onChange={(e) => setClassForm({ ...classForm, age_group: e.target.value })} placeholder="Ex: 3 a 4 anos" style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
                   <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Turno *</label><select value={classForm.shift} onChange={(e) => setClassForm({ ...classForm, shift: e.target.value as 'MANHA' | 'TARDE' | 'INTEGRAL' })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}><option value="MANHA">🌅 Manhã</option><option value="TARDE">🌆 Tarde</option><option value="INTEGRAL">⏰ Integral</option></select></div>
                   <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Ano *</label><input type="number" value={classForm.year} onChange={(e) => setClassForm({ ...classForm, year: Number(e.target.value) })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
-                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Professor Responsável *</label><select value={classForm.teacherId} onChange={(e) => setClassForm({ ...classForm, teacherId: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}><option value="">Selecione um professor</option>{users.filter(u => u.role === 'PROFESSOR').map((user) => (<option key={user.id} value={user.id}>{user.name}</option>))}</select></div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Professor Responsável *</label>
+                    <select 
+                      value={classForm.teacherId} 
+                      onChange={(e) => setClassForm({ ...classForm, teacherId: e.target.value })} 
+                      style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem', fontFamily: 'inherit' }}
+                    >
+                      <option value="">Selecione um professor</option>
+                      {users.filter(u => u.role === 'PROFESSOR' || u.role === 'ADMIN').length > 0 ? (
+                        users
+                          .filter(u => u.role === 'PROFESSOR' || u.role === 'ADMIN')
+                          .map((user) => (
+                            <option key={user.id} value={user.id}>
+                              {user.name} {user.role === 'ADMIN' ? '(Admin)' : ''}
+                            </option>
+                          ))
+                      ) : (
+                        <option value="" disabled>Nenhum professor cadastrado</option>
+                      )}
+                    </select>
+                    {users.filter(u => u.role === 'PROFESSOR' || u.role === 'ADMIN').length === 0 && (
+                      <p style={{ fontSize: '0.75rem', color: '#dc2626', marginTop: '0.25rem' }}>
+                        ⚠️ Nenhum professor encontrado. Cadastre professores em Usuários primeiro.
+                      </p>
+                    )}
+                  </div>
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                     <button onClick={() => setShowClassModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
                     <button onClick={handleSaveClass} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingClass ? 'Salvar' : 'Cadastrar'}</button>
