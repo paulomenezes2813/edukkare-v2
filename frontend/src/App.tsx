@@ -50,6 +50,20 @@ interface School {
   email?: string;
 }
 
+interface Class {
+  id: number;
+  name: string;
+  age_group: string;
+  shift: 'MANHA' | 'TARDE' | 'INTEGRAL';
+  year: number;
+  teacher?: {
+    id: number;
+    name: string;
+    email: string;
+  };
+  students?: Array<{ id: number; name: string }>;
+}
+
 interface CapturedPhoto {
   dataUrl: string;
   studentName: string;
@@ -99,7 +113,7 @@ function App() {
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes'>('home');
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [studentForm, setStudentForm] = useState({
@@ -161,6 +175,18 @@ function App() {
   const [editingAvatar, setEditingAvatar] = useState<{id: number, avatar: string} | null>(null);
   const [avatarForm, setAvatarForm] = useState({
     avatar: ''
+  });
+
+  // Estados para Classes
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [showClassModal, setShowClassModal] = useState(false);
+  const [editingClass, setEditingClass] = useState<Class | null>(null);
+  const [classForm, setClassForm] = useState({
+    name: '',
+    age_group: '',
+    shift: 'MANHA' as 'MANHA' | 'TARDE' | 'INTEGRAL',
+    year: new Date().getFullYear(),
+    teacherId: ''
   });
 
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -1100,6 +1126,132 @@ function App() {
     }
   };
 
+  // CRUD de Classes (Turmas)
+  const loadClasses = async () => {
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/classes`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setClasses(data.data || data || []);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar turmas:', error);
+    }
+  };
+
+  const openClassModal = async (classData?: Class) => {
+    // Carrega usuários (professores) se ainda não foram carregados
+    if (users.length === 0) {
+      await loadUsers();
+    }
+
+    if (classData) {
+      setEditingClass(classData);
+      setClassForm({
+        name: classData.name,
+        age_group: classData.age_group,
+        shift: classData.shift,
+        year: classData.year,
+        teacherId: classData.teacher?.id?.toString() || ''
+      });
+    } else {
+      setEditingClass(null);
+      setClassForm({
+        name: '',
+        age_group: '',
+        shift: 'MANHA',
+        year: new Date().getFullYear(),
+        teacherId: ''
+      });
+    }
+    setShowClassModal(true);
+  };
+
+  const handleSaveClass = async () => {
+    try {
+      if (!classForm.name.trim() || !classForm.age_group.trim() || !classForm.teacherId) {
+        alert('⚠️ Nome, faixa etária e professor são obrigatórios');
+        return;
+      }
+
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const url = editingClass 
+        ? `${API_URL}/classes/${editingClass.id}`
+        : `${API_URL}/classes`;
+      
+      const method = editingClass ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          ...classForm,
+          teacherId: Number(classForm.teacherId),
+          year: Number(classForm.year)
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Turma ${editingClass ? 'atualizada' : 'cadastrada'} com sucesso!`);
+        setShowClassModal(false);
+        await loadClasses();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao salvar turma'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao salvar turma: ${error.message}`);
+    }
+  };
+
+  const handleDeleteClass = async (classData: Class) => {
+    if (!confirm(`⚠️ Tem certeza que deseja excluir a turma ${classData.name}?`)) return;
+
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/classes/${classData.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Turma excluída com sucesso!`);
+        await loadClasses();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao excluir turma'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao excluir turma: ${error.message}`);
+    }
+  };
+
   // CRUD de Avatares
   const openAvatarModal = (avatar?: {id: number, avatar: string}) => {
     if (avatar) {
@@ -1909,6 +2061,42 @@ function App() {
               <span>Atividades</span>
             </button>
 
+            {/* Classes (Turmas) */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                setCurrentScreen('classes');
+                loadClasses();
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>🎓</span>
+              <span>Turmas</span>
+            </button>
+
             {/* Avatares */}
             <button
               onClick={() => {
@@ -2670,6 +2858,65 @@ function App() {
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                     <button onClick={() => setShowActivityModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
                     <button onClick={handleSaveActivity} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingActivity ? 'Salvar' : 'Cadastrar'}</button>
+                  </div>
+                </div>
+              </div></>
+            )}
+          </main>
+        ) : currentScreen === 'classes' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div><h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>🎓 Gerenciar Turmas</h2><p style={{ fontSize: '0.875rem', color: '#64748b' }}>{classes.length} turmas cadastradas</p></div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem', marginBottom: '5rem' }}>
+              {classes.map((classData) => (
+                <div key={classData.id} style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '1rem' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', margin: 0 }}>{classData.name}</h3>
+                    <span style={{ 
+                      background: classData.shift === 'MANHA' ? '#dbeafe' : classData.shift === 'TARDE' ? '#fef3c7' : '#ddd6fe',
+                      color: classData.shift === 'MANHA' ? '#1e40af' : classData.shift === 'TARDE' ? '#92400e' : '#5b21b6',
+                      padding: '0.25rem 0.75rem',
+                      borderRadius: '9999px',
+                      fontSize: '0.75rem',
+                      fontWeight: '600'
+                    }}>
+                      {classData.shift === 'MANHA' ? '🌅 Manhã' : classData.shift === 'TARDE' ? '🌆 Tarde' : '⏰ Integral'}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>👥</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{classData.age_group}</span></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📅</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>Ano: {classData.year}</span></div>
+                    {classData.teacher && <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>👨‍🏫</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{classData.teacher.name}</span></div>}
+                    {classData._count && (
+                      <>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>👦</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{classData._count.students} alunos</span></div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📚</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{classData._count.activities} atividades</span></div>
+                      </>
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button onClick={() => openClassModal(classData)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => handleDeleteClass(classData)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => openClassModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            {showClassModal && (
+              <><div onClick={() => setShowClassModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
+              <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}><h3 style={{ fontSize: '1.5rem', fontWeight: '700' }}>{editingClass ? '✏️ Editar Turma' : '➕ Nova Turma'}</h3><button onClick={() => setShowClassModal(false)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer' }}>✕</button></div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Nome da Turma *</label><input type="text" value={classForm.name} onChange={(e) => setClassForm({ ...classForm, name: e.target.value })} placeholder="Ex: Infantil II - A" style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Faixa Etária *</label><input type="text" value={classForm.age_group} onChange={(e) => setClassForm({ ...classForm, age_group: e.target.value })} placeholder="Ex: 3 a 4 anos" style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Turno *</label><select value={classForm.shift} onChange={(e) => setClassForm({ ...classForm, shift: e.target.value as 'MANHA' | 'TARDE' | 'INTEGRAL' })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}><option value="MANHA">🌅 Manhã</option><option value="TARDE">🌆 Tarde</option><option value="INTEGRAL">⏰ Integral</option></select></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Ano *</label><input type="number" value={classForm.year} onChange={(e) => setClassForm({ ...classForm, year: Number(e.target.value) })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Professor Responsável *</label><select value={classForm.teacherId} onChange={(e) => setClassForm({ ...classForm, teacherId: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}><option value="">Selecione um professor</option>{users.filter(u => u.role === 'PROFESSOR').map((user) => (<option key={user.id} value={user.id}>{user.name}</option>))}</select></div>
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                    <button onClick={() => setShowClassModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
+                    <button onClick={handleSaveClass} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingClass ? 'Salvar' : 'Cadastrar'}</button>
                   </div>
                 </div>
               </div></>
