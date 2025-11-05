@@ -3324,37 +3324,9 @@ function App() {
             </div>
           </main>
         ) : currentScreen === 'studentPanel' ? (
-          <main style={{ padding: 0, background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', minHeight: '100vh' }}>
-            {/* Header Branco */}
-            <div style={{ background: 'white', borderBottom: '2px solid #e5e7eb', padding: '1.25rem 1.875rem', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.9375rem' }}>
-                  <div style={{ width: '3rem', height: '3rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.5rem', fontWeight: 'bold', boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)' }}>
-                    E
-                  </div>
-                  <h1 style={{ fontSize: '1.5rem', color: '#1f2937', fontWeight: '700', margin: 0 }}>EDUKKARE</h1>
-                </div>
-                <button
-                  onClick={() => setCurrentScreen('home')}
-                  style={{
-                    background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.625rem 1.25rem',
-                    borderRadius: '0.75rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
-                  }}
-                >
-                  ← Voltar
-                </button>
-              </div>
-            </div>
-
+          <main style={{ padding: '1.25rem', background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', minHeight: '100vh' }}>
             {/* Busca de Aluno */}
-            <div style={{ background: 'white', borderRadius: '1rem', padding: '1.25rem 1.875rem', margin: '1.25rem', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)', border: '2px solid #e5e7eb' }}>
+            <div style={{ background: 'white', borderRadius: '1rem', padding: '1.25rem 1.875rem', marginBottom: '1.25rem', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)', border: '2px solid #e5e7eb' }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: '0.9375rem', alignItems: 'end' }}>
                 <div>
                   <label style={{ display: 'block', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem', fontSize: '0.875rem' }}>
@@ -3455,7 +3427,7 @@ function App() {
                   color: 'white',
                   borderRadius: '1.25rem',
                   padding: '1.875rem',
-                  margin: '1.25rem',
+                  marginBottom: '1.25rem',
                   boxShadow: '0 8px 25px rgba(168, 85, 247, 0.3)',
                   position: 'relative',
                   overflow: 'hidden'
@@ -3501,7 +3473,7 @@ function App() {
                 </div>
 
                 {/* Content Grid */}
-                <div style={{ padding: '0 1.25rem 1.875rem 1.25rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+                <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
                   {/* Contatos de Emergência */}
                   <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
                     <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
