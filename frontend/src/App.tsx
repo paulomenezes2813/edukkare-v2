@@ -113,7 +113,8 @@ function App() {
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile'>('home');
+  const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<Student | null>(null);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [studentForm, setStudentForm] = useState({
@@ -2474,10 +2475,13 @@ function App() {
                     gap: '0.5rem'
                   }}>
                     <button
-                      onClick={() => openStudentModal(student)}
+                      onClick={() => {
+                        setSelectedStudentForProfile(student);
+                        setCurrentScreen('studentProfile');
+                      }}
                       style={{
                         flex: 1,
-                        background: '#8b5cf6',
+                        background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
                         color: 'white',
                         border: 'none',
                         padding: '0.75rem',
@@ -2491,7 +2495,25 @@ function App() {
                         gap: '0.5rem'
                       }}
                     >
-                      ✏️ Editar
+                      👁️ Ver Perfil
+                    </button>
+                    <button
+                      onClick={() => openStudentModal(student)}
+                      style={{
+                        background: '#8b5cf6',
+                        color: 'white',
+                        border: 'none',
+                        padding: '0.75rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      ✏️
                     </button>
                     <button
                       onClick={() => handleDeleteStudent(student)}
@@ -3113,6 +3135,184 @@ function App() {
                 </div>
               </div></>
             )}
+          </main>
+        ) : currentScreen === 'studentProfile' && selectedStudentForProfile ? (
+          <main style={{ padding: 0, background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', minHeight: '100vh' }}>
+            {/* Header do Perfil */}
+            <div style={{ background: 'white', borderBottom: '2px solid #e5e7eb', padding: '1.25rem 1.5rem', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
+              <button
+                onClick={() => setCurrentScreen('students')}
+                style={{
+                  background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.625rem 1.25rem',
+                  borderRadius: '0.75rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                }}
+              >
+                ← Voltar para Lista
+              </button>
+            </div>
+
+            {/* Student Profile Header */}
+            <div style={{
+              background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+              color: 'white',
+              borderRadius: '1.25rem',
+              padding: '1.875rem',
+              margin: '1.25rem',
+              boxShadow: '0 8px 25px rgba(168, 85, 247, 0.3)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', position: 'relative', zIndex: 1 }}>
+                <img 
+                  src={getStudentAvatar(selectedStudentForProfile)} 
+                  alt={selectedStudentForProfile.name}
+                  style={{
+                    width: '100px',
+                    height: '100px',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    border: '4px solid rgba(255, 255, 255, 0.3)'
+                  }}
+                />
+                <div style={{ flex: 1 }}>
+                  <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+                    {selectedStudentForProfile.name}
+                  </h2>
+                  <div style={{ fontSize: '1rem', opacity: 0.9, marginBottom: '0.5rem', lineHeight: '1.5' }}>
+                    📅 {new Date(selectedStudentForProfile.birthDate).toLocaleDateString('pt-BR')} | 
+                    🏫 {selectedStudentForProfile.class?.name || 'Sem turma'} | 
+                    {selectedStudentForProfile.shift === 'MANHA' ? '🌅 Manhã' : selectedStudentForProfile.shift === 'TARDE' ? '🌆 Tarde' : '⏰ Integral'}
+                  </div>
+                  {selectedStudentForProfile.responsavel && (
+                    <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>
+                      👨‍👩‍👦 Responsável: {selectedStudentForProfile.responsavel}
+                    </div>
+                  )}
+                </div>
+                <div style={{ display: 'flex', gap: '1.875rem', alignItems: 'center' }}>
+                  <div style={{ textAlign: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.9375rem 1.25rem', borderRadius: '0.75rem' }}>
+                    <div style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>94%</div>
+                    <div style={{ fontSize: '0.75rem', opacity: 0.9' }}>Marcos</div>
+                  </div>
+                  <div style={{ textAlign: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.9375rem 1.25rem', borderRadius: '0.75rem' }}>
+                    <div style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>87%</div>
+                    <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>BNCC</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Content Grid */}
+            <div style={{ padding: '0 1.25rem 1.875rem 1.25rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+              {/* Contatos de Emergência */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    🚨 Contatos de Emergência
+                  </h3>
+                </div>
+                <div style={{ display: 'grid', gap: '0.9375rem' }}>
+                  {selectedStudentForProfile.telefone ? (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.9375rem', padding: '1rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem' }}>
+                      <div style={{ fontSize: '1.5rem', width: '3rem', height: '3rem', borderRadius: '50%', background: '#ef4444', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        📞
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>Telefone Principal</div>
+                        <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>{selectedStudentForProfile.telefone}</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', padding: '1rem', color: '#9ca3af', fontSize: '0.875rem' }}>
+                      Nenhum contato cadastrado
+                    </div>
+                  )}
+                  {selectedStudentForProfile.email && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.9375rem', padding: '1rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem' }}>
+                      <div style={{ fontSize: '1.5rem', width: '3rem', height: '3rem', borderRadius: '50%', background: '#ef4444', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        📧
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>E-mail</div>
+                        <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>{selectedStudentForProfile.email}</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Cuidados Especiais */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    💝 Cuidados Especiais
+                  </h3>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem' }}>
+                  <div style={{ textAlign: 'center', padding: '1.25rem', borderRadius: '1rem', border: '2px solid #bbf7d0', background: '#f0fdf4' }}>
+                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🍎</div>
+                    <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Alimentação</div>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>Normal</div>
+                  </div>
+                  <div style={{ textAlign: 'center', padding: '1.25rem', borderRadius: '1rem', border: '2px solid #bbf7d0', background: '#f0fdf4' }}>
+                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>😴</div>
+                    <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Sono</div>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>Regular</div>
+                  </div>
+                  <div style={{ textAlign: 'center', padding: '1.25rem', borderRadius: '1rem', border: '2px solid #bbf7d0', background: '#f0fdf4' }}>
+                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🌡️</div>
+                    <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Alergias</div>
+                    <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>Nenhuma</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Marcos do Desenvolvimento */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)', gridColumn: '1 / -1' }}>
+                <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    🎯 Marcos do Desenvolvimento
+                  </h3>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+                  {['Motor', 'Cognitivo', 'Social', 'Linguagem'].map((marco, idx) => (
+                    <div key={idx} style={{ textAlign: 'center', padding: '1.25rem', background: '#eff6ff', borderRadius: '0.75rem' }}>
+                      <div style={{ fontSize: '2rem', marginBottom: '0.625rem' }}>
+                        {idx === 0 ? '🏃' : idx === 1 ? '🧠' : idx === 2 ? '👥' : '💬'}
+                      </div>
+                      <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem' }}>
+                        {marco}
+                      </div>
+                      <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#3b82f6' }}>
+                        {92 + idx}%
+                      </div>
+                      <div style={{ marginTop: '0.625rem', height: '0.5rem', background: '#dbeafe', borderRadius: '9999px', overflow: 'hidden' }}>
+                        <div style={{ height: '100%', width: `${92 + idx}%`, background: '#3b82f6', borderRadius: '9999px' }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Histórico de Saúde */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)', gridColumn: '1 / -1' }}>
+                <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    🏥 Histórico de Saúde
+                  </h3>
+                </div>
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#9ca3af', fontSize: '0.875rem' }}>
+                  Nenhum registro de saúde disponível
+                </div>
+              </div>
+            </div>
           </main>
         ) : currentScreen === 'avatars' ? (
           <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
