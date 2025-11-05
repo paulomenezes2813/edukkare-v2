@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://wa.me;">
+    <meta name="description" content="EDUKKARE - Painel de Acompanhamento Pedagógico de Alunos">
+    <title>EDUKKARE - Painel Alunos | MVP</title>
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --border: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            border-bottom: 2px solid var(--border);
+            padding: 20px 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .brand-info h1 {
+            font-size: 24px;
+            color: var(--dark);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-info p {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .view-switcher {
+            display: flex;
+            background: var(--light);
+            border-radius: 10px;
+            padding: 4px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
+        }
+
+        .view-btn {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .view-btn:hover {
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .view-btn:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .view-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Student Search Bar */
+        .search-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 30px;
+            margin: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--border);
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .search-input {
+            position: relative;
+        }
+
+        .search-input label {
+            display: block;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .search-input input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            background: var(--light);
+            transition: all 0.3s ease;
+        }
+
+        .search-input input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .search-input .icon {
+            position: absolute;
+            left: 12px;
+            bottom: 15px;
+            color: #6b7280;
+            font-size: 18px;
+            pointer-events: none;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .search-btn:focus {
+            outline: 2px solid var(--dark);
+            outline-offset: 2px;
+        }
+
+        /* Student Profile Header */
+        .student-profile-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px;
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .student-profile-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .profile-content {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .student-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .student-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .student-nickname {
+            font-size: 18px;
+            margin-bottom: 12px;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        .student-details {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* Main Content Grid */
+        .main-content {
+            padding: 0 20px 30px 20px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Emergency Section */
+        .emergency-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .emergency-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 16px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .emergency-item:hover {
+            background: #fee2e2;
+            transform: translateX(5px);
+        }
+
+        .emergency-icon {
+            font-size: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--danger);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emergency-info {
+            flex: 1;
+        }
+
+        .emergency-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .emergency-detail {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128c7e;
+            transform: translateY(-2px);
+        }
+
+        .whatsapp-btn:focus {
+            outline: 2px solid var(--dark);
+            outline-offset: 2px;
+        }
+
+        /* Care Section */
+        .care-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .care-item {
+            text-align: center;
+            padding: 20px;
+            border-radius: 16px;
+            transition: transform 0.3s ease;
+            border: 2px solid;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .care-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        .care-item.accepted {
+            background: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        .care-item.accepted::before {
+            background: var(--success);
+        }
+
+        .care-item.partial {
+            background: #fffbeb;
+            border-color: #fed7aa;
+        }
+
+        .care-item.partial::before {
+            background: var(--warning);
+        }
+
+        .care-item.rejected {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        .care-item.rejected::before {
+            background: var(--danger);
+        }
+
+        .care-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .care-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .care-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .care-time {
+            font-size: 14px;
+            margin-bottom: 12px;
+            opacity: 0.8;
+        }
+
+        .care-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        .care-status.accepted {
+            background: var(--success);
+            color: white;
+        }
+
+        .care-status.partial {
+            background: var(--warning);
+            color: white;
+        }
+
+        .care-status.rejected {
+            background: var(--danger);
+            color: white;
+        }
+
+        .care-description {
+            font-size: 12px;
+            line-height: 1.4;
+            color: #64748b;
+        }
+
+        /* BNCC Progress */
+        .bncc-progress {
+            display: grid;
+            gap: 16px;
+        }
+
+        .progress-item {
+            margin-bottom: 16px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .progress-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            background: var(--border);
+            border-radius: 10px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .progress-detail {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Development Milestones */
+        .milestones-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .milestone-pillar {
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid;
+        }
+
+        .milestone-pillar.motor {
+            background: rgba(239, 68, 68, 0.05);
+            border-left-color: var(--danger);
+        }
+
+        .milestone-pillar.cognitive {
+            background: rgba(59, 130, 246, 0.05);
+            border-left-color: var(--info);
+        }
+
+        .milestone-pillar.language {
+            background: rgba(16, 185, 129, 0.05);
+            border-left-color: var(--success);
+        }
+
+        .milestone-pillar.social {
+            background: rgba(245, 158, 11, 0.05);
+            border-left-color: var(--warning);
+        }
+
+        .pillar-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .milestone-list {
+            list-style: none;
+        }
+
+        .milestone-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--light);
+            font-size: 14px;
+        }
+
+        .milestone-item:last-child {
+            border-bottom: none;
+        }
+
+        .milestone-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .milestone-check.completed {
+            background: var(--success);
+        }
+
+        .milestone-check.pending {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .milestone-check.attention {
+            background: var(--warning);
+        }
+
+        /* Health Card */
+        .health-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .health-item {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .health-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .health-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .health-status {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* Learning Album */
+        .album-carousel {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .album-container {
+            display: flex;
+            overflow: hidden;
+            border-radius: 12px;
+            background: var(--light);
+            transform: translateX(0);
+            transition: transform 0.5s ease;
+        }
+
+        .album-item {
+            min-width: 100%;
+            position: relative;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .album-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .album-content {
+            text-align: center;
+            color: white;
+        }
+
+        .album-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .album-date {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-controls:hover {
+            background: rgba(0,0,0,0.7);
+        }
+
+        .carousel-controls:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+
+        .carousel-controls.prev {
+            left: 10px;
+        }
+
+        .carousel-controls.next {
+            right: 10px;
+        }
+
+        .carousel-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .indicator:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .indicator.active {
+            background: var(--primary);
+        }
+
+        .album-stats {
+            display: flex;
+            justify-content: space-between;
+            background: var(--light);
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .album-stat {
+            text-align: center;
+        }
+
+        .album-stat-value {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .album-stat-label {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* Action Buttons */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .action-btn:focus {
+            outline: 2px solid var(--dark);
+            outline-offset: 2px;
+        }
+
+        .action-btn.secondary {
+            background: rgba(255,255,255,0.9);
+            color: var(--dark);
+            border: 2px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-btn.secondary:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            max-width: 350px;
+            line-height: 1.4;
+            animation: slideInRight 0.5s ease-out;
+            role: alert;
+            aria-live: polite;
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        /* Data Lake Integration Badge */
+        .datalake-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        /* Animations */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .care-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .milestones-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .care-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .health-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .view-switcher {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .search-section {
+                padding: 15px 20px;
+                margin: 15px;
+            }
+
+            .student-profile-header {
+                padding: 20px;
+                margin: 15px;
+            }
+
+            .main-content {
+                padding: 0 15px 20px 15px;
+            }
+
+            .card {
+                padding: 16px;
+            }
+        }
+
+        /* Accessibility improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Focus visible for keyboard navigation */
+        *:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header" role="banner">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo" aria-label="Logo EDUKKARE">E</div>
+                    <div class="brand-info">
+                        <h1>EDUKKARE</h1>
+                        <p>Painel Alunos • MVP v1.0</p>
+                    </div>
+                </div>
+                
+                <div class="header-controls">
+                    <nav class="view-switcher" role="navigation" aria-label="Navegação entre painéis">
+                        <button class="view-btn" onclick="switchView('gestor')" aria-label="Ir para Painel do Gestor">
+                            <span aria-hidden="true">📊</span>
+                            <span>Painel Gestor</span>
+                        </button>
+                        <button class="view-btn active" onclick="switchView('alunos')" aria-label="Painel Alunos (atual)" aria-current="page">
+                            <span aria-hidden="true">👶</span>
+                            <span>Painel Alunos</span>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Student Search Section -->
+        <section class="search-section" role="search" aria-label="Busca de alunos">
+            <div class="search-grid">
+                <div class="search-input">
+                    <label for="studentName">Nome do Aluno</label>
+                    <div style="position: relative;">
+                        <span class="icon" aria-hidden="true">🔍</span>
+                        <input 
+                            type="text" 
+                            id="studentName" 
+                            name="studentName"
+                            placeholder="Digite o nome do aluno..." 
+                            aria-label="Nome do aluno"
+                            autocomplete="off"
+                        />
+                    </div>
+                </div>
+                <div class="search-input">
+                    <label for="studentId">Matrícula</label>
+                    <div style="position: relative;">
+                        <span class="icon" aria-hidden="true">📋</span>
+                        <input 
+                            type="text" 
+                            id="studentId" 
+                            name="studentId"
+                            placeholder="Digite a matrícula..." 
+                            aria-label="Matrícula do aluno"
+                            autocomplete="off"
+                        />
+                    </div>
+                </div>
+                <button class="search-btn" onclick="searchStudent()" aria-label="Buscar aluno">
+                    <span aria-hidden="true">🔍</span>
+                    <span>Buscar Aluno</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Student Profile Header -->
+        <section class="student-profile-header" id="studentProfile" style="display: none;" aria-label="Perfil do aluno">
+            <div class="profile-content">
+                <div class="student-avatar" id="studentAvatar" aria-label="Avatar do aluno">
+                    PR
+                </div>
+                <div class="profile-info">
+                    <h2 class="student-name" id="studentNameDisplay">Pedro Rodrigues Teixeira</h2>
+                    <div class="student-nickname" id="studentNickname">🌟 PePê</div>
+                    <div class="student-details" id="studentDetails">
+                        <span aria-label="Data de nascimento">📅 16/07/2022</span> | 
+                        <span aria-label="Idade">👶 30 meses</span> | 
+                        <span aria-label="Turma">🏫 Infantil I</span> | 
+                        <span aria-label="Período">🌅 Manhã</span><br>
+                        <span aria-label="Responsáveis">👨‍👩‍👦 Responsáveis: Larissa Rodrigues e Teixeira Júnior</span>
+                    </div>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="developmentScore">94%</div>
+                        <div class="stat-label">Marcos em Dia</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="bnccScore">87%</div>
+                        <div class="stat-label">Progresso BNCC</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent" style="display: none;">
+            <!-- Emergency & Health Row -->
+            <div class="content-grid">
+                <!-- Emergency Contacts -->
+                <article class="card">
+                    <header class="card-header">
+                        <h3 class="card-title">
+                            <span aria-hidden="true">🚨</span>
+                            <span>Emergência</span>
+                        </h3>
+                        <div class="card-badge" aria-label="Status">Sempre Acessível</div>
+                    </header>
+                    <div class="emergency-grid">
+                        <div class="emergency-item">
+                            <div class="emergency-icon" aria-hidden="true">👩‍⚕️</div>
+                            <div class="emergency-info">
+                                <div class="emergency-title">Pediatra</div>
+                                <div class="emergency-detail">Dra. Cristina Rola</div>
+                                <div class="emergency-detail">(85) 98216-1543</div>
+                                <a href="https://wa.me/5585982161543" target="_blank" rel="noopener noreferrer" class="whatsapp-btn" aria-label="Entrar em contato via WhatsApp com Dra. Cristina Rola">
+                                    <span aria-hidden="true">📱</span> WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                        <div class="emergency-item">
+                            <div class="emergency-icon" aria-hidden="true">⚠️</div>
+                            <div class="emergency-info">
+                                <div class="emergency-title">Alergias</div>
+                                <div class="emergency-detail" style="color: #dc2626; font-weight: 600;">
+                                    Castanha, Amendoim, Tylenol Corante
+                                </div>
+                            </div>
+                        </div>
+                        <div class="emergency-item">
+                            <div class="emergency-icon" aria-hidden="true">🏥</div>
+                            <div class="emergency-info">
+                                <div class="emergency-title">Hospital</div>
+                                <div class="emergency-detail">Hospital São Carlos</div>
+                                <div class="emergency-detail">Pediatria | Emergência 24h</div>
+                            </div>
+                        </div>
+                        <div class="emergency-item">
+                            <div class="emergency-icon" aria-hidden="true">💳</div>
+                            <div class="emergency-info">
+                                <div class="emergency-title">Plano de Saúde</div>
+                                <div class="emergency-detail">Bradesco Saúde</div>
+                                <div class="emergency-detail">Cartão: ****-****-****-1234</div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Health & Vaccination -->
+                <article class="card">
+                    <header class="card-header">
+                        <h3 class="card-title">
+                            <span aria-hidden="true">💉</span>
+                            <span>Caderneta de Saúde</span>
+                        </h3>
+                        <div class="card-badge" aria-label="Status">Atualizado</div>
+                    </header>
+                    <div class="health-grid">
+                        <div class="health-item">
+                            <div class="health-icon" aria-hidden="true">✅</div>
+                            <div class="health-title">Vacinas</div>
+                            <div class="health-status">Em Dia</div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-icon" aria-hidden="true">📏</div>
+                            <div class="health-title">Altura</div>
+                            <div class="health-status">92 cm</div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-icon" aria-hidden="true">⚖️</div>
+                            <div class="health-title">Peso</div>
+                            <div class="health-status">14.2 kg</div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Care Today -->
+            <article class="card full-width">
+                <header class="card-header">
+                    <h3 class="card-title">
+                        <span aria-hidden="true">🍽️</span>
+                        <span>Cuidados de Hoje</span>
+                    </h3>
+                    <div class="card-badge" aria-label="Data">04/11/2025</div>
+                </header>
+                <div class="care-grid">
+                    <div class="care-item accepted">
+                        <div class="care-icon" aria-hidden="true">🍽️</div>
+                        <div class="care-title">Almoço</div>
+                        <div class="care-time">11:30</div>
+                        <div class="care-status accepted">Aceitou Bem</div>
+                        <div class="care-description">Arroz, feijão, frango e legumes. Comeu tudo!</div>
+                    </div>
+                    <div class="care-item partial">
+                        <div class="care-icon" aria-hidden="true">🍎</div>
+                        <div class="care-title">Lanche</div>
+                        <div class="care-time">15:00</div>
+                        <div class="care-status partial">Parcialmente</div>
+                        <div class="care-description">Banana e biscoito. Comeu apenas a banana.</div>
+                    </div>
+                    <div class="care-item accepted">
+                        <div class="care-icon" aria-hidden="true">😴</div>
+                        <div class="care-title">Soneca</div>
+                        <div class="care-time">13:00-14:30</div>
+                        <div class="care-status accepted">Dormiu Bem</div>
+                        <div class="care-description">Sono tranquilo por 1h30min.</div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- BNCC Progress & Development -->
+            <div class="content-grid">
+                <article class="card">
+                    <header class="card-header">
+                        <h3 class="card-title">
+                            <span aria-hidden="true">📚</span>
+                            <span>Progresso BNCC</span>
+                        </h3>
+                        <div class="card-badge">87%</div>
+                    </header>
+                    <div class="bncc-progress">
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span class="progress-label">O Eu, o Outro e o Nós</span>
+                                <span class="progress-value">92%</span>
+                            </div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso: O Eu, o Outro e o Nós">
+                                <div class="progress-fill" style="width: 92%;"></div>
+                            </div>
+                            <div class="progress-detail">11 de 12 objetivos alcançados</div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span class="progress-label">Corpo, Gestos e Movimentos</span>
+                                <span class="progress-value">88%</span>
+                            </div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso: Corpo, Gestos e Movimentos">
+                                <div class="progress-fill" style="width: 88%;"></div>
+                            </div>
+                            <div class="progress-detail">7 de 8 objetivos alcançados</div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span class="progress-label">Traços, Sons, Cores e Formas</span>
+                                <span class="progress-value">85%</span>
+                            </div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso: Traços, Sons, Cores e Formas">
+                                <div class="progress-fill" style="width: 85%;"></div>
+                            </div>
+                            <div class="progress-detail">6 de 7 objetivos alcançados</div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span class="progress-label">Escuta, Fala, Pensamento</span>
+                                <span class="progress-value">83%</span>
+                            </div>
+                            <div class="progress-bar" role="progressbar" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso: Escuta, Fala, Pensamento">
+                                <div class="progress-fill" style="width: 83%;"></div>
+                            </div>
+                            <div class="progress-detail">10 de 12 objetivos alcançados</div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <header class="card-header">
+                        <h3 class="card-title">
+                            <span aria-hidden="true">🎯</span>
+                            <span>Marcos de Desenvolvimento</span>
+                        </h3>
+                        <div class="card-badge">30 meses</div>
+                    </header>
+                    <div class="milestones-grid">
+                        <div class="milestone-pillar motor">
+                            <div class="pillar-title">
+                                <span aria-hidden="true">🏃</span>
+                                <span>Motor</span>
+                            </div>
+                            <ul class="milestone-list">
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Sobe escadas alternando pés</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Pula com os dois pés</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Chuta bola</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check pending" aria-label="Pendente">○</span>
+                                    <span>Pedala triciclo</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="milestone-pillar cognitive">
+                            <div class="pillar-title">
+                                <span aria-hidden="true">🧠</span>
+                                <span>Cognitivo</span>
+                            </div>
+                            <ul class="milestone-list">
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Empilha 6+ blocos</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Identifica cores básicas</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Conta até 5</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check attention" aria-label="Em desenvolvimento">!</span>
+                                    <span>Formas geométricas</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="milestone-pillar language">
+                            <div class="pillar-title">
+                                <span aria-hidden="true">💬</span>
+                                <span>Linguagem</span>
+                            </div>
+                            <ul class="milestone-list">
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Frases de 3-4 palavras</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Nomeia objetos familiares</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Segue instruções simples</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Usa pronomes (eu, você)</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="milestone-pillar social">
+                            <div class="pillar-title">
+                                <span aria-hidden="true">🤝</span>
+                                <span>Socioemocional</span>
+                            </div>
+                            <ul class="milestone-list">
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Brinca com outras crianças</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Demonstra empatia</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check completed" aria-label="Completo">✓</span>
+                                    <span>Imita comportamentos</span>
+                                </li>
+                                <li class="milestone-item">
+                                    <span class="milestone-check pending" aria-label="Pendente">○</span>
+                                    <span>Espera sua vez</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Learning Album -->
+            <article class="card full-width">
+                <header class="card-header">
+                    <h3 class="card-title">
+                        <span aria-hidden="true">📸</span>
+                        <span>Álbum de Aprendizagem</span>
+                    </h3>
+                    <div class="card-badge">Esta Semana</div>
+                </header>
+                
+                <div class="album-carousel" role="region" aria-label="Álbum de fotos">
+                    <div class="album-container" id="albumContainer">
+                        <div class="album-item" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div class="album-overlay">Foto 1 de 5</div>
+                            <div class="album-content">
+                                <div class="album-title">Atividade de Pintura</div>
+                                <div class="album-date">Segunda-feira, 01/11</div>
+                            </div>
+                        </div>
+                        <div class="album-item" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <div class="album-overlay">Foto 2 de 5</div>
+                            <div class="album-content">
+                                <div class="album-title">Brincadeira no Parque</div>
+                                <div class="album-date">Terça-feira, 02/11</div>
+                            </div>
+                        </div>
+                        <div class="album-item" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <div class="album-overlay">Foto 3 de 5</div>
+                            <div class="album-content">
+                                <div class="album-title">Música e Dança</div>
+                                <div class="album-date">Quarta-feira, 03/11</div>
+                            </div>
+                        </div>
+                        <div class="album-item" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                            <div class="album-overlay">Foto 4 de 5</div>
+                            <div class="album-content">
+                                <div class="album-title">Contação de Histórias</div>
+                                <div class="album-date">Quinta-feira, 04/11</div>
+                            </div>
+                        </div>
+                        <div class="album-item" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                            <div class="album-overlay">Foto 5 de 5</div>
+                            <div class="album-content">
+                                <div class="album-title">Construção com Blocos</div>
+                                <div class="album-date">Sexta-feira, 05/11</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="carousel-controls prev" onclick="prevSlide()" aria-label="Foto anterior">‹</button>
+                    <button class="carousel-controls next" onclick="nextSlide()" aria-label="Próxima foto">›</button>
+                    
+                    <div class="carousel-indicators" role="tablist" aria-label="Indicadores de fotos">
+                        <button class="indicator active" onclick="goToSlide(0)" role="tab" aria-label="Ir para foto 1" aria-selected="true"></button>
+                        <button class="indicator" onclick="goToSlide(1)" role="tab" aria-label="Ir para foto 2" aria-selected="false"></button>
+                        <button class="indicator" onclick="goToSlide(2)" role="tab" aria-label="Ir para foto 3" aria-selected="false"></button>
+                        <button class="indicator" onclick="goToSlide(3)" role="tab" aria-label="Ir para foto 4" aria-selected="false"></button>
+                        <button class="indicator" onclick="goToSlide(4)" role="tab" aria-label="Ir para foto 5" aria-selected="false"></button>
+                    </div>
+                </div>
+
+                <div class="album-stats">
+                    <div class="album-stat">
+                        <div class="album-stat-value">47</div>
+                        <div class="album-stat-label">Fotos Este Mês</div>
+                    </div>
+                    <div class="album-stat">
+                        <div class="album-stat-value">12</div>
+                        <div class="album-stat-label">Vídeos</div>
+                    </div>
+                    <div class="album-stat">
+                        <div class="album-stat-value">23</div>
+                        <div class="album-stat-label">Atividades</div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Action Buttons -->
+            <div class="action-grid">
+                <button class="action-btn" onclick="downloadFullProfile()" aria-label="Baixar perfil completo do aluno">
+                    <span aria-hidden="true">📥</span>
+                    <span>Baixar Perfil Completo</span>
+                </button>
+                <button class="action-btn secondary" onclick="shareProgress()" aria-label="Compartilhar progresso">
+                    <span aria-hidden="true">📤</span>
+                    <span>Compartilhar Progresso</span>
+                </button>
+                <button class="action-btn secondary" onclick="syncWithDataLake()" aria-label="Sincronizar com Data Lake">
+                    <span aria-hidden="true">🔄</span>
+                    <span>Sincronizar Data Lake</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- Data Lake Badge -->
+        <div class="datalake-badge" role="status" aria-live="polite" aria-label="Status de sincronização do Data Lake">
+            <span aria-hidden="true">🔵</span>
+            <span>Conectado ao Data Lake</span>
+        </div>
+    </div>
+
+    <script>
+        // Configuration Constants
+        const CONFIG = {
+            NOTIFICATION_DELAY: 1500,
+            SYNC_DELAY: 2000,
+            CAROUSEL_INTERVAL: 10000,
+            AUTO_ROTATE_RESTART: 15000,
+            REAL_TIME_UPDATE_INTERVAL: 45000,
+            DATA_LAKE_UPDATE_INTERVAL: 30000
+        };
+
+        // Cache DOM elements
+        const DOM = {
+            studentProfile: null,
+            mainContent: null,
+            albumContainer: null,
+            studentNameInput: null,
+            studentIdInput: null,
+            dataLakeBadge: null
+        };
+
+        // Initialize DOM cache
+        function initDOMCache() {
+            DOM.studentProfile = document.getElementById('studentProfile');
+            DOM.mainContent = document.getElementById('mainContent');
+            DOM.albumContainer = document.getElementById('albumContainer');
+            DOM.studentNameInput = document.getElementById('studentName');
+            DOM.studentIdInput = document.getElementById('studentId');
+            DOM.dataLakeBadge = document.querySelector('.datalake-badge');
+        }
+
+        // Input sanitization function
+        function sanitizeInput(input) {
+            const div = document.createElement('div');
+            div.textContent = input;
+            return div.innerHTML;
+        }
+
+        // Mock student data (In production, this would be fetched from an API)
+        const mockStudentData = {
+            nome: "Pedro Rodrigues dos Santos",
+            apelido: "PePê",
+            avatar: "PR",
+            dataNascimento: "16/07/2022",
+            idadeMeses: 30,
+            turma: "Infantil I",
+            periodo: "Manhã",
+            responsaveis: "Larissa Rodrigues e Teixeira Júnior",
+            marcosDesenvolvimento: 94,
+            progressoBNCC: 87
+        };
+
+        // Current carousel slide
+        let currentSlide = 0;
+        let carouselInterval = null;
+
+        // Search Student Function
+        function searchStudent() {
+            if (!DOM.studentNameInput || !DOM.studentIdInput) {
+                initDOMCache();
+            }
+
+            const nameValue = sanitizeInput(DOM.studentNameInput.value.trim());
+            const idValue = sanitizeInput(DOM.studentIdInput.value.trim());
+            
+            if (!nameValue && !idValue) {
+                showNotification('⚠️ Digite pelo menos um campo para buscar', 'warning');
+                return;
+            }
+
+            showNotification('🔍 Buscando no banco de dados...', 'info');
+            
+            setTimeout(() => {
+                const isValidStudent = 
+                    nameValue.toLowerCase().includes('pedro') || 
+                    idValue.includes('2023001');
+                
+                if (isValidStudent) {
+                    loadStudentData(mockStudentData);
+                    showNotification('✅ Aluno encontrado com sucesso!', 'success');
+                } else {
+                    showNotification('❌ Aluno não encontrado. Tente novamente.', 'error');
+                }
+            }, CONFIG.NOTIFICATION_DELAY);
+        }
+
+        // Load Student Data
+        function loadStudentData(data) {
+            if (!DOM.studentProfile || !DOM.mainContent) {
+                initDOMCache();
+            }
+
+            // Update profile header
+            document.getElementById('studentAvatar').textContent = data.avatar;
+            document.getElementById('studentNameDisplay').textContent = data.nome;
+            document.getElementById('studentNickname').textContent = `🌟 ${data.apelido}`;
+            document.getElementById('studentDetails').innerHTML = `
+                <span aria-label="Data de nascimento">📅 ${data.dataNascimento}</span> | 
+                <span aria-label="Idade">👶 ${data.idadeMeses} meses</span> | 
+                <span aria-label="Turma">🏫 ${data.turma}</span> | 
+                <span aria-label="Período">🌅 ${data.periodo}</span><br>
+                <span aria-label="Responsáveis">👨‍👩‍👦 Responsáveis: ${data.responsaveis}</span>
+            `;
+            document.getElementById('developmentScore').textContent = `${data.marcosDesenvolvimento}%`;
+            document.getElementById('bnccScore').textContent = `${data.progressoBNCC}%`;
+            
+            // Show sections
+            DOM.studentProfile.style.display = 'block';
+            DOM.mainContent.style.display = 'block';
+            
+            // Animate elements
+            animateElements();
+            
+            // Start carousel
+            startCarouselAutoRotate();
+        }
+
+        // Carousel Functions
+        function showSlide(index) {
+            if (!DOM.albumContainer) {
+                initDOMCache();
+            }
+
+            const slides = DOM.albumContainer.children;
+            const indicators = document.querySelectorAll('.indicator');
+            
+            if (index >= slides.length) currentSlide = 0;
+            if (index < 0) currentSlide = slides.length - 1;
+            
+            DOM.albumContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === currentSlide);
+                indicator.setAttribute('aria-selected', i === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+            stopCarouselAutoRotate();
+            setTimeout(startCarouselAutoRotate, CONFIG.AUTO_ROTATE_RESTART);
+        }
+
+        function startCarouselAutoRotate() {
+            stopCarouselAutoRotate();
+            carouselInterval = setInterval(() => {
+                if (DOM.albumContainer) {
+                    nextSlide();
+                }
+            }, CONFIG.CAROUSEL_INTERVAL);
+        }
+
+        function stopCarouselAutoRotate() {
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
+                carouselInterval = null;
+            }
+        }
+
+        // Action Functions
+        function downloadFullProfile() {
+            showNotification('📥 Preparando download do perfil completo...', 'info');
+            
+            setTimeout(() => {
+                showNotification('💾 Perfil completo baixado! Inclui marcos, BNCC e álbum', 'success');
+            }, CONFIG.SYNC_DELAY);
+        }
+
+        function shareProgress() {
+            showNotification('🔗 Gerando link de compartilhamento seguro...', 'info');
+            
+            setTimeout(() => {
+                showNotification('✅ Link copiado! Válido por 24h para acesso dos responsáveis', 'success');
+            }, CONFIG.NOTIFICATION_DELAY);
+        }
+
+        function syncWithDataLake() {
+            showNotification('🌐 Sincronizando com Data Lake... Atualizando informações', 'info');
+            
+            setTimeout(() => {
+                showNotification('✅ Sincronização completa! Todos os dados atualizados', 'success');
+                updateDataLakeBadge();
+            }, CONFIG.SYNC_DELAY);
+        }
+
+        function updateDataLakeBadge() {
+            if (!DOM.dataLakeBadge) {
+                initDOMCache();
+            }
+            
+            if (DOM.dataLakeBadge) {
+                DOM.dataLakeBadge.innerHTML = '<span aria-hidden="true">🟢</span><span>Data Lake Sincronizado</span>';
+                DOM.dataLakeBadge.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            }
+        }
+
+        // View Switching
+        function switchView(view) {
+            if (view === 'gestor') {
+                showNotification('🔄 Redirecionando para Painel do Gestor...', 'info');
+                // In production: window.location.href = '/painel-gestor';
+            }
+        }
+
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = sanitizeInput(message);
+            notification.setAttribute('role', 'alert');
+            notification.setAttribute('aria-live', 'polite');
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    notification.style.animation = 'slideOutRight 0.5s ease-out forwards';
+                    setTimeout(() => {
+                        if (document.body.contains(notification)) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 500);
+                }
+            }, 4000);
+        }
+
+        // Animate Elements
+        function animateElements() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+            
+            // Animate progress bars
+            setTimeout(() => {
+                const progressBars = document.querySelectorAll('.progress-fill');
+                progressBars.forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 500);
+                });
+            }, 500);
+        }
+
+        // Real-time Data Lake connection simulation
+        function simulateRealTimeUpdates() {
+            setInterval(() => {
+                const updateTypes = [
+                    'Novo marco de desenvolvimento registrado',
+                    'Dados de alimentação atualizados',
+                    'Nova foto adicionada ao álbum',
+                    'Progresso BNCC atualizado',
+                    'Informações de saúde sincronizadas'
+                ];
+                
+                const randomUpdate = updateTypes[Math.floor(Math.random() * updateTypes.length)];
+                
+                const profileVisible = DOM.studentProfile && DOM.studentProfile.style.display === 'block';
+                if (profileVisible) {
+                    const shouldShowUpdate = Math.random() < 0.3;
+                    if (shouldShowUpdate) {
+                        showNotification(`🔄 ${randomUpdate} - Data Lake atualizado`, 'info');
+                    }
+                }
+            }, CONFIG.REAL_TIME_UPDATE_INTERVAL);
+        }
+
+        // Data Lake badge pulse animation
+        function animateDataLakeBadge() {
+            setInterval(() => {
+                if (DOM.dataLakeBadge) {
+                    DOM.dataLakeBadge.style.animation = 'pulse 1s ease';
+                    setTimeout(() => {
+                        if (DOM.dataLakeBadge) {
+                            DOM.dataLakeBadge.style.animation = 'pulse 2s infinite';
+                        }
+                    }, 1000);
+                }
+            }, CONFIG.DATA_LAKE_UPDATE_INTERVAL);
+        }
+
+        // Keyboard navigation for carousel
+        function handleKeyboardNavigation(event) {
+            if (event.key === 'ArrowLeft') {
+                prevSlide();
+                stopCarouselAutoRotate();
+                setTimeout(startCarouselAutoRotate, CONFIG.AUTO_ROTATE_RESTART);
+            } else if (event.key === 'ArrowRight') {
+                nextSlide();
+                stopCarouselAutoRotate();
+                setTimeout(startCarouselAutoRotate, CONFIG.AUTO_ROTATE_RESTART);
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize DOM cache
+            initDOMCache();
+
+            // Show welcome message
+            setTimeout(() => {
+                showNotification('👋 Bem-vindo ao Painel de Alunos EDUKKARE! Pesquise um aluno para começar.', 'info');
+            }, 1000);
+
+            // Add search functionality on Enter key
+            if (DOM.studentNameInput) {
+                DOM.studentNameInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        searchStudent();
+                    }
+                });
+            }
+
+            if (DOM.studentIdInput) {
+                DOM.studentIdInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        searchStudent();
+                    }
+                });
+            }
+
+            // Keyboard navigation for carousel
+            document.addEventListener('keydown', handleKeyboardNavigation);
+
+            // Start real-time updates simulation
+            simulateRealTimeUpdates();
+
+            // Animate Data Lake badge
+            animateDataLakeBadge();
+
+            // Add demo button
+            const header = document.querySelector('.header-controls');
+            if (header) {
+                const demoBtn = document.createElement('button');
+                demoBtn.className = 'action-btn secondary';
+                demoBtn.style.padding = '8px 16px';
+                demoBtn.style.fontSize = '12px';
+                demoBtn.innerHTML = '<span aria-hidden="true">🎭</span> Demo';
+                demoBtn.setAttribute('aria-label', 'Carregar dados de demonstração');
+                demoBtn.onclick = () => {
+                    DOM.studentNameInput.value = 'Pedro Rodrigues';
+                    DOM.studentIdInput.value = '2023001';
+                    searchStudent();
+                };
+                header.appendChild(demoBtn);
+            }
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            stopCarouselAutoRotate();
+        });
+    </script>
+</body>
+</html>
