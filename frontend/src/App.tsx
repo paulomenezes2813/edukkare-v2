@@ -1878,10 +1878,8 @@ function App() {
               {/* Painel Alunos */}
               <button
                 onClick={() => {
-                  const alunosSection = document.querySelector('[data-section="alunos"]');
-                  if (alunosSection) {
-                    alunosSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
+                  setCurrentScreen('students');
+                  loadStudents();
                 }}
                 style={{
                   background: 'rgba(255,255,255,0.2)',
@@ -3199,7 +3197,7 @@ function App() {
                 <div style={{ display: 'flex', gap: '1.875rem', alignItems: 'center' }}>
                   <div style={{ textAlign: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.9375rem 1.25rem', borderRadius: '0.75rem' }}>
                     <div style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>94%</div>
-                    <div style={{ fontSize: '0.75rem', opacity: 0.9' }}>Marcos</div>
+                    <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>Marcos</div>
                   </div>
                   <div style={{ textAlign: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.9375rem 1.25rem', borderRadius: '0.75rem' }}>
                     <div style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>87%</div>
