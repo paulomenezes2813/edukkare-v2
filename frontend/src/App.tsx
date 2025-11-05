@@ -1149,33 +1149,28 @@ function App() {
   };
 
   const openClassModal = async (classData?: Class) => {
-    // Carrega usuários (professores) e professores se ainda não foram carregados
+    // Carrega professores da tabela teachers
     console.log('🎓 Abrindo modal de turma...');
-    
-    if (users.length === 0) {
-      console.log('👥 Carregando usuários...');
-      await loadUsers();
-    }
     
     if (teachers.length === 0) {
       console.log('👨‍🏫 Carregando professores...');
       await loadTeachers();
     }
 
-    console.log('✅ Usuários carregados:', users.length);
-    console.log('✅ Professores carregados:', teachers.length);
-    
-    const professoresUsers = users.filter(u => u.role === 'PROFESSOR' || u.role === 'ADMIN');
-    console.log('👨‍🏫 Professores (users):', professoresUsers.length, professoresUsers);
+    console.log('✅ Professores da tabela teachers carregados:', teachers.length);
 
     if (classData) {
       setEditingClass(classData);
+      // Prioriza teacherProfile (da tabela teachers) se existir
+      const teacherIdValue = (classData as any).teacherProfile?.id?.toString() || 
+                             classData.teacher?.id?.toString() || '';
+      console.log('📝 Editando turma, professor ID:', teacherIdValue);
       setClassForm({
         name: classData.name,
         age_group: classData.age_group,
         shift: classData.shift,
         year: classData.year,
-        teacherId: classData.teacher?.id?.toString() || ''
+        teacherId: teacherIdValue
       });
     } else {
       setEditingClass(null);
@@ -1209,6 +1204,8 @@ function App() {
       
       const method = editingClass ? 'PUT' : 'POST';
 
+      console.log('💾 Salvando turma com teacherProfileId:', classForm.teacherId);
+
       const response = await fetch(url, {
         method,
         headers: {
@@ -1216,9 +1213,11 @@ function App() {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          ...classForm,
-          teacherId: Number(classForm.teacherId),
-          year: Number(classForm.year)
+          name: classForm.name,
+          age_group: classForm.age_group,
+          shift: classForm.shift,
+          year: Number(classForm.year),
+          teacherProfileId: Number(classForm.teacherId), // Envia como teacherProfileId (da tabela teachers)
         })
       });
 
@@ -2902,7 +2901,17 @@ function App() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>👥</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{classData.age_group}</span></div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📅</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>Ano: {classData.year}</span></div>
-                    {classData.teacher && <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>👨‍🏫</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{classData.teacher.name}</span></div>}
+                    {((classData as any).teacherProfile || classData.teacher) && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span>👨‍🏫</span>
+                        <span style={{ fontSize: '0.875rem', color: '#475569' }}>
+                          {(classData as any).teacherProfile?.name || classData.teacher.name}
+                          {(classData as any).teacherProfile?.specialization && (
+                            <span style={{ color: '#8b5cf6', fontSize: '0.75rem' }}> - {(classData as any).teacherProfile.specialization}</span>
+                          )}
+                        </span>
+                      </div>
+                    )}
                     {classData._count && (
                       <>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>👦</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{classData._count.students} alunos</span></div>
@@ -2935,21 +2944,27 @@ function App() {
                       style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem', fontFamily: 'inherit' }}
                     >
                       <option value="">Selecione um professor</option>
-                      {users.filter(u => u.role === 'PROFESSOR' || u.role === 'ADMIN').length > 0 ? (
-                        users
-                          .filter(u => u.role === 'PROFESSOR' || u.role === 'ADMIN')
-                          .map((user) => (
-                            <option key={user.id} value={user.id}>
-                              {user.name} {user.role === 'ADMIN' ? '(Admin)' : ''}
+                      {teachers.length > 0 ? (
+                        teachers
+                          .filter(t => t.active)
+                          .map((teacher) => (
+                            <option key={`teacher-${teacher.id}`} value={teacher.id}>
+                              👨‍🏫 {teacher.name}
+                              {teacher.specialization ? ` - ${teacher.specialization}` : ''}
                             </option>
                           ))
                       ) : (
                         <option value="" disabled>Nenhum professor cadastrado</option>
                       )}
                     </select>
-                    {users.filter(u => u.role === 'PROFESSOR' || u.role === 'ADMIN').length === 0 && (
+                    {teachers.length === 0 && (
                       <p style={{ fontSize: '0.75rem', color: '#dc2626', marginTop: '0.25rem' }}>
-                        ⚠️ Nenhum professor encontrado. Cadastre professores em Usuários primeiro.
+                        ⚠️ Nenhum professor encontrado. Cadastre professores primeiro (Menu → Professores).
+                      </p>
+                    )}
+                    {teachers.length > 0 && (
+                      <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>
+                        💡 Mostrando professores da tabela Teachers ({teachers.filter(t => t.active).length} ativos)
                       </p>
                     )}
                   </div>

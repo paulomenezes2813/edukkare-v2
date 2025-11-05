@@ -76,6 +76,8 @@ model Teacher {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   
+  classes         Class[]   // Relação com turmas
+  
   @@map("teachers")
 }
 
@@ -129,6 +131,9 @@ model Class {
 
   teacherId     Int
   teacher       User      @relation(fields: [teacherId], references: [id])
+  
+  teacherProfileId  Int?     // ID do professor da tabela teachers (opcional)
+  teacherProfile    Teacher? @relation(fields: [teacherProfileId], references: [id])
   
   students      Student[]
   activities    Activity[]

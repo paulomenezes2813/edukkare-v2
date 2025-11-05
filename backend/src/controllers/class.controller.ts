@@ -23,6 +23,15 @@ export class ClassController {
               email: true,
             },
           },
+          teacherProfile: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              specialization: true,
+            },
+          },
           students: {
             select: {
               id: true,
@@ -84,19 +93,49 @@ export class ClassController {
 
   async create(req: Request, res: Response) {
     try {
-      const { name, age_group, shift, year, teacherId } = req.body;
+      const { name, age_group, shift, year, teacherId, teacherProfileId } = req.body;
 
-      if (!name || !age_group || !shift || !year || !teacherId) {
-        return ApiResponse.badRequest(res, 'Nome, faixa etária, turno, ano e professor são obrigatórios');
+      if (!name || !age_group || !shift || !year) {
+        return ApiResponse.badRequest(res, 'Nome, faixa etária, turno e ano são obrigatórios');
       }
 
-      // Verifica se o professor existe
-      const teacher = await prisma.user.findUnique({
-        where: { id: Number(teacherId) },
-      });
+      // Valida que pelo menos um professor foi informado
+      if (!teacherId && !teacherProfileId) {
+        return ApiResponse.badRequest(res, 'É necessário informar um professor responsável');
+      }
 
-      if (!teacher) {
-        return ApiResponse.notFound(res, 'Professor não encontrado');
+      // Verifica se o professor existe (User ou Teacher)
+      if (teacherId) {
+        const teacher = await prisma.user.findUnique({
+          where: { id: Number(teacherId) },
+        });
+
+        if (!teacher) {
+          return ApiResponse.notFound(res, 'Professor (usuário) não encontrado');
+        }
+      }
+
+      if (teacherProfileId) {
+        const teacherProfile = await prisma.teacher.findUnique({
+          where: { id: Number(teacherProfileId) },
+        });
+
+        if (!teacherProfile) {
+          return ApiResponse.notFound(res, 'Professor (perfil) não encontrado');
+        }
+      }
+
+      // Se teacherProfileId foi fornecido mas teacherId não, usa o primeiro user admin como fallback
+      let finalTeacherId = teacherId ? Number(teacherId) : null;
+      if (!finalTeacherId) {
+        const adminUser = await prisma.user.findFirst({
+          where: { role: 'ADMIN' },
+        });
+        if (adminUser) {
+          finalTeacherId = adminUser.id;
+        } else {
+          return ApiResponse.badRequest(res, 'Nenhum usuário administrador encontrado para associar');
+        }
       }
 
       const classData = await prisma.class.create({
@@ -105,7 +144,8 @@ export class ClassController {
           age_group,
           shift,
           year: Number(year),
-          teacherId: Number(teacherId),
+          teacherId: finalTeacherId,
+          teacherProfileId: teacherProfileId ? Number(teacherProfileId) : null,
         },
         include: {
           teacher: {
@@ -113,6 +153,15 @@ export class ClassController {
               id: true,
               name: true,
               email: true,
+            },
+          },
+          teacherProfile: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              specialization: true,
             },
           },
           _count: {
@@ -134,7 +183,7 @@ export class ClassController {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { name, age_group, shift, year, teacherId, active } = req.body;
+      const { name, age_group, shift, year, teacherId, teacherProfileId, active } = req.body;
 
       const existingClass = await prisma.class.findUnique({
         where: { id: Number(id) },
@@ -144,14 +193,25 @@ export class ClassController {
         return ApiResponse.notFound(res, 'Turma não encontrada');
       }
 
-      // Se está alterando o professor, verifica se ele existe
+      // Se está alterando o professor (user), verifica se ele existe
       if (teacherId) {
         const teacher = await prisma.user.findUnique({
           where: { id: Number(teacherId) },
         });
 
         if (!teacher) {
-          return ApiResponse.notFound(res, 'Professor não encontrado');
+          return ApiResponse.notFound(res, 'Professor (usuário) não encontrado');
+        }
+      }
+
+      // Se está alterando o teacherProfile, verifica se ele existe
+      if (teacherProfileId) {
+        const teacherProfile = await prisma.teacher.findUnique({
+          where: { id: Number(teacherProfileId) },
+        });
+
+        if (!teacherProfile) {
+          return ApiResponse.notFound(res, 'Professor (perfil) não encontrado');
         }
       }
 
@@ -161,6 +221,9 @@ export class ClassController {
       if (shift) updateData.shift = shift;
       if (year) updateData.year = Number(year);
       if (teacherId) updateData.teacherId = Number(teacherId);
+      if (teacherProfileId !== undefined) {
+        updateData.teacherProfileId = teacherProfileId ? Number(teacherProfileId) : null;
+      }
       if (active !== undefined) updateData.active = active;
 
       const classData = await prisma.class.update({
@@ -172,6 +235,15 @@ export class ClassController {
               id: true,
               name: true,
               email: true,
+            },
+          },
+          teacherProfile: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              specialization: true,
             },
           },
           _count: {
