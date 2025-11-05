@@ -907,23 +907,84 @@ function App() {
   };
 
   const handleSaveUser = async () => {
-    if (!userForm.name.trim() || !userForm.email.trim()) {
-      alert('⚠️ Nome e email são obrigatórios');
-      return;
+    try {
+      if (!userForm.name.trim() || !userForm.email.trim()) {
+        alert('⚠️ Nome e email são obrigatórios');
+        return;
+      }
+      if (!editingUser && !userForm.password.trim()) {
+        alert('⚠️ Senha é obrigatória para novos usuários');
+        return;
+      }
+
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const url = editingUser 
+        ? `${API_URL}/users/${editingUser.id}`
+        : `${API_URL}/users`;
+      
+      const method = editingUser ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: userForm.name,
+          email: userForm.email,
+          password: userForm.password || undefined,
+          role: userForm.role
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert(`✅ Usuário ${editingUser ? 'atualizado' : 'cadastrado'} com sucesso!`);
+        setShowUserModal(false);
+        await loadUsers();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao salvar usuário'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao salvar usuário: ${error.message}`);
     }
-    if (!editingUser && !userForm.password.trim()) {
-      alert('⚠️ Senha é obrigatória para novos usuários');
-      return;
-    }
-    alert(`✅ Usuário ${editingUser ? 'atualizado' : 'cadastrado'} com sucesso! (Mock)`);
-    setShowUserModal(false);
-    await loadUsers();
   };
 
   const handleDeleteUser = async (user: User) => {
-    if (!confirm(`⚠️ Tem certeza que deseja excluir ${user.name}?`)) return;
-    alert(`✅ Usuário excluído com sucesso! (Mock)`);
-    await loadUsers();
+    try {
+      if (!confirm(`⚠️ Tem certeza que deseja desativar ${user.name}?`)) return;
+
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/users/${user.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert('✅ Usuário desativado com sucesso!');
+        await loadUsers();
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao desativar usuário'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao desativar usuário: ${error.message}`);
+    }
   };
 
   // CRUD de Escolas

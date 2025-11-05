@@ -9,6 +9,7 @@ import teacherRoutes from './teacher.routes';
 import schoolRoutes from './school.routes';
 import avatarRoutes from './avatar.routes';
 import classRoutes from './class.routes';
+import userRoutes from './user.routes';
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.use('/teachers', teacherRoutes);
 router.use('/schools', schoolRoutes);
 router.use('/avatars', avatarRoutes);
 router.use('/classes', classRoutes);
+router.use('/users', userRoutes);
 
 // Health check
 router.get('/health', (req, res) => {
