@@ -3473,45 +3473,148 @@ function App() {
                 </div>
 
                 {/* Content Grid */}
-                <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
-                  {/* Contatos de Emergência */}
+                <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                  {/* Emergência */}
                   <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        🚨 Contatos de Emergência
+                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                        🚨 Emergência
                       </h3>
+                      <span style={{ 
+                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        color: 'white', 
+                        padding: '0.375rem 0.75rem', 
+                        borderRadius: '1rem', 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600' 
+                      }}>
+                        Sempre Acessível
+                      </span>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '0.9375rem' }}>
-                      {selectedStudentForProfile.telefone ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.9375rem', padding: '1rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem' }}>
+                    <div style={{ display: 'grid', gap: '1rem' }}>
+                      {/* Pediatra */}
+                      <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem', padding: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                           <div style={{ fontSize: '1.5rem', width: '3rem', height: '3rem', borderRadius: '50%', background: '#ef4444', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            📞
+                            👩‍⚕️
                           </div>
                           <div style={{ flex: 1 }}>
-                            <div style={{ fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>Telefone Principal</div>
-                            <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>{selectedStudentForProfile.telefone}</div>
+                            <div style={{ fontWeight: '700', color: '#1f2937', fontSize: '0.875rem' }}>Pediatra</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>Dra. Cristina Rola</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>(85) 98216-1543</div>
                           </div>
                         </div>
-                      ) : null}
-                      {selectedStudentForProfile.email && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.9375rem', padding: '1rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem' }}>
+                        <button
+                          onClick={() => window.open('https://wa.me/5585982161543', '_blank')}
+                          style={{
+                            background: '#25d366',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.5rem 0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.75rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.375rem',
+                            width: '100%',
+                            justifyContent: 'center'
+                          }}
+                        >
+                          📱 WhatsApp
+                        </button>
+                      </div>
+
+                      {/* Alergias */}
+                      <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem', padding: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                           <div style={{ fontSize: '1.5rem', width: '3rem', height: '3rem', borderRadius: '50%', background: '#ef4444', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            📧
+                            ⚠️
                           </div>
                           <div style={{ flex: 1 }}>
-                            <div style={{ fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>E-mail</div>
-                            <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>{selectedStudentForProfile.email}</div>
+                            <div style={{ fontWeight: '700', color: '#1f2937', fontSize: '0.875rem', marginBottom: '0.25rem' }}>Alergias</div>
+                            <div style={{ color: '#dc2626', fontSize: '0.875rem', fontWeight: '600' }}>
+                              Castanha, Amendoim, Tylenol Corante
+                            </div>
                           </div>
                         </div>
-                      )}
-                      {!selectedStudentForProfile.telefone && !selectedStudentForProfile.email && (
-                        <div style={{ textAlign: 'center', padding: '1rem', color: '#9ca3af', fontSize: '0.875rem' }}>
-                          Nenhum contato cadastrado
+                      </div>
+
+                      {/* Hospital */}
+                      <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem', padding: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <div style={{ fontSize: '1.5rem', width: '3rem', height: '3rem', borderRadius: '50%', background: '#ef4444', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            🏥
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontWeight: '700', color: '#1f2937', fontSize: '0.875rem' }}>Hospital</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>Hospital São Carlos</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>Pediatria | Emergência 24h</div>
+                          </div>
                         </div>
-                      )}
+                      </div>
+
+                      {/* Plano de Saúde */}
+                      <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem', padding: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <div style={{ fontSize: '1.5rem', width: '3rem', height: '3rem', borderRadius: '50%', background: '#ef4444', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            💳
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontWeight: '700', color: '#1f2937', fontSize: '0.875rem' }}>Plano de Saúde</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>Bradesco Saúde</div>
+                            <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>Cartão: ****-****-****-1234</div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
+                  {/* Caderneta de Saúde */}
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                        🩺 Caderneta de Saúde
+                      </h3>
+                      <span style={{ 
+                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        color: 'white', 
+                        padding: '0.375rem 0.75rem', 
+                        borderRadius: '1rem', 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600' 
+                      }}>
+                        Atualizado
+                      </span>
+                    </div>
+                    <div style={{ display: 'grid', gap: '1rem' }}>
+                      {/* Vacinas */}
+                      <div style={{ background: '#f0fdf4', border: '2px solid #bbf7d0', borderRadius: '0.75rem', padding: '1.25rem', textAlign: 'center' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>✅</div>
+                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>Vacinas</div>
+                        <div style={{ fontSize: '0.875rem', color: '#16a34a', fontWeight: '600' }}>Em Dia</div>
+                      </div>
+
+                      {/* Altura */}
+                      <div style={{ background: '#eff6ff', border: '2px solid #bfdbfe', borderRadius: '0.75rem', padding: '1.25rem', textAlign: 'center' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>📏</div>
+                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>Altura</div>
+                        <div style={{ fontSize: '0.875rem', color: '#3b82f6', fontWeight: '600' }}>92 cm</div>
+                      </div>
+
+                      {/* Peso */}
+                      <div style={{ background: '#fef3c7', border: '2px solid #fde68a', borderRadius: '0.75rem', padding: '1.25rem', textAlign: 'center' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>⚖️</div>
+                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>Peso</div>
+                        <div style={{ fontSize: '0.875rem', color: '#d97706', fontWeight: '600' }}>14.2 kg</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Segunda Grid - Largura Completa */}
+                <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
                   {/* Cuidados Especiais */}
                   <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
                     <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
