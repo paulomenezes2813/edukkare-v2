@@ -1161,9 +1161,8 @@ function App() {
 
     if (classData) {
       setEditingClass(classData);
-      // Prioriza teacherProfile (da tabela teachers) se existir
-      const teacherIdValue = (classData as any).teacherProfile?.id?.toString() || 
-                             classData.teacher?.id?.toString() || '';
+      // Agora usa apenas teacher (da tabela teachers)
+      const teacherIdValue = classData.teacher?.id?.toString() || '';
       console.log('📝 Editando turma, professor ID:', teacherIdValue);
       setClassForm({
         name: classData.name,
@@ -1204,7 +1203,7 @@ function App() {
       
       const method = editingClass ? 'PUT' : 'POST';
 
-      console.log('💾 Salvando turma com teacherProfileId:', classForm.teacherId);
+      console.log('💾 Salvando turma com teacherId:', classForm.teacherId);
 
       const response = await fetch(url, {
         method,
@@ -1217,7 +1216,7 @@ function App() {
           age_group: classForm.age_group,
           shift: classForm.shift,
           year: Number(classForm.year),
-          teacherProfileId: Number(classForm.teacherId), // Envia como teacherProfileId (da tabela teachers)
+          teacherId: Number(classForm.teacherId), // Envia teacherId (da tabela teachers)
         })
       });
 
@@ -2901,17 +2900,17 @@ function App() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>👥</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{classData.age_group}</span></div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📅</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>Ano: {classData.year}</span></div>
-                    {((classData as any).teacherProfile || classData.teacher) && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <span>👨‍🏫</span>
-                        <span style={{ fontSize: '0.875rem', color: '#475569' }}>
-                          {(classData as any).teacherProfile?.name || classData.teacher.name}
-                          {(classData as any).teacherProfile?.specialization && (
-                            <span style={{ color: '#8b5cf6', fontSize: '0.75rem' }}> - {(classData as any).teacherProfile.specialization}</span>
-                          )}
-                        </span>
-                      </div>
-                    )}
+                  {classData.teacher && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span>👨‍🏫</span>
+                      <span style={{ fontSize: '0.875rem', color: '#475569' }}>
+                        {classData.teacher.name}
+                        {classData.teacher.specialization && (
+                          <span style={{ color: '#8b5cf6', fontSize: '0.75rem' }}> - {classData.teacher.specialization}</span>
+                        )}
+                      </span>
+                    </div>
+                  )}
                     {classData._count && (
                       <>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>👦</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{classData._count.students} alunos</span></div>

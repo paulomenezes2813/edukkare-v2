@@ -59,7 +59,6 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  classes       Class[]
   evaluations   Evaluation[]
   evidences     Evidence[]
   
@@ -129,11 +128,8 @@ model Class {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  teacherId     Int
-  teacher       User      @relation(fields: [teacherId], references: [id])
-  
-  teacherProfileId  Int?     // ID do professor da tabela teachers (opcional)
-  teacherProfile    Teacher? @relation(fields: [teacherProfileId], references: [id])
+  teacherId     Int       // ID do professor da tabela teachers
+  teacher       Teacher   @relation(fields: [teacherId], references: [id])
   
   students      Student[]
   activities    Activity[]
