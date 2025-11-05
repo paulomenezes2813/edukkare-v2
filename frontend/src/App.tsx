@@ -1852,7 +1852,13 @@ function App() {
             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
               {/* Painel Gestor */}
               <button
-                onClick={() => setShowSidebar(true)}
+                onClick={() => {
+                  if (currentScreen === 'home') {
+                    setShowSidebar(true);
+                  } else {
+                    setCurrentScreen('home');
+                  }
+                }}
                 style={{
                   background: 'rgba(255,255,255,0.2)',
                   color: 'white',
@@ -3498,7 +3504,7 @@ function App() {
                 </div>
 
                 {/* Content Grid */}
-                <div style={{ padding: '0 1.25rem 1.875rem 1.25rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div style={{ padding: '0 1.25rem 1.875rem 1.25rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
                   {/* Contatos de Emergência */}
                   <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
                     <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
@@ -3506,7 +3512,7 @@ function App() {
                         🚨 Contatos de Emergência
                       </h3>
                     </div>
-                    <div style={{ display: 'grid', gap: '0.9375rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '0.9375rem' }}>
                       {selectedStudentForProfile.telefone ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.9375rem', padding: '1rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem' }}>
                           <div style={{ fontSize: '1.5rem', width: '3rem', height: '3rem', borderRadius: '50%', background: '#ef4444', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -3517,11 +3523,7 @@ function App() {
                             <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>{selectedStudentForProfile.telefone}</div>
                           </div>
                         </div>
-                      ) : (
-                        <div style={{ textAlign: 'center', padding: '1rem', color: '#9ca3af', fontSize: '0.875rem' }}>
-                          Nenhum contato cadastrado
-                        </div>
-                      )}
+                      ) : null}
                       {selectedStudentForProfile.email && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.9375rem', padding: '1rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem' }}>
                           <div style={{ fontSize: '1.5rem', width: '3rem', height: '3rem', borderRadius: '50%', background: '#ef4444', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -3531,6 +3533,11 @@ function App() {
                             <div style={{ fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>E-mail</div>
                             <div style={{ color: '#6b7280', fontSize: '0.875rem' }}>{selectedStudentForProfile.email}</div>
                           </div>
+                        </div>
+                      )}
+                      {!selectedStudentForProfile.telefone && !selectedStudentForProfile.email && (
+                        <div style={{ textAlign: 'center', padding: '1rem', color: '#9ca3af', fontSize: '0.875rem' }}>
+                          Nenhum contato cadastrado
                         </div>
                       )}
                     </div>
@@ -3543,7 +3550,7 @@ function App() {
                         💝 Cuidados Especiais
                       </h3>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
                       <div style={{ textAlign: 'center', padding: '1.25rem', borderRadius: '1rem', border: '2px solid #bbf7d0', background: '#f0fdf4' }}>
                         <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🍎</div>
                         <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Alimentação</div>
@@ -3563,13 +3570,13 @@ function App() {
                   </div>
 
                   {/* Marcos do Desenvolvimento */}
-                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)', gridColumn: '1 / -1' }}>
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
                     <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
                       <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         🎯 Marcos do Desenvolvimento
                       </h3>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
                       {['Motor', 'Cognitivo', 'Social', 'Linguagem'].map((marco, idx) => (
                         <div key={idx} style={{ textAlign: 'center', padding: '1.25rem', background: '#eff6ff', borderRadius: '0.75rem' }}>
                           <div style={{ fontSize: '2rem', marginBottom: '0.625rem' }}>
@@ -3586,6 +3593,18 @@ function App() {
                           </div>
                         </div>
                       ))}
+                    </div>
+                  </div>
+
+                  {/* Histórico de Saúde */}
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
+                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        🏥 Histórico de Saúde
+                      </h3>
+                    </div>
+                    <div style={{ textAlign: 'center', padding: '2rem', color: '#9ca3af', fontSize: '0.875rem' }}>
+                      Nenhum registro de saúde disponível
                     </div>
                   </div>
                 </div>
