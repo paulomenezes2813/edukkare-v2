@@ -3332,10 +3332,7 @@ function App() {
                   <div style={{ width: '3rem', height: '3rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', borderRadius: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.5rem', fontWeight: 'bold', boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)' }}>
                     E
                   </div>
-                  <div>
-                    <h1 style={{ fontSize: '1.5rem', color: '#1f2937', fontWeight: '700', margin: 0 }}>EDUKKARE</h1>
-                    <p style={{ fontSize: '0.75rem', color: '#6b7280', margin: 0 }}>Painel Alunos • v2.0</p>
-                  </div>
+                  <h1 style={{ fontSize: '1.5rem', color: '#1f2937', fontWeight: '700', margin: 0 }}>EDUKKARE</h1>
                 </div>
                 <button
                   onClick={() => setCurrentScreen('home')}
