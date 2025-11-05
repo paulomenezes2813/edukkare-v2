@@ -3108,6 +3108,90 @@ function App() {
           </main>
         ) : (
           <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            {/* Botões Painel Gestor e Painel Alunos */}
+            <div style={{
+              display: 'flex',
+              gap: '1rem',
+              marginBottom: '2rem',
+              flexWrap: 'wrap'
+            }}>
+              {/* Painel Gestor */}
+              <button
+                onClick={() => setShowSidebar(true)}
+                style={{
+                  flex: '1 1 calc(50% - 0.5rem)',
+                  minWidth: '150px',
+                  padding: '1.25rem 1.5rem',
+                  background: 'white',
+                  border: '2px solid #e2e8f0',
+                  borderRadius: '1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#64748b'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#8b5cf6';
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(139, 92, 246, 0.15)';
+                  e.currentTarget.style.color = '#8b5cf6';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+                  e.currentTarget.style.color = '#64748b';
+                }}
+              >
+                <span style={{ fontSize: '1.5rem' }}>📊</span>
+                <span>Painel Gestor</span>
+              </button>
+
+              {/* Painel Alunos */}
+              <button
+                onClick={() => {
+                  // Scroll suave para a seção de alunos
+                  const alunosSection = document.querySelector('[data-section="alunos"]');
+                  if (alunosSection) {
+                    alunosSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                style={{
+                  flex: '1 1 calc(50% - 0.5rem)',
+                  minWidth: '150px',
+                  padding: '1.25rem 1.5rem',
+                  background: 'white',
+                  border: '2px solid #e2e8f0',
+                  borderRadius: '1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#8b5cf6'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#8b5cf6';
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(139, 92, 246, 0.15)';
+                  e.currentTarget.style.background = '#f3f0ff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+                  e.currentTarget.style.background = 'white';
+                }}
+              >
+                <span style={{ fontSize: '1.5rem' }}>👶</span>
+                <span>Painel Alunos</span>
+              </button>
+            </div>
+
             {/* Seleção de Atividade - Compacto */}
         <div style={{ marginBottom: '1.5rem' }}>
           <h2 style={{ marginBottom: '0.75rem', color: '#1e293b', fontSize: '1rem', fontWeight: '700' }}>
@@ -3217,7 +3301,7 @@ function App() {
         </div>
 
         {/* Seleção de Criança - Mobile Compacto */}
-        <div style={{ marginBottom: '1.5rem' }}>
+        <div data-section="alunos" style={{ marginBottom: '1.5rem' }}>
           <h2 style={{ marginBottom: '0.75rem', color: '#1e293b', fontSize: '1rem', fontWeight: '700' }}>
             👶 2. Selecione a Criança
           </h2>
