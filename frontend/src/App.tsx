@@ -3613,41 +3613,41 @@ function App() {
 
                   {/* Caderneta de Saúde */}
                   <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div style={{ marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
                       <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                         🩺 Caderneta de Saúde
                       </h3>
                       <span style={{ 
                         background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
                         color: 'white', 
-                        padding: '0.375rem 0.75rem', 
-                        borderRadius: '1rem', 
-                        fontSize: '0.75rem', 
+                        padding: '0.25rem 0.5rem', 
+                        borderRadius: '0.5rem', 
+                        fontSize: '0.65rem', 
                         fontWeight: '600' 
                       }}>
                         Atualizado
                       </span>
                     </div>
-                    <div style={{ display: 'grid', gap: '1rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
                       {/* Vacinas */}
-                      <div style={{ background: '#f0fdf4', border: '2px solid #bbf7d0', borderRadius: '0.75rem', padding: '1.25rem', textAlign: 'center' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>✅</div>
-                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>Vacinas</div>
-                        <div style={{ fontSize: '0.875rem', color: '#16a34a', fontWeight: '600' }}>Em Dia</div>
+                      <div style={{ background: '#f0fdf4', border: '2px solid #bbf7d0', borderRadius: '0.5rem', padding: '0.5rem', textAlign: 'center' }}>
+                        <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>✅</div>
+                        <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.125rem' }}>Vacinas</div>
+                        <div style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: '600' }}>Em Dia</div>
                       </div>
 
                       {/* Altura */}
-                      <div style={{ background: '#eff6ff', border: '2px solid #bfdbfe', borderRadius: '0.75rem', padding: '1.25rem', textAlign: 'center' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>📏</div>
-                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>Altura</div>
-                        <div style={{ fontSize: '0.875rem', color: '#3b82f6', fontWeight: '600' }}>92 cm</div>
+                      <div style={{ background: '#eff6ff', border: '2px solid #bfdbfe', borderRadius: '0.5rem', padding: '0.5rem', textAlign: 'center' }}>
+                        <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>📏</div>
+                        <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.125rem' }}>Altura</div>
+                        <div style={{ fontSize: '0.7rem', color: '#3b82f6', fontWeight: '600' }}>92 cm</div>
                       </div>
 
                       {/* Peso */}
-                      <div style={{ background: '#fef3c7', border: '2px solid #fde68a', borderRadius: '0.75rem', padding: '1.25rem', textAlign: 'center' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>⚖️</div>
-                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>Peso</div>
-                        <div style={{ fontSize: '0.875rem', color: '#d97706', fontWeight: '600' }}>14.2 kg</div>
+                      <div style={{ background: '#fef3c7', border: '2px solid #fde68a', borderRadius: '0.5rem', padding: '0.5rem', textAlign: 'center' }}>
+                        <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>⚖️</div>
+                        <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.125rem' }}>Peso</div>
+                        <div style={{ fontSize: '0.7rem', color: '#d97706', fontWeight: '600' }}>14.2 kg</div>
                       </div>
                     </div>
                   </div>
@@ -3657,85 +3657,91 @@ function App() {
                 <div style={{ paddingBottom: '1rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }}>
                   {/* Cuidados de Hoje */}
                   <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div style={{ marginBottom: '0.75rem', paddingBottom: '0.5rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
                       <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                         🍽️ Cuidados de Hoje
                       </h3>
                       <span style={{ 
                         background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
                         color: 'white', 
-                        padding: '0.375rem 0.75rem', 
-                        borderRadius: '1rem', 
-                        fontSize: '0.75rem', 
+                        padding: '0.25rem 0.5rem', 
+                        borderRadius: '0.5rem', 
+                        fontSize: '0.65rem', 
                         fontWeight: '600' 
                       }}>
                         {new Date().toLocaleDateString('pt-BR')}
                       </span>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       {/* Almoço */}
-                      <div style={{ border: '3px solid #10b981', borderRadius: '1rem', padding: '1rem', background: '#f0fdf4', textAlign: 'center' }}>
-                        <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🍽️</div>
-                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Almoço</div>
-                        <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.75rem' }}>11:30</div>
-                        <div style={{ 
-                          background: '#10b981', 
-                          color: 'white', 
-                          padding: '0.5rem 1rem', 
-                          borderRadius: '1.5rem', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600',
-                          marginBottom: '0.75rem',
-                          display: 'inline-block'
-                        }}>
-                          Aceitou Bem
-                        </div>
-                        <div style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.4' }}>
-                          Arroz, feijão, frango e legumes. Comeu tudo!
+                      <div style={{ border: '2px solid #10b981', borderRadius: '0.5rem', padding: '0.75rem', background: '#f0fdf4', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{ fontSize: '2rem', flexShrink: 0 }}>🍽️</div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1f2937' }}>Almoço</span>
+                            <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>11:30</span>
+                            <span style={{ 
+                              background: '#10b981', 
+                              color: 'white', 
+                              padding: '0.125rem 0.5rem', 
+                              borderRadius: '0.75rem', 
+                              fontSize: '0.7rem', 
+                              fontWeight: '600'
+                            }}>
+                              Aceitou Bem
+                            </span>
+                          </div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280', lineHeight: '1.3' }}>
+                            Arroz, feijão, frango e legumes
+                          </div>
                         </div>
                       </div>
 
                       {/* Lanche */}
-                      <div style={{ border: '3px solid #f59e0b', borderRadius: '1rem', padding: '1rem', background: '#fffbeb', textAlign: 'center' }}>
-                        <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🍎</div>
-                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Lanche</div>
-                        <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.75rem' }}>15:00</div>
-                        <div style={{ 
-                          background: '#f59e0b', 
-                          color: 'white', 
-                          padding: '0.5rem 1rem', 
-                          borderRadius: '1.5rem', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600',
-                          marginBottom: '0.75rem',
-                          display: 'inline-block'
-                        }}>
-                          Parcialmente
-                        </div>
-                        <div style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.4' }}>
-                          Banana e biscoito. Comeu apenas a banana.
+                      <div style={{ border: '2px solid #f59e0b', borderRadius: '0.5rem', padding: '0.75rem', background: '#fffbeb', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{ fontSize: '2rem', flexShrink: 0 }}>🍎</div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1f2937' }}>Lanche</span>
+                            <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>15:00</span>
+                            <span style={{ 
+                              background: '#f59e0b', 
+                              color: 'white', 
+                              padding: '0.125rem 0.5rem', 
+                              borderRadius: '0.75rem', 
+                              fontSize: '0.7rem', 
+                              fontWeight: '600'
+                            }}>
+                              Parcialmente
+                            </span>
+                          </div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280', lineHeight: '1.3' }}>
+                            Banana e biscoito
+                          </div>
                         </div>
                       </div>
 
                       {/* Soneca */}
-                      <div style={{ border: '3px solid #10b981', borderRadius: '1rem', padding: '1rem', background: '#f0fdf4', textAlign: 'center' }}>
-                        <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>😴</div>
-                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Soneca</div>
-                        <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.75rem' }}>13:00-14:30</div>
-                        <div style={{ 
-                          background: '#10b981', 
-                          color: 'white', 
-                          padding: '0.5rem 1rem', 
-                          borderRadius: '1.5rem', 
-                          fontSize: '0.875rem', 
-                          fontWeight: '600',
-                          marginBottom: '0.75rem',
-                          display: 'inline-block'
-                        }}>
-                          Dormiu Bem
-                        </div>
-                        <div style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.4' }}>
-                          Sono tranquilo por 1h30min.
+                      <div style={{ border: '2px solid #10b981', borderRadius: '0.5rem', padding: '0.75rem', background: '#f0fdf4', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{ fontSize: '2rem', flexShrink: 0 }}>😴</div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1f2937' }}>Soneca</span>
+                            <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>13:00-14:30</span>
+                            <span style={{ 
+                              background: '#10b981', 
+                              color: 'white', 
+                              padding: '0.125rem 0.5rem', 
+                              borderRadius: '0.75rem', 
+                              fontSize: '0.7rem', 
+                              fontWeight: '600'
+                            }}>
+                              Dormiu Bem
+                            </span>
+                          </div>
+                          <div style={{ fontSize: '0.75rem', color: '#6b7280', lineHeight: '1.3' }}>
+                            1h30 de sono tranquilo
+                          </div>
                         </div>
                       </div>
                     </div>
