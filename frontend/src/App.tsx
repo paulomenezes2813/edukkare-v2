@@ -1851,7 +1851,7 @@ function App() {
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-              {/* Painel Gestor */}
+              {/* Gestor */}
               <button
                 onClick={() => {
                   if (currentScreen === 'home') {
@@ -1864,15 +1864,16 @@ function App() {
                   background: 'rgba(255,255,255,0.2)',
                   color: 'white',
                   border: 'none',
-                  padding: '0.5rem 0.875rem',
+                  padding: '0.375rem 0.625rem',
                   borderRadius: '0.5rem',
                   cursor: 'pointer',
                   fontSize: '0.75rem',
                   fontWeight: '600',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.375rem',
-                  transition: 'all 0.2s'
+                  gap: '0.25rem',
+                  transition: 'all 0.2s',
+                  whiteSpace: 'nowrap'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.3)';
@@ -1881,11 +1882,11 @@ function App() {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
                 }}
               >
-                <span style={{ fontSize: '1rem' }}>📊</span>
-                <span>Painel Gestor</span>
+                <span style={{ fontSize: '0.875rem' }}>📊</span>
+                <span>Gestor</span>
               </button>
 
-              {/* Painel Alunos */}
+              {/* Alunos */}
               <button
                 onClick={() => {
                   setCurrentScreen('studentPanel');
@@ -1897,15 +1898,16 @@ function App() {
                   background: 'rgba(255,255,255,0.2)',
                   color: 'white',
                   border: 'none',
-                  padding: '0.5rem 0.875rem',
+                  padding: '0.375rem 0.625rem',
                   borderRadius: '0.5rem',
                   cursor: 'pointer',
                   fontSize: '0.75rem',
                   fontWeight: '600',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.375rem',
-                  transition: 'all 0.2s'
+                  gap: '0.25rem',
+                  transition: 'all 0.2s',
+                  whiteSpace: 'nowrap'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.3)';
@@ -1914,8 +1916,8 @@ function App() {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
                 }}
               >
-                <span style={{ fontSize: '1rem' }}>👶</span>
-                <span>Painel Alunos</span>
+                <span style={{ fontSize: '0.875rem' }}>👶</span>
+                <span>Alunos</span>
               </button>
 
               {/* IA */}
