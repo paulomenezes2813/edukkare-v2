@@ -3917,9 +3917,9 @@ function App() {
                 </div>
 
                 {/* Quarta Grid - Álbum */}
-                <div style={{ paddingBottom: '1rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }}>
+                <div style={{ paddingBottom: '1rem' }}>
                   {/* Álbum de Aprendizagem */}
-                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)', maxWidth: '100%' }}>
                     <div style={{ marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
                       <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                         📸 Álbum de Aprendizagem
