@@ -118,6 +118,7 @@ function App() {
   const [searchName, setSearchName] = useState('');
   const [searchId, setSearchId] = useState('');
   const [showProfileInPanel, setShowProfileInPanel] = useState(false);
+  const [albumCurrentSlide, setAlbumCurrentSlide] = useState(0);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [studentForm, setStudentForm] = useState({
@@ -3917,17 +3918,284 @@ function App() {
                   </div>
                 </div>
 
-                {/* Quarta Grid - Histórico */}
+                {/* Quarta Grid - Álbum */}
                 <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
-                  {/* Histórico de Saúde */}
+                  {/* Álbum de Aprendizagem */}
                   <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        🏥 Histórico de Saúde
+                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                        📸 Álbum de Aprendizagem
                       </h3>
+                      <span style={{ 
+                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        color: 'white', 
+                        padding: '0.375rem 0.75rem', 
+                        borderRadius: '1rem', 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600' 
+                      }}>
+                        Esta Semana
+                      </span>
                     </div>
-                    <div style={{ textAlign: 'center', padding: '2rem', color: '#9ca3af', fontSize: '0.875rem' }}>
-                      Nenhum registro de saúde disponível
+
+                    {/* Carrossel */}
+                    <div style={{ position: 'relative', marginBottom: '1.25rem' }}>
+                      <div style={{ 
+                        overflow: 'hidden', 
+                        borderRadius: '0.75rem', 
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        position: 'relative'
+                      }}>
+                        <div style={{ 
+                          display: 'flex', 
+                          transition: 'transform 0.5s ease',
+                          transform: `translateX(-${albumCurrentSlide * 100}%)`
+                        }}>
+                          {/* Slide 1 */}
+                          <div style={{ 
+                            minWidth: '100%', 
+                            height: '250px', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            color: 'white',
+                            flexDirection: 'column',
+                            gap: '0.5rem',
+                            position: 'relative'
+                          }}>
+                            <div style={{
+                              position: 'absolute',
+                              top: '10px',
+                              right: '10px',
+                              background: 'rgba(0,0,0,0.7)',
+                              color: 'white',
+                              padding: '4px 8px',
+                              borderRadius: '12px',
+                              fontSize: '11px',
+                              fontWeight: '600'
+                            }}>
+                              Foto 1 de 5
+                            </div>
+                            <div style={{ fontSize: '1.25rem', fontWeight: '600' }}>Atividade de Pintura</div>
+                            <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>Segunda-feira, 01/11</div>
+                          </div>
+
+                          {/* Slide 2 */}
+                          <div style={{ 
+                            minWidth: '100%', 
+                            height: '250px', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                            color: 'white',
+                            flexDirection: 'column',
+                            gap: '0.5rem',
+                            position: 'relative'
+                          }}>
+                            <div style={{
+                              position: 'absolute',
+                              top: '10px',
+                              right: '10px',
+                              background: 'rgba(0,0,0,0.7)',
+                              color: 'white',
+                              padding: '4px 8px',
+                              borderRadius: '12px',
+                              fontSize: '11px',
+                              fontWeight: '600'
+                            }}>
+                              Foto 2 de 5
+                            </div>
+                            <div style={{ fontSize: '1.25rem', fontWeight: '600' }}>Brincadeira no Parque</div>
+                            <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>Terça-feira, 02/11</div>
+                          </div>
+
+                          {/* Slide 3 */}
+                          <div style={{ 
+                            minWidth: '100%', 
+                            height: '250px', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                            color: 'white',
+                            flexDirection: 'column',
+                            gap: '0.5rem',
+                            position: 'relative'
+                          }}>
+                            <div style={{
+                              position: 'absolute',
+                              top: '10px',
+                              right: '10px',
+                              background: 'rgba(0,0,0,0.7)',
+                              color: 'white',
+                              padding: '4px 8px',
+                              borderRadius: '12px',
+                              fontSize: '11px',
+                              fontWeight: '600'
+                            }}>
+                              Foto 3 de 5
+                            </div>
+                            <div style={{ fontSize: '1.25rem', fontWeight: '600' }}>Música e Dança</div>
+                            <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>Quarta-feira, 03/11</div>
+                          </div>
+
+                          {/* Slide 4 */}
+                          <div style={{ 
+                            minWidth: '100%', 
+                            height: '250px', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                            color: 'white',
+                            flexDirection: 'column',
+                            gap: '0.5rem',
+                            position: 'relative'
+                          }}>
+                            <div style={{
+                              position: 'absolute',
+                              top: '10px',
+                              right: '10px',
+                              background: 'rgba(0,0,0,0.7)',
+                              color: 'white',
+                              padding: '4px 8px',
+                              borderRadius: '12px',
+                              fontSize: '11px',
+                              fontWeight: '600'
+                            }}>
+                              Foto 4 de 5
+                            </div>
+                            <div style={{ fontSize: '1.25rem', fontWeight: '600' }}>Contação de Histórias</div>
+                            <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>Quinta-feira, 04/11</div>
+                          </div>
+
+                          {/* Slide 5 */}
+                          <div style={{ 
+                            minWidth: '100%', 
+                            height: '250px', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+                            color: 'white',
+                            flexDirection: 'column',
+                            gap: '0.5rem',
+                            position: 'relative'
+                          }}>
+                            <div style={{
+                              position: 'absolute',
+                              top: '10px',
+                              right: '10px',
+                              background: 'rgba(0,0,0,0.7)',
+                              color: 'white',
+                              padding: '4px 8px',
+                              borderRadius: '12px',
+                              fontSize: '11px',
+                              fontWeight: '600'
+                            }}>
+                              Foto 5 de 5
+                            </div>
+                            <div style={{ fontSize: '1.25rem', fontWeight: '600' }}>Construção com Blocos</div>
+                            <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>Sexta-feira, 05/11</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Controles do Carrossel */}
+                      <button
+                        onClick={() => setAlbumCurrentSlide(prev => prev === 0 ? 4 : prev - 1)}
+                        style={{
+                          position: 'absolute',
+                          left: '10px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          background: 'rgba(0,0,0,0.5)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '40px',
+                          height: '40px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '1.5rem',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.7)'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.5)'}
+                      >
+                        ‹
+                      </button>
+
+                      <button
+                        onClick={() => setAlbumCurrentSlide(prev => prev === 4 ? 0 : prev + 1)}
+                        style={{
+                          position: 'absolute',
+                          right: '10px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          background: 'rgba(0,0,0,0.5)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '40px',
+                          height: '40px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '1.5rem',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.7)'}
+                        onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.5)'}
+                      >
+                        ›
+                      </button>
+                    </div>
+
+                    {/* Indicadores */}
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginBottom: '1.25rem' }}>
+                      {[0, 1, 2, 3, 4].map((idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setAlbumCurrentSlide(idx)}
+                          style={{
+                            width: '12px',
+                            height: '12px',
+                            borderRadius: '50%',
+                            background: albumCurrentSlide === idx ? '#8b5cf6' : '#d1d5db',
+                            border: 'none',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s ease'
+                          }}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Estatísticas */}
+                    <div style={{ 
+                      display: 'flex', 
+                      justifyContent: 'space-between', 
+                      background: '#f9fafb', 
+                      padding: '1rem', 
+                      borderRadius: '0.75rem' 
+                    }}>
+                      <div style={{ textAlign: 'center', flex: 1 }}>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>47</div>
+                        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Fotos Este Mês</div>
+                      </div>
+                      <div style={{ textAlign: 'center', flex: 1 }}>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>12</div>
+                        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Vídeos</div>
+                      </div>
+                      <div style={{ textAlign: 'center', flex: 1 }}>
+                        <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>23</div>
+                        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Atividades</div>
+                      </div>
                     </div>
                   </div>
                 </div>
