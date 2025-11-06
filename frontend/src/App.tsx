@@ -3323,10 +3323,10 @@ function App() {
             </div>
           </main>
         ) : currentScreen === 'studentPanel' ? (
-          <main style={{ padding: '1.25rem', background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', minHeight: '100vh' }}>
+          <main style={{ padding: '0.75rem', background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', minHeight: '100vh' }}>
             {/* Busca de Aluno */}
-            <div style={{ background: 'white', borderRadius: '1rem', padding: '1.25rem 1.875rem', marginBottom: '1.25rem', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)', border: '2px solid #e5e7eb' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: '0.9375rem', alignItems: 'end' }}>
+            <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', marginBottom: '1rem', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.08)', border: '2px solid #e5e7eb' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '0.75rem', alignItems: 'end' }}>
                 <div>
                   <label style={{ display: 'block', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem', fontSize: '0.875rem' }}>
                     Nome do Aluno
@@ -3472,11 +3472,11 @@ function App() {
                 </div>
 
                 {/* Content Grid */}
-                <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div style={{ paddingBottom: '1rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
                   {/* Emergência */}
-                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                    <div style={{ marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                         🚨 Emergência
                       </h3>
                       <span style={{ 
@@ -3571,9 +3571,9 @@ function App() {
                   </div>
 
                   {/* Caderneta de Saúde */}
-                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                    <div style={{ marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                         🩺 Caderneta de Saúde
                       </h3>
                       <span style={{ 
@@ -3613,11 +3613,11 @@ function App() {
                 </div>
 
                 {/* Segunda Grid - Largura Completa */}
-                <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+                <div style={{ paddingBottom: '1rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }}>
                   {/* Cuidados de Hoje */}
-                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                    <div style={{ marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                         🍽️ Cuidados de Hoje
                       </h3>
                       <span style={{ 
@@ -3631,11 +3631,11 @@ function App() {
                         {new Date().toLocaleDateString('pt-BR')}
                       </span>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
                       {/* Almoço */}
-                      <div style={{ border: '3px solid #10b981', borderRadius: '1rem', padding: '1.5rem', background: '#f0fdf4', textAlign: 'center' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>🍽️</div>
-                        <div style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Almoço</div>
+                      <div style={{ border: '3px solid #10b981', borderRadius: '1rem', padding: '1rem', background: '#f0fdf4', textAlign: 'center' }}>
+                        <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🍽️</div>
+                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Almoço</div>
                         <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.75rem' }}>11:30</div>
                         <div style={{ 
                           background: '#10b981', 
@@ -3655,9 +3655,9 @@ function App() {
                       </div>
 
                       {/* Lanche */}
-                      <div style={{ border: '3px solid #f59e0b', borderRadius: '1rem', padding: '1.5rem', background: '#fffbeb', textAlign: 'center' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>🍎</div>
-                        <div style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Lanche</div>
+                      <div style={{ border: '3px solid #f59e0b', borderRadius: '1rem', padding: '1rem', background: '#fffbeb', textAlign: 'center' }}>
+                        <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🍎</div>
+                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Lanche</div>
                         <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.75rem' }}>15:00</div>
                         <div style={{ 
                           background: '#f59e0b', 
@@ -3677,9 +3677,9 @@ function App() {
                       </div>
 
                       {/* Soneca */}
-                      <div style={{ border: '3px solid #10b981', borderRadius: '1rem', padding: '1.5rem', background: '#f0fdf4', textAlign: 'center' }}>
-                        <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>😴</div>
-                        <div style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Soneca</div>
+                      <div style={{ border: '3px solid #10b981', borderRadius: '1rem', padding: '1rem', background: '#f0fdf4', textAlign: 'center' }}>
+                        <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>😴</div>
+                        <div style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Soneca</div>
                         <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.75rem' }}>13:00-14:30</div>
                         <div style={{ 
                           background: '#10b981', 
@@ -3702,11 +3702,11 @@ function App() {
                 </div>
 
                 {/* Terceira Grid - Progresso e Marcos */}
-                <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div style={{ paddingBottom: '1rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
                   {/* Progresso BNCC */}
-                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                    <div style={{ marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                         📚 Progresso BNCC
                       </h3>
                       <span style={{ 
@@ -3795,9 +3795,9 @@ function App() {
                   </div>
 
                   {/* Marcos de Desenvolvimento */}
-                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                    <div style={{ marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                         🎯 Marcos de Desenvolvimento
                       </h3>
                       <span style={{ 
@@ -3917,11 +3917,11 @@ function App() {
                 </div>
 
                 {/* Quarta Grid - Álbum */}
-                <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+                <div style={{ paddingBottom: '1rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }}>
                   {/* Álbum de Aprendizagem */}
-                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                    <div style={{ marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <h3 style={{ fontSize: '1rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                         📸 Álbum de Aprendizagem
                       </h3>
                       <span style={{ 
@@ -3952,7 +3952,7 @@ function App() {
                           {/* Slide 1 */}
                           <div style={{ 
                             minWidth: '100%', 
-                            height: '250px', 
+                            height: '200px', 
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'center',
@@ -3982,7 +3982,7 @@ function App() {
                           {/* Slide 2 */}
                           <div style={{ 
                             minWidth: '100%', 
-                            height: '250px', 
+                            height: '200px', 
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'center',
@@ -4012,7 +4012,7 @@ function App() {
                           {/* Slide 3 */}
                           <div style={{ 
                             minWidth: '100%', 
-                            height: '250px', 
+                            height: '200px', 
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'center',
@@ -4042,7 +4042,7 @@ function App() {
                           {/* Slide 4 */}
                           <div style={{ 
                             minWidth: '100%', 
-                            height: '250px', 
+                            height: '200px', 
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'center',
@@ -4072,7 +4072,7 @@ function App() {
                           {/* Slide 5 */}
                           <div style={{ 
                             minWidth: '100%', 
-                            height: '250px', 
+                            height: '200px', 
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'center',
@@ -4177,22 +4177,24 @@ function App() {
                     {/* Estatísticas */}
                     <div style={{ 
                       display: 'flex', 
-                      justifyContent: 'space-between', 
+                      flexWrap: 'wrap',
+                      justifyContent: 'space-around', 
                       background: '#f9fafb', 
-                      padding: '1rem', 
-                      borderRadius: '0.75rem' 
+                      padding: '0.75rem', 
+                      borderRadius: '0.75rem',
+                      gap: '0.75rem'
                     }}>
-                      <div style={{ textAlign: 'center', flex: 1 }}>
-                        <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>47</div>
-                        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Fotos Este Mês</div>
+                      <div style={{ textAlign: 'center', flex: '1 1 80px', minWidth: '80px' }}>
+                        <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>47</div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Fotos Este Mês</div>
                       </div>
-                      <div style={{ textAlign: 'center', flex: 1 }}>
-                        <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>12</div>
-                        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Vídeos</div>
+                      <div style={{ textAlign: 'center', flex: '1 1 80px', minWidth: '80px' }}>
+                        <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>12</div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Vídeos</div>
                       </div>
-                      <div style={{ textAlign: 'center', flex: 1 }}>
-                        <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>23</div>
-                        <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Atividades</div>
+                      <div style={{ textAlign: 'center', flex: '1 1 80px', minWidth: '80px' }}>
+                        <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>23</div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Atividades</div>
                       </div>
                     </div>
                   </div>
