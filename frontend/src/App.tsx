@@ -3700,34 +3700,225 @@ function App() {
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Marcos do Desenvolvimento */}
+                {/* Terceira Grid - Progresso e Marcos */}
+                <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                  {/* Progresso BNCC */}
                   <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        🎯 Marcos do Desenvolvimento
+                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                        📚 Progresso BNCC
                       </h3>
+                      <span style={{ 
+                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        color: 'white', 
+                        padding: '0.375rem 0.75rem', 
+                        borderRadius: '1rem', 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600' 
+                      }}>
+                        87%
+                      </span>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
-                      {['Motor', 'Cognitivo', 'Social', 'Linguagem'].map((marco, idx) => (
-                        <div key={idx} style={{ textAlign: 'center', padding: '1.25rem', background: '#eff6ff', borderRadius: '0.75rem' }}>
-                          <div style={{ fontSize: '2rem', marginBottom: '0.625rem' }}>
-                            {idx === 0 ? '🏃' : idx === 1 ? '🧠' : idx === 2 ? '👥' : '💬'}
-                          </div>
-                          <div style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem' }}>
-                            {marco}
-                          </div>
-                          <div style={{ fontSize: '1.5rem', fontWeight: '700', color: '#3b82f6' }}>
-                            {92 + idx}%
-                          </div>
-                          <div style={{ marginTop: '0.625rem', height: '0.5rem', background: '#dbeafe', borderRadius: '9999px', overflow: 'hidden' }}>
-                            <div style={{ height: '100%', width: `${92 + idx}%`, background: '#3b82f6', borderRadius: '9999px' }} />
-                          </div>
-                        </div>
-                      ))}
+                    
+                    {/* O Eu, o Outro e o Nós */}
+                    <div style={{ marginBottom: '1.25rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>O Eu, o Outro e o Nós</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>92%</span>
+                      </div>
+                      <div style={{ height: '0.5rem', background: '#e5e7eb', borderRadius: '9999px', overflow: 'hidden' }}>
+                        <div style={{ 
+                          height: '100%', 
+                          width: '92%', 
+                          background: 'linear-gradient(90deg, #8b5cf6, #ec4899)', 
+                          borderRadius: '9999px',
+                          transition: 'width 1s ease'
+                        }} />
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>11 de 12 objetivos alcançados</div>
+                    </div>
+
+                    {/* Corpo, Gestos e Movimentos */}
+                    <div style={{ marginBottom: '1.25rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Corpo, Gestos e Movimentos</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>88%</span>
+                      </div>
+                      <div style={{ height: '0.5rem', background: '#e5e7eb', borderRadius: '9999px', overflow: 'hidden' }}>
+                        <div style={{ 
+                          height: '100%', 
+                          width: '88%', 
+                          background: 'linear-gradient(90deg, #8b5cf6, #ec4899)', 
+                          borderRadius: '9999px',
+                          transition: 'width 1s ease'
+                        }} />
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>7 de 8 objetivos alcançados</div>
+                    </div>
+
+                    {/* Traços, Sons, Cores e Formas */}
+                    <div style={{ marginBottom: '1.25rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Traços, Sons, Cores e Formas</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>85%</span>
+                      </div>
+                      <div style={{ height: '0.5rem', background: '#e5e7eb', borderRadius: '9999px', overflow: 'hidden' }}>
+                        <div style={{ 
+                          height: '100%', 
+                          width: '85%', 
+                          background: 'linear-gradient(90deg, #8b5cf6, #ec4899)', 
+                          borderRadius: '9999px',
+                          transition: 'width 1s ease'
+                        }} />
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>6 de 7 objetivos alcançados</div>
+                    </div>
+
+                    {/* Escuta, Fala, Pensamento */}
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Escuta, Fala, Pensamento</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>83%</span>
+                      </div>
+                      <div style={{ height: '0.5rem', background: '#e5e7eb', borderRadius: '9999px', overflow: 'hidden' }}>
+                        <div style={{ 
+                          height: '100%', 
+                          width: '83%', 
+                          background: 'linear-gradient(90deg, #8b5cf6, #ec4899)', 
+                          borderRadius: '9999px',
+                          transition: 'width 1s ease'
+                        }} />
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>10 de 12 objetivos alcançados</div>
                     </div>
                   </div>
 
+                  {/* Marcos de Desenvolvimento */}
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
+                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                        🎯 Marcos de Desenvolvimento
+                      </h3>
+                      <span style={{ 
+                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        color: 'white', 
+                        padding: '0.375rem 0.75rem', 
+                        borderRadius: '1rem', 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600' 
+                      }}>
+                        30 meses
+                      </span>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                      {/* Motor */}
+                      <div style={{ border: '3px solid', borderColor: '#ef4444', borderLeftWidth: '5px', borderRadius: '0.75rem', padding: '1rem', background: 'rgba(239, 68, 68, 0.05)' }}>
+                        <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          🏃 Motor
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Sobe escadas alternando pés</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Pula com os dois pés</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Chuta bola</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#e2e8f0', fontSize: '1rem' }}>○</span>
+                            <span>Pedala triciclo</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Cognitivo */}
+                      <div style={{ border: '3px solid', borderColor: '#3b82f6', borderLeftWidth: '5px', borderRadius: '0.75rem', padding: '1rem', background: 'rgba(59, 130, 246, 0.05)' }}>
+                        <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          🧠 Cognitivo
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Empilha 6+ blocos</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Identifica cores básicas</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Conta até 5</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#f59e0b', fontSize: '1rem' }}>!</span>
+                            <span>Formas geométricas</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Linguagem */}
+                      <div style={{ border: '3px solid', borderColor: '#10b981', borderLeftWidth: '5px', borderRadius: '0.75rem', padding: '1rem', background: 'rgba(16, 185, 129, 0.05)' }}>
+                        <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          💬 Linguagem
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Frases de 3-4 palavras</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Nomeia objetos familiares</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Segue instruções simples</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Usa pronomes (eu, você)</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Socioemocional */}
+                      <div style={{ border: '3px solid', borderColor: '#f59e0b', borderLeftWidth: '5px', borderRadius: '0.75rem', padding: '1rem', background: 'rgba(245, 158, 11, 0.05)' }}>
+                        <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          🤝 Socioemocional
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Brinca com outras crianças</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Demonstra empatia</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#10b981', fontSize: '1rem' }}>✓</span>
+                            <span>Imita comportamentos</span>
+                          </div>
+                          <div style={{ fontSize: '0.8125rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span style={{ color: '#e2e8f0', fontSize: '1rem' }}>○</span>
+                            <span>Espera sua vez</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quarta Grid - Histórico */}
+                <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
                   {/* Histórico de Saúde */}
                   <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
                     <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
