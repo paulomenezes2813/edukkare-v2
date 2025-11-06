@@ -3615,28 +3615,88 @@ function App() {
 
                 {/* Segunda Grid - Largura Completa */}
                 <div style={{ paddingBottom: '1.875rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
-                  {/* Cuidados Especiais */}
+                  {/* Cuidados de Hoje */}
                   <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 4px 6px rgba(0,0,0,0.07)' }}>
-                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb' }}>
-                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        💝 Cuidados Especiais
+                    <div style={{ marginBottom: '1.25rem', paddingBottom: '0.75rem', borderBottom: '2px solid #f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                        🍽️ Cuidados de Hoje
                       </h3>
+                      <span style={{ 
+                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        color: 'white', 
+                        padding: '0.375rem 0.75rem', 
+                        borderRadius: '1rem', 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600' 
+                      }}>
+                        {new Date().toLocaleDateString('pt-BR')}
+                      </span>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-                      <div style={{ textAlign: 'center', padding: '1.25rem', borderRadius: '1rem', border: '2px solid #bbf7d0', background: '#f0fdf4' }}>
-                        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🍎</div>
-                        <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Alimentação</div>
-                        <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>Normal</div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.25rem' }}>
+                      {/* Almoço */}
+                      <div style={{ border: '3px solid #10b981', borderRadius: '1rem', padding: '1.5rem', background: '#f0fdf4', textAlign: 'center' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>🍽️</div>
+                        <div style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Almoço</div>
+                        <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.75rem' }}>11:30</div>
+                        <div style={{ 
+                          background: '#10b981', 
+                          color: 'white', 
+                          padding: '0.5rem 1rem', 
+                          borderRadius: '1.5rem', 
+                          fontSize: '0.875rem', 
+                          fontWeight: '600',
+                          marginBottom: '0.75rem',
+                          display: 'inline-block'
+                        }}>
+                          Aceitou Bem
+                        </div>
+                        <div style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.4' }}>
+                          Arroz, feijão, frango e legumes. Comeu tudo!
+                        </div>
                       </div>
-                      <div style={{ textAlign: 'center', padding: '1.25rem', borderRadius: '1rem', border: '2px solid #bbf7d0', background: '#f0fdf4' }}>
-                        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>😴</div>
-                        <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Sono</div>
-                        <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>Regular</div>
+
+                      {/* Lanche */}
+                      <div style={{ border: '3px solid #f59e0b', borderRadius: '1rem', padding: '1.5rem', background: '#fffbeb', textAlign: 'center' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>🍎</div>
+                        <div style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Lanche</div>
+                        <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.75rem' }}>15:00</div>
+                        <div style={{ 
+                          background: '#f59e0b', 
+                          color: 'white', 
+                          padding: '0.5rem 1rem', 
+                          borderRadius: '1.5rem', 
+                          fontSize: '0.875rem', 
+                          fontWeight: '600',
+                          marginBottom: '0.75rem',
+                          display: 'inline-block'
+                        }}>
+                          Parcialmente
+                        </div>
+                        <div style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.4' }}>
+                          Banana e biscoito. Comeu apenas a banana.
+                        </div>
                       </div>
-                      <div style={{ textAlign: 'center', padding: '1.25rem', borderRadius: '1rem', border: '2px solid #bbf7d0', background: '#f0fdf4' }}>
-                        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🌡️</div>
-                        <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Alergias</div>
-                        <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>Nenhuma</div>
+
+                      {/* Soneca */}
+                      <div style={{ border: '3px solid #10b981', borderRadius: '1rem', padding: '1.5rem', background: '#f0fdf4', textAlign: 'center' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>😴</div>
+                        <div style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>Soneca</div>
+                        <div style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '0.75rem' }}>13:00-14:30</div>
+                        <div style={{ 
+                          background: '#10b981', 
+                          color: 'white', 
+                          padding: '0.5rem 1rem', 
+                          borderRadius: '1.5rem', 
+                          fontSize: '0.875rem', 
+                          fontWeight: '600',
+                          marginBottom: '0.75rem',
+                          display: 'inline-block'
+                        }}>
+                          Dormiu Bem
+                        </div>
+                        <div style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.4' }}>
+                          Sono tranquilo por 1h30min.
+                        </div>
                       </div>
                     </div>
                   </div>
