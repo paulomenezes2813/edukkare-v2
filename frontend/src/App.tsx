@@ -1864,16 +1864,15 @@ function App() {
                   background: 'rgba(255,255,255,0.2)',
                   color: 'white',
                   border: 'none',
-                  padding: '0.375rem 0.625rem',
+                  padding: '0.5rem 0.875rem',
                   borderRadius: '0.5rem',
                   cursor: 'pointer',
-                  fontSize: '0.75rem',
+                  fontSize: '1rem',
                   fontWeight: '600',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.25rem',
-                  transition: 'all 0.2s',
-                  whiteSpace: 'nowrap'
+                  transition: 'all 0.2s'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.3)';
@@ -1882,8 +1881,7 @@ function App() {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
                 }}
               >
-                <span style={{ fontSize: '0.875rem' }}>📊</span>
-                <span>Gestor</span>
+                📊
               </button>
 
               {/* Alunos */}
@@ -1898,16 +1896,15 @@ function App() {
                   background: 'rgba(255,255,255,0.2)',
                   color: 'white',
                   border: 'none',
-                  padding: '0.375rem 0.625rem',
+                  padding: '0.5rem 0.875rem',
                   borderRadius: '0.5rem',
                   cursor: 'pointer',
-                  fontSize: '0.75rem',
+                  fontSize: '1rem',
                   fontWeight: '600',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.25rem',
-                  transition: 'all 0.2s',
-                  whiteSpace: 'nowrap'
+                  transition: 'all 0.2s'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.3)';
@@ -1916,8 +1913,7 @@ function App() {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
                 }}
               >
-                <span style={{ fontSize: '0.875rem' }}>👶</span>
-                <span>Alunos</span>
+                👶
               </button>
 
               {/* IA */}
