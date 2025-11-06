@@ -3420,52 +3420,58 @@ function App() {
             {/* Perfil do Aluno (quando encontrado) */}
             {showProfileInPanel && selectedStudentForProfile && (
               <>
-                {/* Cabeçalho do Perfil */}
+                {/* Cabeçalho do Perfil - Compacto */}
                 <div style={{
                   background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
                   color: 'white',
-                  borderRadius: '1.25rem',
-                  padding: '1.875rem',
-                  marginBottom: '1.25rem',
-                  boxShadow: '0 8px 25px rgba(168, 85, 247, 0.3)',
-                  position: 'relative',
-                  overflow: 'hidden'
+                  borderRadius: '1rem',
+                  padding: '1rem',
+                  marginBottom: '1rem',
+                  boxShadow: '0 4px 15px rgba(168, 85, 247, 0.3)'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', position: 'relative', zIndex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                    {/* Avatar */}
                     <img 
                       src={getStudentAvatar(selectedStudentForProfile)} 
                       alt={selectedStudentForProfile.name}
                       style={{
-                        width: '100px',
-                        height: '100px',
+                        width: '60px',
+                        height: '60px',
                         borderRadius: '50%',
                         objectFit: 'cover',
-                        border: '4px solid rgba(255, 255, 255, 0.3)'
+                        border: '3px solid rgba(255, 255, 255, 0.3)',
+                        flexShrink: 0
                       }}
                     />
-                    <div style={{ flex: 1 }}>
-                      <h2 style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+                    
+                    {/* Informações Principais */}
+                    <div style={{ flex: '1 1 250px', minWidth: '200px' }}>
+                      <h2 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.375rem', margin: 0 }}>
                         {selectedStudentForProfile.name}
                       </h2>
-                      <div style={{ fontSize: '1rem', opacity: 0.9, marginBottom: '0.5rem', lineHeight: '1.5' }}>
-                        📅 {new Date(selectedStudentForProfile.birthDate).toLocaleDateString('pt-BR')} | 
-                        🏫 {selectedStudentForProfile.class?.name || 'Sem turma'} | 
-                        {selectedStudentForProfile.shift === 'MANHA' ? '🌅 Manhã' : selectedStudentForProfile.shift === 'TARDE' ? '🌆 Tarde' : '⏰ Integral'}
+                      <div style={{ fontSize: '0.8rem', opacity: 0.95, display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+                        <span>📅 {new Date(selectedStudentForProfile.birthDate).toLocaleDateString('pt-BR')}</span>
+                        <span>•</span>
+                        <span>🏫 {selectedStudentForProfile.class?.name || 'Sem turma'}</span>
+                        <span>•</span>
+                        <span>{selectedStudentForProfile.shift === 'MANHA' ? '🌅 Manhã' : selectedStudentForProfile.shift === 'TARDE' ? '🌆 Tarde' : '⏰ Integral'}</span>
                       </div>
                       {selectedStudentForProfile.responsavel && (
-                        <div style={{ fontSize: '0.875rem', opacity: 0.9 }}>
-                          👨‍👩‍👦 Responsável: {selectedStudentForProfile.responsavel}
+                        <div style={{ fontSize: '0.75rem', opacity: 0.9, marginTop: '0.25rem' }}>
+                          👨‍👩‍👦 {selectedStudentForProfile.responsavel}
                         </div>
                       )}
                     </div>
-                    <div style={{ display: 'flex', gap: '1.875rem', alignItems: 'center' }}>
-                      <div style={{ textAlign: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.9375rem 1.25rem', borderRadius: '0.75rem' }}>
-                        <div style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>94%</div>
-                        <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>Marcos</div>
+                    
+                    {/* Estatísticas */}
+                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                      <div style={{ textAlign: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.5rem 0.75rem', borderRadius: '0.5rem', minWidth: '65px' }}>
+                        <div style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '0.125rem' }}>94%</div>
+                        <div style={{ fontSize: '0.65rem', opacity: 0.9 }}>Marcos</div>
                       </div>
-                      <div style={{ textAlign: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.9375rem 1.25rem', borderRadius: '0.75rem' }}>
-                        <div style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>87%</div>
-                        <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>BNCC</div>
+                      <div style={{ textAlign: 'center', background: 'rgba(255, 255, 255, 0.15)', padding: '0.5rem 0.75rem', borderRadius: '0.5rem', minWidth: '65px' }}>
+                        <div style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '0.125rem' }}>87%</div>
+                        <div style={{ fontSize: '0.65rem', opacity: 0.9 }}>BNCC</div>
                       </div>
                     </div>
                   </div>
