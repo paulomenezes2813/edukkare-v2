@@ -2117,10 +2117,11 @@ function App() {
 
             {/* Treinamento */}
             <button
-              onClick={() => {
+              onClick={async () => {
                 setShowSidebar(false);
                 setTrainingScreenType('training');
                 setCurrentScreen('training');
+                await loadActivities();
               }}
               style={{
                 width: '100%',
@@ -4331,14 +4332,160 @@ function App() {
               </h1>
               <p style={{ fontSize: '1.125rem', color: 'rgba(255,255,255,0.9)', fontWeight: '500' }}>
                 {trainingScreenType === 'training' 
-                  ? 'Desenvolva suas habilidades com nossos materiais de capacitação'
+                  ? 'Atividades pedagógicas para aplicar em sala de aula'
                   : 'Aprenda a usar todas as funcionalidades da plataforma Edukkare'
                 }
               </p>
             </div>
 
-            {/* Categorias de Treinamento */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+            {/* Conteúdo Dinâmico baseado no tipo */}
+            {trainingScreenType === 'training' ? (
+              /* TELA DE ATIVIDADES - Do banco de dados */
+              <div>
+                {/* Grid de Atividades */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                  {activities.length === 0 ? (
+                    <div style={{ 
+                      gridColumn: '1 / -1', 
+                      background: 'white', 
+                      borderRadius: '1rem', 
+                      padding: '3rem', 
+                      textAlign: 'center',
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.15)'
+                    }}>
+                      <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>📚</div>
+                      <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.5rem' }}>
+                        Nenhuma atividade cadastrada
+                      </h3>
+                      <p style={{ fontSize: '1rem', color: '#6b7280' }}>
+                        As atividades cadastradas aparecerão aqui para treinamento
+                      </p>
+                    </div>
+                  ) : (
+                    activities.map((activity) => (
+                      <div 
+                        key={activity.id}
+                        style={{ 
+                          background: 'white', 
+                          borderRadius: '1rem', 
+                          padding: '1.5rem', 
+                          boxShadow: '0 10px 30px rgba(0,0,0,0.15)', 
+                          transition: 'all 0.3s',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          height: '100%'
+                        }}
+                        onMouseEnter={(e) => { 
+                          e.currentTarget.style.transform = 'translateY(-5px)';
+                          e.currentTarget.style.boxShadow = '0 15px 40px rgba(0,0,0,0.2)';
+                        }}
+                        onMouseLeave={(e) => { 
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.15)';
+                        }}
+                      >
+                        {/* Ícone e Título */}
+                        <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+                          <div style={{ fontSize: '3rem', marginBottom: '0.75rem' }}>📝</div>
+                          <h3 style={{ 
+                            fontSize: '1.25rem', 
+                            fontWeight: '700', 
+                            color: '#1f2937', 
+                            marginBottom: '0.5rem',
+                            lineHeight: '1.3'
+                          }}>
+                            {activity.title}
+                          </h3>
+                        </div>
+
+                        {/* Descrição */}
+                        <p style={{ 
+                          fontSize: '0.875rem', 
+                          color: '#6b7280', 
+                          lineHeight: '1.6', 
+                          marginBottom: '1rem',
+                          flex: 1
+                        }}>
+                          {activity.description}
+                        </p>
+
+                        {/* Informações */}
+                        <div style={{ 
+                          display: 'flex', 
+                          flexDirection: 'column', 
+                          gap: '0.5rem',
+                          marginBottom: '1rem'
+                        }}>
+                          {/* Duração */}
+                          <div style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '0.5rem',
+                            fontSize: '0.875rem',
+                            color: '#4b5563'
+                          }}>
+                            <span style={{ fontSize: '1.25rem' }}>⏱️</span>
+                            <span><strong>Duração:</strong> {activity.duration} minutos</span>
+                          </div>
+
+                          {/* Código BNCC */}
+                          {activity.bnccCode && (
+                            <div style={{ 
+                              display: 'flex', 
+                              alignItems: 'flex-start', 
+                              gap: '0.5rem',
+                              fontSize: '0.875rem',
+                              color: '#4b5563'
+                            }}>
+                              <span style={{ fontSize: '1.25rem' }}>📊</span>
+                              <div style={{ flex: 1 }}>
+                                <div><strong>BNCC:</strong> {activity.bnccCode.code}</div>
+                                <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
+                                  {activity.bnccCode.field} - {activity.bnccCode.name}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Botão de Ação */}
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedActivity(activity);
+                          }}
+                          style={{
+                            background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s',
+                            width: '100%'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                        >
+                          🎯 Aplicar Atividade
+                        </button>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            ) : (
+              /* TELA DE AJUDA - Conteúdo de capacitação */
+              <div>
+                {/* Categorias de Treinamento */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
               {/* Introdução ao Sistema */}
               <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
                 onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
@@ -4787,6 +4934,9 @@ function App() {
                 </div>
               </div>
             </div>
+                </div>
+              </div>
+            )}
 
             {/* Botão Voltar */}
             <div style={{ marginTop: '2rem', textAlign: 'center' }}>
