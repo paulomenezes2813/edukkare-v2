@@ -4932,8 +4932,9 @@ function App() {
                         Participar
                       </button>
                     </div>
+                  </div>
+                </div>
               </div>
-            </div>
             )}
 
             {/* Botão Voltar */}
