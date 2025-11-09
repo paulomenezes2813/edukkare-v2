@@ -119,6 +119,7 @@ function App() {
   const [searchId, setSearchId] = useState('');
   const [showProfileInPanel, setShowProfileInPanel] = useState(false);
   const [albumCurrentSlide, setAlbumCurrentSlide] = useState(0);
+  const [trainingScreenType, setTrainingScreenType] = useState<'training' | 'help'>('training');
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [studentForm, setStudentForm] = useState({
@@ -2114,6 +2115,42 @@ function App() {
               <span>Professores</span>
             </button>
 
+            {/* Treinamento */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                setTrainingScreenType('training');
+                setCurrentScreen('training');
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>🎓</span>
+              <span>Treinamento</span>
+            </button>
+
             {/* Usuários */}
             <button
               onClick={() => {
@@ -2304,6 +2341,7 @@ function App() {
             <button
               onClick={() => {
                 setShowSidebar(false);
+                setTrainingScreenType('help');
                 setCurrentScreen('training');
               }}
               style={{
@@ -4289,10 +4327,13 @@ function App() {
             {/* Header */}
             <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
               <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: 'white', marginBottom: '0.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
-                🎓 Centro de Treinamento
+                {trainingScreenType === 'training' ? '🎓 Centro de Treinamento' : '❓ Ajuda no uso da ferramenta'}
               </h1>
               <p style={{ fontSize: '1.125rem', color: 'rgba(255,255,255,0.9)', fontWeight: '500' }}>
-                Desenvolva suas habilidades com nossos materiais de capacitação
+                {trainingScreenType === 'training' 
+                  ? 'Desenvolva suas habilidades com nossos materiais de capacitação'
+                  : 'Aprenda a usar todas as funcionalidades da plataforma Edukkare'
+                }
               </p>
             </div>
 
