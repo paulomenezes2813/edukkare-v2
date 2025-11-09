@@ -4486,452 +4486,452 @@ function App() {
               <div>
                 {/* Categorias de Treinamento */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-              {/* Introdução ao Sistema */}
-              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
-              >
-                <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>📚</div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
-                  Introdução ao Sistema
-                </h3>
-                <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
-                  Aprenda os conceitos básicos do Edukkare e como navegar pela plataforma
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                  {/* Introdução ao Sistema */}
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
                   >
-                    📖 Ler Guia Completo
-                  </button>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  >
-                    🎥 Assistir Vídeo (15 min)
-                  </button>
-                </div>
-              </div>
+                    <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>📚</div>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
+                      Introdução ao Sistema
+                    </h3>
+                    <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
+                      Aprenda os conceitos básicos do Edukkare e como navegar pela plataforma
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                      <button style={{
+                        background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '0.75rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                        transition: 'opacity 0.2s'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                      >
+                        📖 Ler Guia Completo
+                      </button>
+                      <button style={{
+                        background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '0.75rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                        transition: 'opacity 0.2s'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                      >
+                        🎥 Assistir Vídeo (15 min)
+                      </button>
+                    </div>
+                  </div>
 
-              {/* Gestão de Alunos */}
-              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
-              >
-                <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>👶</div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
-                  Gestão de Alunos
-                </h3>
-                <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
-                  Cadastro, acompanhamento e relatórios individuais de cada criança
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                  {/* Gestão de Alunos */}
+                  <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
                   >
-                    📖 Ler Documentação
-                  </button>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  >
-                    🎥 Assistir Tutorial (12 min)
-                  </button>
-                </div>
-              </div>
+                    <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>👶</div>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
+                          Gestão de Alunos
+                        </h3>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
+                          Cadastro, acompanhamento e relatórios individuais de cada criança
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                          <button style={{
+                            background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            📖 Ler Documentação
+                          </button>
+                          <button style={{
+                            background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            🎥 Assistir Tutorial (12 min)
+                          </button>
+                        </div>
+                      </div>
 
-              {/* Avaliações BNCC */}
-              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
-              >
-                <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>📊</div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
-                  Avaliações BNCC
-                </h3>
-                <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
-                  Como realizar e interpretar avaliações alinhadas à BNCC
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  >
-                    📖 Ler Material
-                  </button>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  >
-                    🎥 Assistir Webinar (20 min)
-                  </button>
-                </div>
-              </div>
+                      {/* Avaliações BNCC */}
+                      <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                      >
+                        <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>📊</div>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
+                          Avaliações BNCC
+                        </h3>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
+                          Como realizar e interpretar avaliações alinhadas à BNCC
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                          <button style={{
+                            background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            📖 Ler Material
+                          </button>
+                          <button style={{
+                            background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            🎥 Assistir Webinar (20 min)
+                          </button>
+                        </div>
+                      </div>
 
-              {/* Registro de Evidências */}
-              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
-              >
-                <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>📸</div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
-                  Registro de Evidências
-                </h3>
-                <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
-                  Capture e documente o desenvolvimento das crianças com fotos e vídeos
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  >
-                    📖 Ler Guia Prático
-                  </button>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  >
-                    🎥 Ver Demonstração (8 min)
-                  </button>
-                </div>
-              </div>
+                      {/* Registro de Evidências */}
+                      <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                      >
+                        <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>📸</div>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
+                          Registro de Evidências
+                        </h3>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
+                          Capture e documente o desenvolvimento das crianças com fotos e vídeos
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                          <button style={{
+                            background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            📖 Ler Guia Prático
+                          </button>
+                          <button style={{
+                            background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            🎥 Ver Demonstração (8 min)
+                          </button>
+                        </div>
+                      </div>
 
-              {/* Relatórios e Dashboard */}
-              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
-              >
-                <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>📈</div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
-                  Relatórios e Dashboard
-                </h3>
-                <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
-                  Visualize métricas e gere relatórios detalhados de desempenho
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  >
-                    📖 Ler Manual
-                  </button>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  >
-                    🎥 Assistir Curso (18 min)
-                  </button>
-                </div>
-              </div>
+                      {/* Relatórios e Dashboard */}
+                      <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                      >
+                        <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>📈</div>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
+                          Relatórios e Dashboard
+                        </h3>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
+                          Visualize métricas e gere relatórios detalhados de desempenho
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                          <button style={{
+                            background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            📖 Ler Manual
+                          </button>
+                          <button style={{
+                            background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            🎥 Assistir Curso (18 min)
+                          </button>
+                        </div>
+                      </div>
 
-              {/* Uso da IA */}
-              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
-              >
-                <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>🤖</div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
-                  Assistente de IA
-                </h3>
-                <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
-                  Aprenda a usar o assistente de IA para criar atividades e avaliar alunos
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  >
-                    📖 Ler Tutorial
-                  </button>
-                  <button style={{
-                    background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                    color: 'white',
-                    border: 'none',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'opacity 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  >
-                    🎥 Ver Exemplos (10 min)
-                  </button>
-                </div>
+                      {/* Uso da IA */}
+                      <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)', transition: 'transform 0.3s', cursor: 'pointer' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-5px)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+                      >
+                        <div style={{ fontSize: '3rem', marginBottom: '1rem', textAlign: 'center' }}>🤖</div>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.75rem', textAlign: 'center' }}>
+                          Assistente de IA
+                        </h3>
+                        <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.6', marginBottom: '1rem', textAlign: 'center' }}>
+                          Aprenda a usar o assistente de IA para criar atividades e avaliar alunos
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                          <button style={{
+                            background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            📖 Ler Tutorial
+                          </button>
+                          <button style={{
+                            background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem',
+                            borderRadius: '0.5rem',
+                            fontSize: '0.875rem',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            transition: 'opacity 0.2s'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            🎥 Ver Exemplos (10 min)
+                      </button>
+                    </div>
               </div>
             </div>
 
             {/* Recursos Adicionais */}
             <div style={{ background: 'white', borderRadius: '1rem', padding: '2rem', boxShadow: '0 10px 30px rgba(0,0,0,0.15)' }}>
               <h2 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#1f2937', marginBottom: '1.5rem', textAlign: 'center' }}>
-                📚 Recursos Adicionais
+                    📚 Recursos Adicionais
               </h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📖</div>
-                  <h4 style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem' }}>
-                    Base de Conhecimento
-                  </h4>
-                  <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>
-                    Artigos e guias completos sobre todas as funcionalidades
-                  </p>
-                  <button style={{
-                    background: '#f3f4f6',
-                    color: '#1f2937',
-                    border: 'none',
-                    padding: '0.625rem 1.25rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = '#e5e7eb'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = '#f3f4f6'; }}
-                  >
-                    Acessar
-                  </button>
-                </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>📖</div>
+                      <h4 style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem' }}>
+                        Base de Conhecimento
+                      </h4>
+                      <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>
+                        Artigos e guias completos sobre todas as funcionalidades
+                      </p>
+                      <button style={{
+                        background: '#f3f4f6',
+                        color: '#1f2937',
+                        border: 'none',
+                        padding: '0.625rem 1.25rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = '#e5e7eb'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = '#f3f4f6'; }}
+                      >
+                        Acessar
+                      </button>
+                    </div>
 
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>❓</div>
-                  <h4 style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem' }}>
-                    FAQ - Perguntas Frequentes
-                  </h4>
-                  <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>
-                    Respostas rápidas para as dúvidas mais comuns
-                  </p>
-                  <button style={{
-                    background: '#f3f4f6',
-                    color: '#1f2937',
-                    border: 'none',
-                    padding: '0.625rem 1.25rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = '#e5e7eb'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = '#f3f4f6'; }}
-                  >
-                    Ver FAQ
-                  </button>
-                </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>❓</div>
+                      <h4 style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem' }}>
+                        FAQ - Perguntas Frequentes
+                      </h4>
+                      <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>
+                        Respostas rápidas para as dúvidas mais comuns
+                      </p>
+                      <button style={{
+                        background: '#f3f4f6',
+                        color: '#1f2937',
+                        border: 'none',
+                        padding: '0.625rem 1.25rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = '#e5e7eb'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = '#f3f4f6'; }}
+                      >
+                        Ver FAQ
+                      </button>
+                    </div>
 
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>💬</div>
-                  <h4 style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem' }}>
-                    Suporte Técnico
-                  </h4>
-                  <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>
-                    Entre em contato com nossa equipe de suporte
-                  </p>
-                  <button style={{
-                    background: '#f3f4f6',
-                    color: '#1f2937',
-                    border: 'none',
-                    padding: '0.625rem 1.25rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = '#e5e7eb'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = '#f3f4f6'; }}
-                  >
-                    Contatar
-                  </button>
-                </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>💬</div>
+                      <h4 style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem' }}>
+                        Suporte Técnico
+                      </h4>
+                      <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>
+                        Entre em contato com nossa equipe de suporte
+                      </p>
+                      <button style={{
+                        background: '#f3f4f6',
+                        color: '#1f2937',
+                        border: 'none',
+                        padding: '0.625rem 1.25rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = '#e5e7eb'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = '#f3f4f6'; }}
+                      >
+                        Contatar
+                      </button>
+                    </div>
 
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>👥</div>
-                  <h4 style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem' }}>
-                    Comunidade
-                  </h4>
-                  <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>
-                    Conecte-se com outros educadores e compartilhe experiências
-                  </p>
-                  <button style={{
-                    background: '#f3f4f6',
-                    color: '#1f2937',
-                    border: 'none',
-                    padding: '0.625rem 1.25rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.875rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = '#e5e7eb'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = '#f3f4f6'; }}
-                  >
-                    Participar
-                  </button>
-                </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2.5rem', marginBottom: '0.75rem' }}>👥</div>
+                      <h4 style={{ fontSize: '1rem', fontWeight: '600', color: '#1f2937', marginBottom: '0.5rem' }}>
+                        Comunidade
+                      </h4>
+                      <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '1rem' }}>
+                        Conecte-se com outros educadores e compartilhe experiências
+                      </p>
+                      <button style={{
+                        background: '#f3f4f6',
+                        color: '#1f2937',
+                        border: 'none',
+                        padding: '0.625rem 1.25rem',
+                        borderRadius: '0.5rem',
+                        fontSize: '0.875rem',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.background = '#e5e7eb'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.background = '#f3f4f6'; }}
+                      >
+                        Participar
+                      </button>
+                    </div>
               </div>
             </div>
             )}
