@@ -1916,35 +1916,6 @@ function App() {
                 👶
               </button>
 
-              {/* Treinamento */}
-              <button
-                onClick={() => {
-                  setCurrentScreen('training');
-                }}
-                style={{
-                  background: 'rgba(255,255,255,0.2)',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.5rem 0.875rem',
-                  borderRadius: '0.5rem',
-                  cursor: 'pointer',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                  transition: 'all 0.2s'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.3)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
-                }}
-              >
-                🎓
-              </button>
-
               {/* IA */}
               <button
                 onClick={() => setShowAIScreen(true)}
@@ -2328,6 +2299,41 @@ function App() {
               background: '#e2e8f0',
               margin: '1rem 1.5rem'
             }} />
+
+            {/* Ajuda */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                setCurrentScreen('training');
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>❓</span>
+              <span>Ajuda</span>
+            </button>
 
             {/* Logout */}
             <button
