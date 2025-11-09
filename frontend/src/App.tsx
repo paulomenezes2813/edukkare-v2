@@ -4449,33 +4449,59 @@ function App() {
                           )}
                         </div>
 
-                        {/* Botão de Ação */}
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedActivity(activity);
-                          }}
-                          style={{
-                            background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-                            color: 'white',
-                            border: 'none',
-                            padding: '0.75rem',
-                            borderRadius: '0.5rem',
-                            fontSize: '0.875rem',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '0.5rem',
-                            transition: 'opacity 0.2s',
-                            width: '100%'
-                          }}
-                          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
-                        >
-                          🎯 Aplicar Atividade
-                        </button>
+                        {/* Botões de Ação */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedActivity(activity);
+                            }}
+                            style={{
+                              background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                              color: 'white',
+                              border: 'none',
+                              padding: '0.75rem',
+                              borderRadius: '0.5rem',
+                              fontSize: '0.875rem',
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '0.5rem',
+                              transition: 'opacity 0.2s'
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            📖 Ler Documentação
+                          </button>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedActivity(activity);
+                            }}
+                            style={{
+                              background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                              color: 'white',
+                              border: 'none',
+                              padding: '0.75rem',
+                              borderRadius: '0.5rem',
+                              fontSize: '0.875rem',
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '0.5rem',
+                              transition: 'opacity 0.2s'
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                          >
+                            🎥 Assistir Tutorial
+                          </button>
+                        </div>
                       </div>
                     ))
                   )}
