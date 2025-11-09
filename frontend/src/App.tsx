@@ -4934,8 +4934,6 @@ function App() {
                 </div>
               </div>
             </div>
-                </div>
-              </div>
             )}
 
             {/* Botão Voltar */}
