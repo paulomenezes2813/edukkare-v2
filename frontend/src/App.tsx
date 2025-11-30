@@ -2044,6 +2044,41 @@ function App() {
             overflowY: 'auto',
             padding: '1rem 0'
           }}>
+            {/* Início */}
+            <button
+              onClick={() => {
+                setShowSidebar(false);
+                setCurrentScreen('home');
+              }}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                background: 'white',
+                border: 'none',
+                borderLeft: '4px solid transparent',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: '#1e293b',
+                transition: 'all 0.2s',
+                textAlign: 'left'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f1f5f9';
+                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>🏠</span>
+              <span>Início</span>
+            </button>
+
             {/* Alunos */}
             <button
               onClick={() => {
