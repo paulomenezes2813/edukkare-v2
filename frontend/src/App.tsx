@@ -7386,113 +7386,179 @@ function App() {
           </main>
         ) : (
           <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
-            {/* Seleção de Atividade - Compacto */}
-        <div style={{ marginBottom: '1.5rem' }}>
-          <h2 style={{ marginBottom: '0.75rem', color: '#1e293b', fontSize: '1rem', fontWeight: '700' }}>
-            📚 1. Selecione a Atividade
-          </h2>
-          
-          {activities.length === 0 ? (
-            <div style={{
-              padding: '1rem',
-              textAlign: 'center',
-              background: '#fff3cd',
-              border: '2px solid #ffc107',
-              borderRadius: '0.75rem',
-              color: '#856404',
-              fontSize: '0.75rem'
-            }}>
-              <p>⚠️ Nenhuma atividade disponível</p>
-            </div>
-          ) : (
-            <>
-              <select
-                value={selectedActivity?.id || ''}
-                onChange={(e) => {
-                  const activity = activities.find(a => a.id === Number(e.target.value));
-                  setSelectedActivity(activity || null);
-                  setSelectedStudent(null);
-                  setProficiencyLevel(null); // Reset avaliação ao trocar de atividade
-                }}
-                style={{
-                  width: '100%',
-                  padding: '1rem',
-                  fontSize: '0.9rem',
-                  fontWeight: '600',
-                  border: '2px solid #e2e8f0',
-                  borderRadius: '0.75rem',
-                  background: 'white',
-                  color: '#1e293b',
-                  cursor: 'pointer',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                  outline: 'none',
-                  fontFamily: 'inherit'
-                }}
-              >
-                <option value="">Escolha uma atividade...</option>
-                {activities.map(activity => (
-                  <option key={activity.id} value={activity.id}>
-                    {activity.title}
-                  </option>
-                ))}
-              </select>
+            {/* Título da Seção */}
+            <h2 style={{ marginBottom: '0.75rem', color: '#1e293b', fontSize: '1rem', fontWeight: '700' }}>
+              📚 1. Selecione a Atividade e Rubrica
+            </h2>
 
-              {/* Detalhes da Atividade Selecionada */}
-              {selectedActivity && (
-                <div style={{
-                  marginTop: '0.75rem',
-                  background: 'linear-gradient(135deg, #f0f9ff, #e0f2fe)',
-                  border: '2px solid #3b82f6',
-                  padding: '0.875rem',
-                  borderRadius: '0.75rem',
-                  color: '#1e40af'
-                }}>
-                  <div style={{ fontWeight: '700', fontSize: '0.85rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    ✓ {selectedActivity.title}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', lineHeight: '1.4', marginBottom: '0.5rem', opacity: 0.9 }}>
-                    {selectedActivity.description}
-                  </div>
+            {/* Seleção de Atividade e Rubrica - Layout Lado a Lado */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+              {/* Seleção de Atividade */}
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: '#64748b', fontSize: '0.875rem', fontWeight: '600' }}>
+                  Atividade
+                </label>
+                {activities.length === 0 ? (
                   <div style={{
-                    display: 'flex',
-                    gap: '0.5rem',
-                    flexWrap: 'wrap',
-                    fontSize: '0.7rem',
-                    marginTop: '0.5rem'
+                    padding: '1rem',
+                    textAlign: 'center',
+                    background: '#fff3cd',
+                    border: '2px solid #ffc107',
+                    borderRadius: '0.75rem',
+                    color: '#856404',
+                    fontSize: '0.75rem'
                   }}>
-                    {selectedActivity.bnccCode && (
-                      <span style={{
-                        background: 'rgba(59, 130, 246, 0.15)',
-                        padding: '0.25rem 0.5rem',
-                        borderRadius: '0.25rem',
-                        fontWeight: '600'
-                      }}>
-                        {selectedActivity.bnccCode.code}
-                      </span>
-                    )}
-                    <span style={{
-                      background: 'rgba(59, 130, 246, 0.15)',
-                      padding: '0.25rem 0.5rem',
-                      borderRadius: '0.25rem'
-                    }}>
-                      ⏱️ {selectedActivity.duration} min
-                    </span>
-                    {selectedActivity.bnccCode?.field && (
-                      <span style={{
-                        background: 'rgba(59, 130, 246, 0.15)',
-                        padding: '0.25rem 0.5rem',
-                        borderRadius: '0.25rem',
-                        fontSize: '0.65rem'
-                      }}>
-                        📖 {selectedActivity.bnccCode.field}
-                      </span>
-                    )}
+                    <p>⚠️ Nenhuma atividade disponível</p>
                   </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+                ) : (
+                  <>
+                    <select
+                      value={selectedActivity?.id || ''}
+                      onChange={(e) => {
+                        const activity = activities.find(a => a.id === Number(e.target.value));
+                        setSelectedActivity(activity || null);
+                        setSelectedStudent(null);
+                        setProficiencyLevel(null);
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '1rem',
+                        fontSize: '0.9rem',
+                        fontWeight: '600',
+                        border: '2px solid #e2e8f0',
+                        borderRadius: '0.75rem',
+                        background: 'white',
+                        color: '#1e293b',
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                        outline: 'none',
+                        fontFamily: 'inherit'
+                      }}
+                    >
+                      <option value="">Escolha uma atividade...</option>
+                      {activities.map(activity => (
+                        <option key={activity.id} value={activity.id}>
+                          {activity.title}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Detalhes da Atividade Selecionada */}
+                    {selectedActivity && (
+                      <div style={{
+                        marginTop: '0.75rem',
+                        background: 'linear-gradient(135deg, #f0f9ff, #e0f2fe)',
+                        border: '2px solid #3b82f6',
+                        padding: '0.875rem',
+                        borderRadius: '0.75rem',
+                        color: '#1e40af'
+                      }}>
+                        <div style={{ fontWeight: '700', fontSize: '0.85rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          ✓ {selectedActivity.title}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', lineHeight: '1.4', marginBottom: '0.5rem', opacity: 0.9 }}>
+                          {selectedActivity.description}
+                        </div>
+                        <div style={{
+                          display: 'flex',
+                          gap: '0.5rem',
+                          flexWrap: 'wrap',
+                          fontSize: '0.7rem',
+                          marginTop: '0.5rem'
+                        }}>
+                          {selectedActivity.bnccCode && (
+                            <span style={{
+                              background: 'rgba(59, 130, 246, 0.15)',
+                              padding: '0.25rem 0.5rem',
+                              borderRadius: '0.25rem',
+                              fontWeight: '600'
+                            }}>
+                              {selectedActivity.bnccCode.code}
+                            </span>
+                          )}
+                          <span style={{
+                            background: 'rgba(59, 130, 246, 0.15)',
+                            padding: '0.25rem 0.5rem',
+                            borderRadius: '0.25rem'
+                          }}>
+                            ⏱️ {selectedActivity.duration} min
+                          </span>
+                          {selectedActivity.bnccCode?.field && (
+                            <span style={{
+                              background: 'rgba(59, 130, 246, 0.15)',
+                              padding: '0.25rem 0.5rem',
+                              borderRadius: '0.25rem',
+                              fontSize: '0.65rem'
+                            }}>
+                              📖 {selectedActivity.bnccCode.field}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* Seleção de Rubrica */}
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.5rem', color: '#64748b', fontSize: '0.875rem', fontWeight: '600' }}>
+                  Rubrica de Avaliação
+                </label>
+                <select
+                  disabled={!selectedActivity}
+                  style={{
+                    width: '100%',
+                    padding: '1rem',
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    border: '2px solid #e2e8f0',
+                    borderRadius: '0.75rem',
+                    background: selectedActivity ? 'white' : '#f8fafc',
+                    color: selectedActivity ? '#1e293b' : '#94a3b8',
+                    cursor: selectedActivity ? 'pointer' : 'not-allowed',
+                    boxShadow: selectedActivity ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',
+                    outline: 'none',
+                    fontFamily: 'inherit',
+                    opacity: selectedActivity ? 1 : 0.6
+                  }}
+                >
+                  <option value="">Escolha uma rubrica...</option>
+                  <option value="excelente">⭐⭐⭐ Excelente - Superou expectativas</option>
+                  <option value="satisfatorio">⭐⭐ Satisfatório - Atingiu objetivos</option>
+                  <option value="desenvolvimento">⭐ Em Desenvolvimento - Progredindo</option>
+                  <option value="iniciante">○ Iniciante - Necessita apoio</option>
+                </select>
+
+                {!selectedActivity && (
+                  <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.5rem', fontStyle: 'italic' }}>
+                    Selecione uma atividade primeiro
+                  </p>
+                )}
+
+                {/* Detalhes da Rubrica Selecionada */}
+                {selectedActivity && (
+                  <div style={{
+                    marginTop: '0.75rem',
+                    background: 'linear-gradient(135deg, #fef3c7, #fde68a)',
+                    border: '2px solid #f59e0b',
+                    padding: '0.875rem',
+                    borderRadius: '0.75rem',
+                    color: '#92400e'
+                  }}>
+                    <div style={{ fontWeight: '700', fontSize: '0.85rem', marginBottom: '0.5rem' }}>
+                      📊 Critérios de Avaliação
+                    </div>
+                    <div style={{ fontSize: '0.75rem', lineHeight: '1.6' }}>
+                      <div style={{ marginBottom: '0.25rem' }}>⭐⭐⭐ <strong>Excelente:</strong> Realiza com autonomia e criatividade</div>
+                      <div style={{ marginBottom: '0.25rem' }}>⭐⭐ <strong>Satisfatório:</strong> Realiza com orientação mínima</div>
+                      <div style={{ marginBottom: '0.25rem' }}>⭐ <strong>Desenvolvimento:</strong> Realiza com apoio constante</div>
+                      <div>○ <strong>Iniciante:</strong> Necessita suporte integral</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
 
         {/* Seleção de Criança - Mobile Compacto */}
         <div data-section="alunos" style={{ marginBottom: '1.5rem' }}>
