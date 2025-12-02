@@ -154,8 +154,10 @@ model BNCCCode {
 
 model Activity {
   id            Int       @id @default(autoincrement())
+  activityCode  String?   @unique // Ex: "E101CG01" - Nullable por enquanto para migração
   title         String
   description   String
+  content       String?   @db.Text // Conteúdo completo em markdown/texto
   duration      Int       // em minutos
   materials     String?   // JSON com lista de materiais
   objectives    String    // JSON com objetivos
@@ -170,6 +172,7 @@ model Activity {
   class         Class?    @relation(fields: [classId], references: [id])
   
   evaluations   Evaluation[]
+  rubrics       Rubric[]
   
   @@map("activities")
 }
@@ -249,4 +252,31 @@ model DashboardMetric {
   metadata      String?   // JSON adicional
 
   @@map("dashboard_metrics")
+}
+
+model Rubric {
+  id            Int       @id @default(autoincrement())
+  rubricCode    String    @unique // Ex: "RUB-E101CG01-001"
+  name          String    // Nome da rubrica
+  description   String    @db.Text
+  activityCode  String    // Código da atividade (ex: "E101CG01")
+  
+  // Níveis de avaliação em JSON:
+  // { 
+  //   "excelente": { "title": "Excelente", "description": "...", "stars": 3 },
+  //   "satisfatorio": { "title": "Satisfatório", "description": "...", "stars": 2 },
+  //   "desenvolvimento": { "title": "Em Desenvolvimento", "description": "...", "stars": 1 },
+  //   "iniciante": { "title": "Iniciante", "description": "...", "stars": 0 }
+  // }
+  levels        String    @db.Text // JSON com os níveis
+  
+  criteria      String?   @db.Text // Critérios específicos de avaliação
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  activityId    Int
+  activity      Activity  @relation(fields: [activityId], references: [id])
+  
+  @@map("rubrics")
 }

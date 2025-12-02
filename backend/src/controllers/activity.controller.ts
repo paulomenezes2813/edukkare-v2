@@ -19,6 +19,14 @@ export const getActivities = async (req: Request, res: Response) => {
             name: true,
             age_group: true
           }
+        },
+        rubrics: {
+          select: {
+            id: true,
+            rubricCode: true,
+            name: true,
+            description: true
+          }
         }
       },
       orderBy: {
@@ -45,7 +53,8 @@ export const getActivityById = async (req: Request, res: Response) => {
           include: {
             students: true
           }
-        }
+        },
+        rubrics: true
       }
     });
 
@@ -53,7 +62,16 @@ export const getActivityById = async (req: Request, res: Response) => {
       return ApiResponse.notFound(res, 'Atividade não encontrada');
     }
 
-    return ApiResponse.success(res, activity);
+    // Parse JSON fields das rubricas
+    const parsedActivity = {
+      ...activity,
+      rubrics: activity.rubrics.map(rubric => ({
+        ...rubric,
+        levels: JSON.parse(rubric.levels)
+      }))
+    };
+
+    return ApiResponse.success(res, parsedActivity);
   } catch (error: any) {
     console.error('Erro ao buscar atividade:', error);
     return ApiResponse.serverError(res);
@@ -62,10 +80,21 @@ export const getActivityById = async (req: Request, res: Response) => {
 
 export const createActivity = async (req: Request, res: Response) => {
   try {
-    const { title, description, duration, bnccCodeId, classId } = req.body;
+    const { activityCode, title, description, content, duration, bnccCodeId, classId } = req.body;
 
     if (!title || !description || !duration) {
       return ApiResponse.badRequest(res, 'Título, descrição e duração são obrigatórios');
+    }
+
+    // Verifica se o activityCode já existe (se fornecido)
+    if (activityCode) {
+      const existingActivity = await prisma.activity.findUnique({
+        where: { activityCode }
+      });
+
+      if (existingActivity) {
+        return ApiResponse.badRequest(res, 'Código de atividade já existe');
+      }
     }
 
     // Se não passar bnccCodeId, usa o primeiro disponível (padrão)
@@ -80,8 +109,10 @@ export const createActivity = async (req: Request, res: Response) => {
 
     const activity = await prisma.activity.create({
       data: {
+        activityCode: activityCode || null,
         title,
         description,
+        content: content || null,
         duration: Number(duration),
         objectives: '[]',
         materials: '[]',
@@ -101,6 +132,14 @@ export const createActivity = async (req: Request, res: Response) => {
             name: true,
             age_group: true
           }
+        },
+        rubrics: {
+          select: {
+            id: true,
+            rubricCode: true,
+            name: true,
+            description: true
+          }
         }
       }
     });
@@ -115,7 +154,7 @@ export const createActivity = async (req: Request, res: Response) => {
 export const updateActivity = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { title, description, duration, bnccCodeId, classId } = req.body;
+    const { activityCode, title, description, content, duration, bnccCodeId, classId } = req.body;
 
     const existingActivity = await prisma.activity.findUnique({
       where: { id: Number(id) }
@@ -125,9 +164,22 @@ export const updateActivity = async (req: Request, res: Response) => {
       return ApiResponse.notFound(res, 'Atividade não encontrada');
     }
 
+    // Verifica se o activityCode já existe (se estiver sendo alterado)
+    if (activityCode && activityCode !== existingActivity.activityCode) {
+      const duplicateActivity = await prisma.activity.findUnique({
+        where: { activityCode }
+      });
+
+      if (duplicateActivity) {
+        return ApiResponse.badRequest(res, 'Código de atividade já existe');
+      }
+    }
+
     const updateData: any = {};
+    if (activityCode !== undefined) updateData.activityCode = activityCode || null;
     if (title) updateData.title = title;
     if (description) updateData.description = description;
+    if (content !== undefined) updateData.content = content || null;
     if (duration) updateData.duration = Number(duration);
     if (bnccCodeId) updateData.bnccCodeId = Number(bnccCodeId);
     if (classId !== undefined) updateData.classId = classId ? Number(classId) : null;
@@ -147,6 +199,14 @@ export const updateActivity = async (req: Request, res: Response) => {
           select: {
             name: true,
             age_group: true
+          }
+        },
+        rubrics: {
+          select: {
+            id: true,
+            rubricCode: true,
+            name: true,
+            description: true
           }
         }
       }
