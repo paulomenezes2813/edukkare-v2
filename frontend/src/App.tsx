@@ -113,13 +113,14 @@ function App() {
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring'>('home');
   const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<Student | null>(null);
   const [searchName, setSearchName] = useState('');
   const [searchId, setSearchId] = useState('');
   const [showProfileInPanel, setShowProfileInPanel] = useState(false);
   const [albumCurrentSlide, setAlbumCurrentSlide] = useState(0);
   const [trainingScreenType, setTrainingScreenType] = useState<'training' | 'help'>('training');
+  const [showGestorSubmenu, setShowGestorSubmenu] = useState(false);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [studentForm, setStudentForm] = useState({
@@ -2079,6 +2080,123 @@ function App() {
               <span>Início</span>
             </button>
 
+            {/* Gestor */}
+            <div>
+              <button
+                onClick={() => {
+                  setShowGestorSubmenu(!showGestorSubmenu);
+                }}
+                style={{
+                  width: '100%',
+                  padding: '1rem 1.5rem',
+                  background: 'white',
+                  border: 'none',
+                  borderLeft: '4px solid transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  transition: 'all 0.2s',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#f1f5f9';
+                  e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'white';
+                  e.currentTarget.style.borderLeftColor = 'transparent';
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>📊</span>
+                  <span>Gestor</span>
+                </div>
+                <span style={{ fontSize: '1.2rem', transition: 'transform 0.2s', transform: showGestorSubmenu ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+                  ▶
+                </span>
+              </button>
+
+              {/* Submenu Gestor */}
+              {showGestorSubmenu && (
+                <div style={{
+                  background: '#f8fafc',
+                  borderLeft: '4px solid #e2e8f0'
+                }}>
+                  {/* Dashboard */}
+                  <button
+                    onClick={() => {
+                      setShowSidebar(false);
+                      setCurrentScreen('dashboard');
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1.5rem 0.75rem 3rem',
+                      background: 'transparent',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      cursor: 'pointer',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      color: '#475569',
+                      transition: 'all 0.2s',
+                      textAlign: 'left'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#e2e8f0';
+                      e.currentTarget.style.color = '#1e293b';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>📈</span>
+                    <span>Dashboard</span>
+                  </button>
+
+                  {/* Monitoramento */}
+                  <button
+                    onClick={() => {
+                      setShowSidebar(false);
+                      setCurrentScreen('monitoring');
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1.5rem 0.75rem 3rem',
+                      background: 'transparent',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      cursor: 'pointer',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      color: '#475569',
+                      transition: 'all 0.2s',
+                      textAlign: 'left'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#e2e8f0';
+                      e.currentTarget.style.color = '#1e293b';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>👁️</span>
+                    <span>Monitoramento</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
             {/* Alunos */}
             <button
               onClick={() => {
@@ -2988,6 +3106,310 @@ function App() {
                 </div>
               </>
             )}
+          </main>
+        ) : currentScreen === 'dashboard' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>📈 Dashboard - Visão Geral</h2>
+                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>Métricas e indicadores da escola</p>
+              </div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+
+            {/* Cards de Métricas */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+              {/* Total de Alunos */}
+              <div style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <span style={{ fontSize: '2rem' }}>👶</span>
+                  <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem', borderRadius: '0.5rem' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: '600' }}>TOTAL</span>
+                  </div>
+                </div>
+                <p style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>{students.length}</p>
+                <p style={{ fontSize: '0.875rem', opacity: 0.9 }}>Alunos Matriculados</p>
+              </div>
+
+              {/* Total de Professores */}
+              <div style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 4px 12px rgba(240, 147, 251, 0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <span style={{ fontSize: '2rem' }}>👩‍🏫</span>
+                  <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem', borderRadius: '0.5rem' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: '600' }}>EQUIPE</span>
+                  </div>
+                </div>
+                <p style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>{teachers.length}</p>
+                <p style={{ fontSize: '0.875rem', opacity: 0.9 }}>Professores Ativos</p>
+              </div>
+
+              {/* Total de Atividades */}
+              <div style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 4px 12px rgba(79, 172, 254, 0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <span style={{ fontSize: '2rem' }}>📝</span>
+                  <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem', borderRadius: '0.5rem' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: '600' }}>CONTEÚDO</span>
+                  </div>
+                </div>
+                <p style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>{activities.length}</p>
+                <p style={{ fontSize: '0.875rem', opacity: 0.9 }}>Atividades Cadastradas</p>
+              </div>
+
+              {/* Total de Turmas */}
+              <div style={{ background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 4px 12px rgba(250, 112, 154, 0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                  <span style={{ fontSize: '2rem' }}>🎓</span>
+                  <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem', borderRadius: '0.5rem' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: '600' }}>TURMAS</span>
+                  </div>
+                </div>
+                <p style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>{classes.length}</p>
+                <p style={{ fontSize: '0.875rem', opacity: 0.9 }}>Turmas Ativas</p>
+              </div>
+            </div>
+
+            {/* Gráficos e Informações Adicionais */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem', marginBottom: '5rem' }}>
+              {/* Distribuição por Turno */}
+              <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>🌅</span>
+                  Distribuição por Turno
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.875rem', color: '#475569' }}>Manhã</span>
+                      <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>
+                        {students.filter(s => s.shift === 'MANHA').length}
+                      </span>
+                    </div>
+                    <div style={{ background: '#e2e8f0', height: '0.5rem', borderRadius: '0.25rem', overflow: 'hidden' }}>
+                      <div style={{ 
+                        background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)', 
+                        height: '100%', 
+                        width: `${students.length > 0 ? (students.filter(s => s.shift === 'MANHA').length / students.length) * 100 : 0}%`,
+                        transition: 'width 0.3s'
+                      }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.875rem', color: '#475569' }}>Tarde</span>
+                      <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>
+                        {students.filter(s => s.shift === 'TARDE').length}
+                      </span>
+                    </div>
+                    <div style={{ background: '#e2e8f0', height: '0.5rem', borderRadius: '0.25rem', overflow: 'hidden' }}>
+                      <div style={{ 
+                        background: 'linear-gradient(90deg, #f093fb 0%, #f5576c 100%)', 
+                        height: '100%', 
+                        width: `${students.length > 0 ? (students.filter(s => s.shift === 'TARDE').length / students.length) * 100 : 0}%`,
+                        transition: 'width 0.3s'
+                      }}></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                      <span style={{ fontSize: '0.875rem', color: '#475569' }}>Integral</span>
+                      <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>
+                        {students.filter(s => s.shift === 'INTEGRAL').length}
+                      </span>
+                    </div>
+                    <div style={{ background: '#e2e8f0', height: '0.5rem', borderRadius: '0.25rem', overflow: 'hidden' }}>
+                      <div style={{ 
+                        background: 'linear-gradient(90deg, #4facfe 0%, #00f2fe 100%)', 
+                        height: '100%', 
+                        width: `${students.length > 0 ? (students.filter(s => s.shift === 'INTEGRAL').length / students.length) * 100 : 0}%`,
+                        transition: 'width 0.3s'
+                      }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Resumo Acadêmico */}
+              <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>📊</span>
+                  Resumo Acadêmico
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem' }}>
+                    <span style={{ fontSize: '0.875rem', color: '#475569' }}>📚 Média de Atividades/Aluno</span>
+                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>
+                      {students.length > 0 ? (activities.length / students.length).toFixed(1) : '0'}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem' }}>
+                    <span style={{ fontSize: '0.875rem', color: '#475569' }}>👥 Média de Alunos/Professor</span>
+                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>
+                      {teachers.length > 0 ? (students.length / teachers.length).toFixed(1) : '0'}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem' }}>
+                    <span style={{ fontSize: '0.875rem', color: '#475569' }}>🎓 Média de Alunos/Turma</span>
+                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>
+                      {classes.length > 0 ? (students.length / classes.length).toFixed(1) : '0'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        ) : currentScreen === 'monitoring' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>👁️ Monitoramento em Tempo Real</h2>
+                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>Acompanhamento de atividades e desenvolvimento</p>
+              </div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+
+            {/* Status Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+              {/* Atividades Hoje */}
+              <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '1rem', borderRadius: '0.75rem' }}>
+                    <span style={{ fontSize: '1.5rem' }}>📅</span>
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.25rem' }}>Atividades Hoje</p>
+                    <p style={{ fontSize: '1.75rem', fontWeight: '700', color: '#1e293b' }}>12</p>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.75rem' }}>
+                  <span style={{ background: '#dcfce7', color: '#166534', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', fontWeight: '600' }}>8 Concluídas</span>
+                  <span style={{ background: '#fef3c7', color: '#92400e', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', fontWeight: '600' }}>4 Em Andamento</span>
+                </div>
+              </div>
+
+              {/* Presença */}
+              <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', padding: '1rem', borderRadius: '0.75rem' }}>
+                    <span style={{ fontSize: '1.5rem' }}>✅</span>
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.25rem' }}>Taxa de Presença</p>
+                    <p style={{ fontSize: '1.75rem', fontWeight: '700', color: '#1e293b' }}>94%</p>
+                  </div>
+                </div>
+                <div style={{ background: '#e2e8f0', height: '0.5rem', borderRadius: '0.25rem', overflow: 'hidden' }}>
+                  <div style={{ background: 'linear-gradient(90deg, #f093fb 0%, #f5576c 100%)', height: '100%', width: '94%' }}></div>
+                </div>
+              </div>
+
+              {/* Alertas */}
+              <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', padding: '1rem', borderRadius: '0.75rem' }}>
+                    <span style={{ fontSize: '1.5rem' }}>⚠️</span>
+                  </div>
+                  <div>
+                    <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '0.25rem' }}>Alertas Ativos</p>
+                    <p style={{ fontSize: '1.75rem', fontWeight: '700', color: '#1e293b' }}>3</p>
+                  </div>
+                </div>
+                <p style={{ fontSize: '0.75rem', color: '#dc2626', fontWeight: '600' }}>2 requerem atenção imediata</p>
+              </div>
+            </div>
+
+            {/* Monitoramento de Alunos */}
+            <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>👶</span>
+                Monitoramento de Alunos
+              </h3>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                      <th style={{ padding: '0.75rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Aluno</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Turma</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Status</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Atividade Atual</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Progresso</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {students.slice(0, 8).map((student, index) => {
+                      const statuses = ['🟢 Ativo', '🟡 Pausado', '🔵 Concluído'];
+                      const activities = ['Pintura', 'Leitura', 'Música', 'Recreação'];
+                      const progress = [75, 60, 90, 45, 85, 30, 100, 55];
+                      return (
+                        <tr key={student.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                          <td style={{ padding: '0.75rem', fontSize: '0.875rem', color: '#1e293b', fontWeight: '600' }}>{student.name}</td>
+                          <td style={{ padding: '0.75rem', fontSize: '0.875rem', color: '#64748b' }}>{student.class?.name || 'Sem turma'}</td>
+                          <td style={{ padding: '0.75rem', fontSize: '0.875rem' }}>
+                            <span style={{ fontSize: '0.875rem' }}>{statuses[index % 3]}</span>
+                          </td>
+                          <td style={{ padding: '0.75rem', fontSize: '0.875rem', color: '#64748b' }}>{activities[index % 4]}</td>
+                          <td style={{ padding: '0.75rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <div style={{ flex: 1, background: '#e2e8f0', height: '0.5rem', borderRadius: '0.25rem', overflow: 'hidden' }}>
+                                <div style={{ 
+                                  background: progress[index] >= 70 ? 'linear-gradient(90deg, #10b981 0%, #059669 100%)' : 
+                                             progress[index] >= 40 ? 'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)' : 
+                                             'linear-gradient(90deg, #ef4444 0%, #dc2626 100%)', 
+                                  height: '100%', 
+                                  width: `${progress[index]}%` 
+                                }}></div>
+                              </div>
+                              <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#64748b', minWidth: '35px' }}>{progress[index]}%</span>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Atividades Recentes */}
+            <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '5rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>📝</span>
+                Atividades Recentes
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {[
+                  { time: '10:45', activity: 'Pintura com Tinta Guache', teacher: 'Profª Maria', status: 'concluída' },
+                  { time: '11:30', activity: 'Hora do Conto - O Patinho Feio', teacher: 'Profª Ana', status: 'concluída' },
+                  { time: '14:00', activity: 'Recreação ao Ar Livre', teacher: 'Profª Carla', status: 'em andamento' },
+                  { time: '15:15', activity: 'Música e Movimento', teacher: 'Profª Beatriz', status: 'aguardando' },
+                ].map((item, index) => (
+                  <div key={index} style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '1rem', 
+                    padding: '0.75rem', 
+                    background: '#f8fafc', 
+                    borderRadius: '0.5rem',
+                    borderLeft: `4px solid ${item.status === 'concluída' ? '#10b981' : item.status === 'em andamento' ? '#f59e0b' : '#64748b'}`
+                  }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#475569', minWidth: '50px' }}>{item.time}</span>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', marginBottom: '0.25rem' }}>{item.activity}</p>
+                      <p style={{ fontSize: '0.75rem', color: '#64748b' }}>{item.teacher}</p>
+                    </div>
+                    <span style={{ 
+                      fontSize: '0.75rem', 
+                      fontWeight: '600', 
+                      padding: '0.25rem 0.75rem', 
+                      borderRadius: '1rem',
+                      background: item.status === 'concluída' ? '#dcfce7' : item.status === 'em andamento' ? '#fef3c7' : '#f1f5f9',
+                      color: item.status === 'concluída' ? '#166534' : item.status === 'em andamento' ? '#92400e' : '#475569'
+                    }}>
+                      {item.status === 'concluída' ? '✓ Concluída' : item.status === 'em andamento' ? '● Em Andamento' : '○ Aguardando'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </main>
         ) : currentScreen === 'teachers' ? (
           <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
