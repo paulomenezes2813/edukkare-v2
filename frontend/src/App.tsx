@@ -113,7 +113,7 @@ function App() {
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring' | 'notes' | 'notesReport' | 'access' | 'pedagogicalDashboard'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring' | 'notes' | 'notesReport' | 'access' | 'pedagogicalDashboard' | 'integratedManagement'>('home');
   const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<Student | null>(null);
   const [searchName, setSearchName] = useState('');
   const [searchId, setSearchId] = useState('');
@@ -2229,6 +2229,40 @@ function App() {
                   >
                     <span style={{ fontSize: '1.2rem' }}>🎓</span>
                     <span>Dashboard Pedagógico</span>
+                  </button>
+
+                  {/* Gestão Integrada */}
+                  <button
+                    onClick={() => {
+                      setShowSidebar(false);
+                      setCurrentScreen('integratedManagement');
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1.5rem 0.75rem 3rem',
+                      background: 'transparent',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      cursor: 'pointer',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      color: '#475569',
+                      transition: 'all 0.2s',
+                      textAlign: 'left'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#e2e8f0';
+                      e.currentTarget.style.color = '#1e293b';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>🤝</span>
+                    <span>Gestão Integrada</span>
                   </button>
                 </div>
               )}
@@ -4716,6 +4750,352 @@ function App() {
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>18h</div>
                   <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Tempo Resposta</div>
+                </div>
+              </div>
+            </div>
+          </main>
+        ) : currentScreen === 'integratedManagement' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem', background: '#f8fafc' }}>
+            {/* Header com gradiente */}
+            <div style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)', borderRadius: '1rem', padding: '2rem', marginBottom: '1.5rem', color: 'white', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
+                  <div>
+                    <h1 style={{ fontSize: '2rem', fontWeight: '700', marginBottom: '0.5rem' }}>Gestão Integrada EDUKKARE + Pacto</h1>
+                    <p style={{ fontSize: '1rem', opacity: 0.9 }}>Município de Eubésio • Sistema Unificado 2026</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '0.5rem', border: '2px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span>✅</span>
+                      <span style={{ fontWeight: '600' }}>FUNDEB: 94%</span>
+                    </div>
+                    <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem 1rem', borderRadius: '0.5rem', border: '2px solid rgba(255,255,255,0.3)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span>⭐</span>
+                      <span style={{ fontWeight: '600' }}>Pacto: Nível 2</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button onClick={() => setCurrentScreen('home')} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'rgba(255,255,255,0.2)', color: 'white', border: '2px solid rgba(255,255,255,0.3)', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+
+            {/* Alertas e Oportunidades */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+              {/* Oportunidade */}
+              <div style={{ background: 'white', border: '3px solid #06b6d4', borderRadius: '1rem', padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', boxShadow: '0 2px 8px rgba(6, 182, 212, 0.2)' }}>
+                <div style={{ fontSize: '2.5rem' }}>🎯</div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#0e7490', marginBottom: '0.25rem' }}>Oportunidade: Badge Melhoria da Gestão</h3>
+                  <p style={{ fontSize: '0.875rem', color: '#64748b' }}>18 escolas podem conquistar esta badge através de ações FUNDEB já realizadas. Potencial de +180 pontos no Pacto.</p>
+                </div>
+                <button style={{ background: '#06b6d4', color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap' }}>Ver Oportunidades</button>
+              </div>
+
+              {/* Atenção */}
+              <div style={{ background: '#fef3c7', border: '3px solid #f59e0b', borderRadius: '1rem', padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)' }}>
+                <div style={{ fontSize: '2.5rem' }}>⚠️</div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#d97706', marginBottom: '0.25rem' }}>Atenção: Meta VAAR em Risco</h3>
+                  <p style={{ fontSize: '0.875rem', color: '#92400e' }}>Projeção indica risco de não atingir a meta de melhoria do IDEB até dezembro. Ações do Pacto podem contribuir para reverter cenário.</p>
+                </div>
+                <button style={{ background: '#f59e0b', color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap' }}>Ver Plano</button>
+              </div>
+
+              {/* Sucesso */}
+              <div style={{ background: '#dcfce7', border: '3px solid #10b981', borderRadius: '1rem', padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', boxShadow: '0 2px 8px rgba(16, 185, 129, 0.2)' }}>
+                <div style={{ fontSize: '2.5rem' }}>✅</div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#059669', marginBottom: '0.25rem' }}>Badges Conquistadas</h3>
+                  <p style={{ fontSize: '0.875rem', color: '#166534' }}>CEMEI Criança Feliz conquistou todas as 3 badges do Pacto, servindo como modelo para a rede municipal.</p>
+                </div>
+                <button style={{ background: '#10b981', color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap' }}>Ver Detalhes</button>
+              </div>
+            </div>
+
+            {/* Progresso das Badges - Pacto Primeira Infância */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>Progresso das Badges - Pacto Primeira Infância</h2>
+              <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1rem' }}>Acompanhamento das conquistas por eixo temático</p>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+                {/* Badge 1 - Ampliação e Qualificação */}
+                <div style={{ background: 'white', border: '3px solid #10b981', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                    <div style={{ width: '80px', height: '80px', borderRadius: '1rem', background: '#1e40af', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ fontSize: '2.5rem' }}>🛡️</span>
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', textAlign: 'center', marginBottom: '1rem' }}>Ampliação e Qualificação dos Serviços</h3>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.875rem', color: '#64748b' }}>Progresso</span>
+                      <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#10b981' }}>100%</span>
+                    </div>
+                    <div style={{ background: '#e2e8f0', height: '8px', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                      <div style={{ background: '#10b981', height: '100%', width: '100%' }}></div>
+                    </div>
+                  </div>
+                  <div style={{ background: '#dcfce7', color: '#166534', padding: '0.75rem', borderRadius: '0.5rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <span>✅</span> Conquistado
+                  </div>
+                </div>
+
+                {/* Badge 2 - Fortalecimento da Governança */}
+                <div style={{ background: 'white', border: '3px solid #10b981', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                    <div style={{ width: '80px', height: '80px', borderRadius: '1rem', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ fontSize: '2.5rem' }}>⚙️</span>
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', textAlign: 'center', marginBottom: '1rem' }}>Fortalecimento da Governança</h3>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.875rem', color: '#64748b' }}>Progresso</span>
+                      <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#10b981' }}>100%</span>
+                    </div>
+                    <div style={{ background: '#e2e8f0', height: '8px', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                      <div style={{ background: '#8b5cf6', height: '100%', width: '100%' }}></div>
+                    </div>
+                  </div>
+                  <div style={{ background: '#dcfce7', color: '#166534', padding: '0.75rem', borderRadius: '0.5rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <span>✅</span> Conquistado
+                  </div>
+                </div>
+
+                {/* Badge 3 - Melhoria da Gestão de Recursos */}
+                <div style={{ background: 'white', border: '3px solid #f59e0b', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                    <div style={{ width: '80px', height: '80px', borderRadius: '1rem', background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <span style={{ fontSize: '2.5rem' }}>💰</span>
+                    </div>
+                  </div>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', textAlign: 'center', marginBottom: '1rem' }}>Melhoria da Gestão de Recursos</h3>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                      <span style={{ fontSize: '0.875rem', color: '#64748b' }}>Progresso</span>
+                      <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#f59e0b' }}>73%</span>
+                    </div>
+                    <div style={{ background: '#e2e8f0', height: '8px', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                      <div style={{ background: '#f59e0b', height: '100%', width: '73%' }}></div>
+                    </div>
+                  </div>
+                  <div style={{ background: '#fef3c7', color: '#92400e', padding: '0.75rem', borderRadius: '0.5rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <span>⏳</span> Em Progresso
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Progresso das Escolas no Pacto */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem' }}>Progresso das Escolas no Pacto</h2>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                {/* Escola 1 - Modelo */}
+                <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '2px solid #e2e8f0' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>CEMEI Criança Feliz</h3>
+                  <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1rem' }}>Diretora: Maria Silva Santos</p>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>156</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Alunos 0-5</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>12</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Professores</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>350</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Pts Pacto</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#1e40af', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>🛡️</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>⚙️</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>💰</div>
+                  </div>
+                  <div style={{ background: '#10b981', color: 'white', padding: '0.75rem', borderRadius: '0.5rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <span>🏆</span> Escola Modelo - 3/3 Badges
+                  </div>
+                </div>
+
+                {/* Escola 2 - Falta Recursos */}
+                <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '2px solid #e2e8f0' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Creche Municipal Sorriso</h3>
+                  <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1rem' }}>Diretor: João Oliveira Costa</p>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>89</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Alunos 0-5</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>8</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Professores</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>235</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Pts Pacto</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#1e40af', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>🛡️</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>⚙️</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', opacity: 0.5 }}>💰</div>
+                  </div>
+                  <div style={{ background: '#f59e0b', color: 'white', padding: '0.75rem', borderRadius: '0.5rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <span>⚠️</span> Falta: Gestão de Recursos
+                  </div>
+                </div>
+
+                {/* Escola 3 - 2 Badges Pendentes */}
+                <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '2px solid #e2e8f0' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>EEI Pequenos Passos</h3>
+                  <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1rem' }}>Diretora: Ana Paula Lima</p>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>134</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Alunos 0-5</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>11</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Professores</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>120</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Pts Pacto</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#1e40af', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>🛡️</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', opacity: 0.5 }}>⚙️</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', opacity: 0.5 }}>💰</div>
+                  </div>
+                  <div style={{ background: '#f59e0b', color: 'white', padding: '0.75rem', borderRadius: '0.5rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <span>📊</span> 2 Badges Pendentes
+                  </div>
+                </div>
+
+                {/* Escola 4 - Iniciando Jornada */}
+                <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '2px solid #e2e8f0' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>CEMEI Futuro Brilhante</h3>
+                  <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1rem' }}>Diretor: Carlos Eduardo Rocha</p>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>203</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Alunos 0-5</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>15</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Professores</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b' }}>45</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Pts Pacto</div>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', opacity: 0.5 }}>🛡️</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', opacity: 0.5 }}>⚙️</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', opacity: 0.5 }}>💰</div>
+                  </div>
+                  <div style={{ background: '#e2e8f0', color: '#64748b', padding: '0.75rem', borderRadius: '0.5rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <span>🎯</span> Iniciando Jornada
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Métricas Grandes */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem', marginBottom: '5rem' }}>
+              {/* Receita Total FUNDEB */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '2px solid #e2e8f0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>📈</div>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>RECEITA TOTAL FUNDEB</div>
+                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#1e293b' }}>R$ 12,4M</div>
+                  </div>
+                </div>
+                <div style={{ fontSize: '0.875rem', color: '#10b981', fontWeight: '600', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <span>↗</span> +8.2% vs 2025
+                </div>
+                <div style={{ marginBottom: '0.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.25rem' }}>
+                    <span style={{ color: '#64748b' }}>Meta Anual</span>
+                    <span style={{ color: '#1e293b', fontWeight: '600' }}>87%</span>
+                  </div>
+                  <div style={{ background: '#e2e8f0', height: '6px', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                    <div style={{ background: '#10b981', height: '100%', width: '87%' }}></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pontos Pacto Acumulados */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '2px solid #e2e8f0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>🎯</div>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>PONTOS PACTO ACUMULADOS</div>
+                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#1e293b' }}>750</div>
+                  </div>
+                </div>
+                <div style={{ fontSize: '0.875rem', color: '#3b82f6', fontWeight: '600', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <span>⭐</span> +85 este mês
+                </div>
+                <div style={{ marginBottom: '0.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.25rem' }}>
+                    <span style={{ color: '#64748b' }}>Meta Nível 3: 1.000 pts</span>
+                    <span style={{ color: '#1e293b', fontWeight: '600' }}>75%</span>
+                  </div>
+                  <div style={{ background: '#e2e8f0', height: '6px', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                    <div style={{ background: '#3b82f6', height: '100%', width: '75%' }}></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Crianças 0-5 Anos */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '2px solid #e2e8f0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#fef3c7', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>👶</div>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>CRIANÇAS 0-5 ANOS</div>
+                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#1e293b' }}>1.247</div>
+                  </div>
+                </div>
+                <div style={{ fontSize: '0.875rem', color: '#f59e0b', fontWeight: '600', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <span>↗</span> +3.1% cobertura
+                </div>
+                <div style={{ marginBottom: '0.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.25rem' }}>
+                    <span style={{ color: '#64748b' }}>Meta Cobertura: 85%</span>
+                    <span style={{ color: '#1e293b', fontWeight: '600' }}>73%</span>
+                  </div>
+                  <div style={{ background: '#e2e8f0', height: '6px', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                    <div style={{ background: '#f59e0b', height: '100%', width: '73%' }}></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Complementação VAAR */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', border: '2px solid #e2e8f0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                  <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>🎯</div>
+                  <div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>COMPLEMENTAÇÃO VAAR</div>
+                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#1e293b' }}>R$ 284K</div>
+                  </div>
+                </div>
+                <div style={{ fontSize: '0.875rem', color: '#ef4444', fontWeight: '600', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <span>⚠️</span> Em risco
+                </div>
+                <div style={{ marginBottom: '0.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.25rem' }}>
+                    <span style={{ color: '#64748b' }}>Meta IDEB Projetada</span>
+                    <span style={{ color: '#1e293b', fontWeight: '600' }}>73%</span>
+                  </div>
+                  <div style={{ background: '#e2e8f0', height: '6px', borderRadius: '0.5rem', overflow: 'hidden' }}>
+                    <div style={{ background: '#f59e0b', height: '100%', width: '73%' }}></div>
+                  </div>
                 </div>
               </div>
             </div>
