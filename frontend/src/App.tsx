@@ -113,7 +113,7 @@ function App() {
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring' | 'notes' | 'notesReport'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring' | 'notes' | 'notesReport' | 'access'>('home');
   const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<Student | null>(null);
   const [searchName, setSearchName] = useState('');
   const [searchId, setSearchId] = useState('');
@@ -123,6 +123,7 @@ function App() {
   const [showGestorSubmenu, setShowGestorSubmenu] = useState(false);
   const [showAdministracaoSubmenu, setShowAdministracaoSubmenu] = useState(false);
   const [showRelatoriosSubmenu, setShowRelatoriosSubmenu] = useState(false);
+  const [showConfiguracaoSubmenu, setShowConfiguracaoSubmenu] = useState(false);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [studentForm, setStudentForm] = useState({
@@ -2652,6 +2653,89 @@ function App() {
               )}
             </div>
 
+            {/* Configuração */}
+            <div>
+              <button
+                onClick={() => {
+                  setShowConfiguracaoSubmenu(!showConfiguracaoSubmenu);
+                }}
+                style={{
+                  width: '100%',
+                  padding: '1rem 1.5rem',
+                  background: 'white',
+                  border: 'none',
+                  borderLeft: '4px solid transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  transition: 'all 0.2s',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#f1f5f9';
+                  e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'white';
+                  e.currentTarget.style.borderLeftColor = 'transparent';
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>🔧</span>
+                  <span>Configuração</span>
+                </div>
+                <span style={{ fontSize: '1.2rem', transition: 'transform 0.2s', transform: showConfiguracaoSubmenu ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+                  ▶
+                </span>
+              </button>
+
+              {/* Submenu Configuração */}
+              {showConfiguracaoSubmenu && (
+                <div style={{
+                  background: '#f8fafc',
+                  borderLeft: '4px solid #e2e8f0'
+                }}>
+                  {/* Acessos */}
+                  <button
+                    onClick={() => {
+                      setShowSidebar(false);
+                      setCurrentScreen('access');
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1.5rem 0.75rem 3rem',
+                      background: 'transparent',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      cursor: 'pointer',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      color: '#475569',
+                      transition: 'all 0.2s',
+                      textAlign: 'left'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#e2e8f0';
+                      e.currentTarget.style.color = '#1e293b';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>🔐</span>
+                    <span>Acessos</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
             {/* Divider */}
             <div style={{
               height: '1px',
@@ -3879,6 +3963,338 @@ function App() {
                     </div>
                   );
                 })}
+              </div>
+            </div>
+          </main>
+        ) : currentScreen === 'access' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  🎯 EDUKKARE - Perfis de Usuário e Controle de Acesso
+                </h2>
+                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>Matriz de permissões e casos de uso por persona</p>
+              </div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+
+            {/* Cards Resumo dos Níveis */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+              <div style={{ background: '#fee2e2', border: '3px solid #ef4444', borderRadius: '1rem', padding: '1.5rem', textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🏢</div>
+                <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>3</div>
+                <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Nível Estratégico</div>
+              </div>
+              <div style={{ background: '#dbeafe', border: '3px solid #3b82f6', borderRadius: '1rem', padding: '1.5rem', textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🏫</div>
+                <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>2</div>
+                <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Nível Operacional</div>
+              </div>
+              <div style={{ background: '#d1fae5', border: '3px solid #10b981', borderRadius: '1rem', padding: '1.5rem', textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>👩‍🏫</div>
+                <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>2</div>
+                <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Nível Pedagógico</div>
+              </div>
+              <div style={{ background: '#e9d5ff', border: '3px solid #a855f7', borderRadius: '1rem', padding: '1.5rem', textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>👨‍👩‍👧</div>
+                <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>1</div>
+                <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Núcleo Familiar</div>
+              </div>
+              <div style={{ background: '#fed7aa', border: '3px solid #f97316', borderRadius: '1rem', padding: '1.5rem', textAlign: 'center' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🩺</div>
+                <div style={{ fontSize: '2rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>1</div>
+                <div style={{ fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Profissionais Externos</div>
+              </div>
+            </div>
+
+            {/* NÍVEL ESTRATÉGICO */}
+            <div style={{ background: '#dc2626', borderRadius: '1rem 1rem 0 0', padding: '1rem 1.5rem', marginBottom: '0' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                🏢 NÍVEL ESTRATÉGICO - Visão Completa da Rede
+              </h3>
+            </div>
+            <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '0 0 1rem 1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '2rem', overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '900px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                    <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', minWidth: '200px' }}>PERFIL DE USUÁRIO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DASHBOARD<br/>REDE</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DASHBOARD<br/>UNIDADE</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DADOS<br/>ALUNOS</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>BNCC &<br/>MARCOS</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>RELATÓRIOS<br/>GESTÃO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>FUNDEB &<br/>FINANCEIRO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>FORMAÇÃO<br/>PROFESSORES</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>COMPLIANCE<br/>MEC</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '1rem' }}>
+                      <div style={{ fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Diretor Superintendente</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Gestão estratégica de múltiplas redes educacionais</div>
+                    </td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '1rem' }}>
+                      <div style={{ fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Diretor Geral / Sec. Educação</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Responsável por toda política educacional municipal/regional</div>
+                    </td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '1rem' }}>
+                      <div style={{ fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Subsecretário / Assessor Técnico</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Suporte técnico-pedagógico para tomada de decisões estratégicas</div>
+                    </td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>📊</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>📊</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* NÍVEL OPERACIONAL */}
+            <div style={{ background: '#3b82f6', borderRadius: '1rem 1rem 0 0', padding: '1rem 1.5rem', marginBottom: '0' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                🏫 NÍVEL OPERACIONAL - Gestão da Unidade Escolar
+              </h3>
+            </div>
+            <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '0 0 1rem 1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '2rem', overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '900px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                    <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', minWidth: '200px' }}>PERFIL DE USUÁRIO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DASHBOARD<br/>REDE</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DASHBOARD<br/>UNIDADE</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DADOS<br/>ALUNOS</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>BNCC &<br/>MARCOS</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>RELATÓRIOS<br/>GESTÃO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>FUNDEB &<br/>FINANCEIRO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>FORMAÇÃO<br/>PROFESSORES</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>COMPLIANCE<br/>MEC</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '1rem' }}>
+                      <div style={{ fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Diretor de Unidade</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Gestão completa de uma unidade escolar específica</div>
+                    </td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '1rem' }}>
+                      <div style={{ fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Supervisor Escolar</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Supervisão pedagógica e administrativa da unidade</div>
+                    </td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>📊</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>📊</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* NÍVEL PEDAGÓGICO */}
+            <div style={{ background: '#10b981', borderRadius: '1rem 1rem 0 0', padding: '1rem 1.5rem', marginBottom: '0' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                👩‍🏫 NÍVEL PEDAGÓGICO - Foco no Ensino-Aprendizagem
+              </h3>
+            </div>
+            <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '0 0 1rem 1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '2rem', overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '900px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                    <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', minWidth: '200px' }}>PERFIL DE USUÁRIO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DASHBOARD<br/>REDE</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DASHBOARD<br/>UNIDADE</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DADOS<br/>ALUNOS</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>BNCC &<br/>MARCOS</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>RELATÓRIOS<br/>GESTÃO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>FUNDEB &<br/>FINANCEIRO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>FORMAÇÃO<br/>PROFESSORES</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>COMPLIANCE<br/>MEC</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '1rem' }}>
+                      <div style={{ fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Coordenador Pedagógico</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Coordenação de turmas específicas e orientação pedagógica</div>
+                    </td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>📊</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>🎯</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>📊</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>✅</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>📊</span></td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '1rem' }}>
+                      <div style={{ fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Professor Regente</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Docência direta com turmas específicas</div>
+                    </td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>🎯</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>🎯</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>📊</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* NÚCLEO FAMILIAR */}
+            <div style={{ background: '#a855f7', borderRadius: '1rem 1rem 0 0', padding: '1rem 1.5rem', marginBottom: '0' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                👨‍👩‍👧 NÚCLEO FAMILIAR - Acompanhamento Individual
+              </h3>
+            </div>
+            <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '0 0 1rem 1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '2rem', overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '900px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                    <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', minWidth: '200px' }}>PERFIL DE USUÁRIO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DASHBOARD<br/>REDE</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DASHBOARD<br/>UNIDADE</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DADOS<br/>ALUNOS</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>BNCC &<br/>MARCOS</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>RELATÓRIOS<br/>GESTÃO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>FUNDEB &<br/>FINANCEIRO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>FORMAÇÃO<br/>PROFESSORES</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>COMPLIANCE<br/>MEC</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '1rem' }}>
+                      <div style={{ fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Pais e Responsáveis</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Acesso exclusivo aos dados dos próprios filhos</div>
+                    </td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>🎯</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>🎯</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* PROFISSIONAIS EXTERNOS */}
+            <div style={{ background: '#f97316', borderRadius: '1rem 1rem 0 0', padding: '1rem 1.5rem', marginBottom: '0' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: 'white', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                🩺 PROFISSIONAIS EXTERNOS - Acesso Especializado
+              </h3>
+            </div>
+            <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '0 0 1rem 1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '2rem', overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '900px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                    <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', minWidth: '200px' }}>PERFIL DE USUÁRIO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DASHBOARD<br/>REDE</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DASHBOARD<br/>UNIDADE</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>DADOS<br/>ALUNOS</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>BNCC &<br/>MARCOS</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>RELATÓRIOS<br/>GESTÃO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>FUNDEB &<br/>FINANCEIRO</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>FORMAÇÃO<br/>PROFESSORES</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: '600', color: '#64748b' }}>COMPLIANCE<br/>MEC</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '1rem' }}>
+                      <div style={{ fontWeight: '700', color: '#1e293b', marginBottom: '0.25rem' }}>Profissionais da Saúde</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Pediatras, Fonoaudiólogos, Psicólogos (com autorização dos pais)</div>
+                    </td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>🎯</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>🎯</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                    <td style={{ padding: '1rem', textAlign: 'center' }}><span style={{ fontSize: '1.5rem' }}>❌</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Legenda */}
+            <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '5rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem' }}>📋 Legenda de Permissões</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem', border: '2px solid #10b981' }}>
+                  <span style={{ fontSize: '2rem' }}>✅</span>
+                  <div>
+                    <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '0.875rem' }}>Acesso Completo</div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Visualização e edição total</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem', border: '2px solid #3b82f6' }}>
+                  <span style={{ fontSize: '2rem' }}>📊</span>
+                  <div>
+                    <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '0.875rem' }}>Acesso Parcial/Somente Leitura</div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Apenas visualização, sem edição</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem', border: '2px solid #f59e0b' }}>
+                  <span style={{ fontSize: '2rem' }}>🎯</span>
+                  <div>
+                    <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '0.875rem' }}>Acesso Restrito</div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Suas turmas/filhos específicos</div>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem', border: '2px solid #ef4444' }}>
+                  <span style={{ fontSize: '2rem' }}>❌</span>
+                  <div>
+                    <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '0.875rem' }}>Sem Acesso</div>
+                    <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Funcionalidade não disponível</div>
+                  </div>
+                </div>
               </div>
             </div>
           </main>
