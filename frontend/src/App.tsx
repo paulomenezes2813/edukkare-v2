@@ -1443,9 +1443,40 @@ function App() {
     setShowRubricModal(true);
   };
 
-  const openActivityRubricsModal = (activity: Activity) => {
-    setSelectedActivityForRubrics(activity);
-    openRubricModal(undefined, activity);
+  const openActivityRubricsModal = async (activity: Activity) => {
+    // Recarrega a atividade para garantir que tem as rubricas atualizadas
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch(`${API_URL}/activities/${activity.id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSelectedActivityForRubrics(data.data);
+        openRubricModal(undefined, data.data);
+      } else {
+        setSelectedActivityForRubrics(activity);
+        openRubricModal(undefined, activity);
+      }
+    } catch {
+      setSelectedActivityForRubrics(activity);
+      openRubricModal(undefined, activity);
+    }
+  };
+
+  const closeRubricModal = () => {
+    setShowRubricModal(false);
+    setSelectedActivityForRubrics(null);
+    setEditingRubric(null);
   };
 
   const handleSaveRubric = async () => {
@@ -1488,7 +1519,7 @@ function App() {
 
       if (response.ok && data.success) {
         alert(`✅ Rubrica ${editingRubric ? 'atualizada' : 'cadastrada'} com sucesso!`);
-        setShowRubricModal(false);
+        closeRubricModal();
         await loadRubrics();
         await loadActivities(); // Atualiza atividades para mostrar rubricas associadas
       } else {
@@ -5825,7 +5856,7 @@ function App() {
             
             {showRubricModal && (
               <>
-                <div onClick={() => setShowRubricModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
+                <div onClick={closeRubricModal} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
                 <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '700px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', alignItems: 'center' }}>
                     <div>
@@ -5838,7 +5869,7 @@ function App() {
                         </p>
                       )}
                     </div>
-                    <button onClick={() => { setShowRubricModal(false); setSelectedActivityForRubrics(null); }} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer' }}>✕</button>
+                    <button onClick={closeRubricModal} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer' }}>✕</button>
                   </div>
                   
                   {selectedActivityForRubrics && !editingRubric && (
@@ -6025,7 +6056,7 @@ function App() {
                     </div>
                     
                       <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
-                        <button onClick={() => { setShowRubricModal(false); setSelectedActivityForRubrics(null); }} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
+                        <button onClick={closeRubricModal} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
                         <button onClick={handleSaveRubric} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingRubric ? 'Salvar' : 'Cadastrar'}</button>
                       </div>
                     </div>
