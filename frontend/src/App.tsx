@@ -14,6 +14,17 @@ interface Student {
   };
 }
 
+interface Note {
+  id: number;
+  studentId: number;
+  studentName: string;
+  classId: number;
+  className: string;
+  disciplina: string;
+  data: string;
+  nota: number;
+}
+
 interface Activity {
   id: number;
   title: string;
@@ -136,6 +147,19 @@ function App() {
     classId: '',
     avatarId: ''
   });
+
+  // Estados para Notes (Avaliações)
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [showGradeModal, setShowGradeModal] = useState(false);
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
+  const [noteForm, setNoteForm] = useState({
+    classId: '',
+    studentId: '',
+    disciplina: '',
+    data: '',
+    nota: ''
+  });
+  const [filteredStudentsForNote, setFilteredStudentsForNote] = useState<Student[]>([]);
   
   // Estados para Teachers
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -730,6 +754,100 @@ function App() {
       }
     } catch (error: any) {
       alert(`❌ Erro ao salvar aluno: ${error.message}`);
+    }
+  };
+
+  const openNoteModal = (note?: Note) => {
+    if (note) {
+      setEditingNote(note);
+      setNoteForm({
+        classId: note.classId.toString(),
+        studentId: note.studentId.toString(),
+        disciplina: note.disciplina,
+        data: note.data,
+        nota: note.nota.toString()
+      });
+      // Carregar alunos da turma
+      const studentsInClass = students.filter(s => s.class && s.class.name === note.className);
+      setFilteredStudentsForNote(studentsInClass);
+    } else {
+      setEditingNote(null);
+      setNoteForm({
+        classId: '',
+        studentId: '',
+        disciplina: '',
+        data: new Date().toISOString().split('T')[0],
+        nota: ''
+      });
+      setFilteredStudentsForNote([]);
+    }
+    setShowGradeModal(true);
+  };
+
+  const handleSaveGrade = () => {
+    if (!noteForm.classId || !noteForm.studentId || !noteForm.disciplina || !noteForm.data || !noteForm.nota) {
+      alert('⚠️ Todos os campos são obrigatórios');
+      return;
+    }
+
+    const nota = parseFloat(noteForm.nota);
+    if (isNaN(nota) || nota < 0 || nota > 10) {
+      alert('⚠️ A nota deve ser um número entre 0 e 10');
+      return;
+    }
+
+    const student = students.find(s => s.id === Number(noteForm.studentId));
+    const selectedClass = classes.find(c => c.id === Number(noteForm.classId));
+
+    if (editingNote) {
+      // Atualizar nota existente
+      setNotes(notes.map(n => n.id === editingNote.id ? {
+        ...n,
+        studentId: Number(noteForm.studentId),
+        studentName: student?.name || '',
+        classId: Number(noteForm.classId),
+        className: selectedClass?.name || '',
+        disciplina: noteForm.disciplina,
+        data: noteForm.data,
+        nota: nota
+      } : n));
+      alert('✅ Nota atualizada com sucesso!');
+    } else {
+      // Criar nova nota
+      const newNote: Note = {
+        id: notes.length > 0 ? Math.max(...notes.map(n => n.id)) + 1 : 1,
+        studentId: Number(noteForm.studentId),
+        studentName: student?.name || '',
+        classId: Number(noteForm.classId),
+        className: selectedClass?.name || '',
+        disciplina: noteForm.disciplina,
+        data: noteForm.data,
+        nota: nota
+      };
+      setNotes([...notes, newNote]);
+      alert('✅ Nota cadastrada com sucesso!');
+    }
+
+    setShowGradeModal(false);
+  };
+
+  const handleDeleteNote = (note: Note) => {
+    if (!confirm(`⚠️ Tem certeza que deseja excluir a nota de ${note.studentName} em ${note.disciplina}?`)) {
+      return;
+    }
+
+    setNotes(notes.filter(n => n.id !== note.id));
+    alert('✅ Nota excluída com sucesso!');
+  };
+
+  const handleClassChangeForNote = (classId: string) => {
+    setNoteForm({ ...noteForm, classId, studentId: '' });
+    if (classId) {
+      const selectedClass = classes.find(c => c.id === Number(classId));
+      const studentsInClass = students.filter(s => s.class && s.class.name === selectedClass?.name);
+      setFilteredStudentsForNote(studentsInClass);
+    } else {
+      setFilteredStudentsForNote([]);
     }
   };
 
@@ -3736,151 +3854,209 @@ function App() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
               <div>
                 <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>📝 Gerenciar Notas</h2>
-                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>Registro e gestão das avaliações dos alunos</p>
+                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>{notes.length} notas cadastradas</p>
               </div>
-              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
-            </div>
-
-            {/* Filtros */}
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-              <select style={{ padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', background: 'white', cursor: 'pointer' }}>
-                <option>Todas as Turmas</option>
-                {classes.map((cls) => (
-                  <option key={cls.id} value={cls.id}>{cls.name}</option>
-                ))}
-              </select>
-              <select style={{ padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', background: 'white', cursor: 'pointer' }}>
-                <option>Todos os Períodos</option>
-                <option>1º Bimestre</option>
-                <option>2º Bimestre</option>
-                <option>3º Bimestre</option>
-                <option>4º Bimestre</option>
-              </select>
-              <select style={{ padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', background: 'white', cursor: 'pointer' }}>
-                <option>Todas as Áreas</option>
-                <option>Linguagem</option>
-                <option>Matemática</option>
-                <option>Artes</option>
-                <option>Movimento</option>
-                <option>Natureza e Sociedade</option>
-              </select>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button onClick={() => openNoteModal()} style={{ background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>➕</span> Incluir Nota
+                </button>
+                <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.75rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+              </div>
             </div>
 
             {/* Tabela de Notas */}
             <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '5rem', overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
-                    <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Aluno</th>
-                    <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Turma</th>
-                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Linguagem</th>
-                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Matemática</th>
-                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Artes</th>
-                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Movimento</th>
-                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Média</th>
-                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {students.slice(0, 10).map((student, index) => {
-                    const grades = [
-                      [8.5, 9.0, 7.5, 8.0],
-                      [7.0, 7.5, 8.0, 7.5],
-                      [9.5, 9.0, 9.5, 9.0],
-                      [6.5, 7.0, 7.5, 8.0],
-                      [8.0, 8.5, 8.0, 8.5],
-                      [9.0, 8.5, 9.0, 8.5],
-                      [7.5, 8.0, 7.0, 7.5],
-                      [8.5, 8.0, 9.0, 8.5],
-                      [9.5, 9.5, 9.0, 9.5],
-                      [7.0, 7.5, 7.0, 8.0]
-                    ];
-                    const studentGrades = grades[index];
-                    const average = studentGrades.reduce((a, b) => a + b, 0) / studentGrades.length;
-                    return (
-                      <tr key={student.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                        <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#1e293b', fontWeight: '600' }}>{student.name}</td>
-                        <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#64748b' }}>{student.class?.name || 'Sem turma'}</td>
-                        <td style={{ padding: '1rem', textAlign: 'center' }}>
-                          <span style={{ 
-                            background: studentGrades[0] >= 7 ? '#dcfce7' : '#fef3c7', 
-                            color: studentGrades[0] >= 7 ? '#166534' : '#92400e', 
-                            padding: '0.25rem 0.75rem', 
-                            borderRadius: '0.5rem', 
-                            fontSize: '0.875rem', 
-                            fontWeight: '600' 
-                          }}>
-                            {studentGrades[0].toFixed(1)}
-                          </span>
+              {notes.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '3rem' }}>
+                  <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📝</div>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>Nenhuma nota cadastrada</h3>
+                  <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '1.5rem' }}>Clique em "Incluir Nota" para adicionar a primeira avaliação</p>
+                </div>
+              ) : (
+                <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                      <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Aluno</th>
+                      <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Turma</th>
+                      <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Disciplina</th>
+                      <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Data</th>
+                      <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Nota</th>
+                      <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {notes.map((note) => (
+                      <tr key={note.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#1e293b', fontWeight: '600' }}>{note.studentName}</td>
+                        <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#64748b' }}>{note.className}</td>
+                        <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#64748b' }}>{note.disciplina}</td>
+                        <td style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', color: '#64748b' }}>
+                          {new Date(note.data).toLocaleDateString('pt-BR')}
                         </td>
                         <td style={{ padding: '1rem', textAlign: 'center' }}>
                           <span style={{ 
-                            background: studentGrades[1] >= 7 ? '#dcfce7' : '#fef3c7', 
-                            color: studentGrades[1] >= 7 ? '#166534' : '#92400e', 
-                            padding: '0.25rem 0.75rem', 
-                            borderRadius: '0.5rem', 
-                            fontSize: '0.875rem', 
-                            fontWeight: '600' 
-                          }}>
-                            {studentGrades[1].toFixed(1)}
-                          </span>
-                        </td>
-                        <td style={{ padding: '1rem', textAlign: 'center' }}>
-                          <span style={{ 
-                            background: studentGrades[2] >= 7 ? '#dcfce7' : '#fef3c7', 
-                            color: studentGrades[2] >= 7 ? '#166534' : '#92400e', 
-                            padding: '0.25rem 0.75rem', 
-                            borderRadius: '0.5rem', 
-                            fontSize: '0.875rem', 
-                            fontWeight: '600' 
-                          }}>
-                            {studentGrades[2].toFixed(1)}
-                          </span>
-                        </td>
-                        <td style={{ padding: '1rem', textAlign: 'center' }}>
-                          <span style={{ 
-                            background: studentGrades[3] >= 7 ? '#dcfce7' : '#fef3c7', 
-                            color: studentGrades[3] >= 7 ? '#166534' : '#92400e', 
-                            padding: '0.25rem 0.75rem', 
-                            borderRadius: '0.5rem', 
-                            fontSize: '0.875rem', 
-                            fontWeight: '600' 
-                          }}>
-                            {studentGrades[3].toFixed(1)}
-                          </span>
-                        </td>
-                        <td style={{ padding: '1rem', textAlign: 'center' }}>
-                          <span style={{ 
-                            background: average >= 7 ? '#dcfce7' : average >= 5 ? '#fef3c7' : '#fee2e2',
-                            color: average >= 7 ? '#166534' : average >= 5 ? '#92400e' : '#dc2626',
+                            background: note.nota >= 7 ? '#dcfce7' : note.nota >= 5 ? '#fef3c7' : '#fee2e2',
+                            color: note.nota >= 7 ? '#166534' : note.nota >= 5 ? '#92400e' : '#dc2626',
                             padding: '0.5rem 1rem', 
                             borderRadius: '0.5rem', 
                             fontSize: '0.875rem', 
                             fontWeight: '700' 
                           }}>
-                            {average.toFixed(1)}
+                            {note.nota.toFixed(1)}
                           </span>
                         </td>
                         <td style={{ padding: '1rem', textAlign: 'center' }}>
-                          <button style={{ 
-                            background: '#8b5cf6', 
-                            color: 'white', 
-                            border: 'none', 
-                            padding: '0.5rem 1rem', 
-                            borderRadius: '0.5rem', 
-                            fontSize: '0.75rem', 
-                            fontWeight: '600', 
-                            cursor: 'pointer' 
-                          }}>
-                            ✏️ Editar
-                          </button>
+                          <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                            <button 
+                              onClick={() => openNoteModal(note)}
+                              style={{ 
+                                background: '#3b82f6', 
+                                color: 'white', 
+                                border: 'none', 
+                                padding: '0.5rem 0.75rem', 
+                                borderRadius: '0.5rem', 
+                                fontSize: '0.75rem', 
+                                fontWeight: '600', 
+                                cursor: 'pointer' 
+                              }}
+                            >
+                              ✏️ Editar
+                            </button>
+                            <button 
+                              onClick={() => handleDeleteNote(note)}
+                              style={{ 
+                                background: '#ef4444', 
+                                color: 'white', 
+                                border: 'none', 
+                                padding: '0.5rem 0.75rem', 
+                                borderRadius: '0.5rem', 
+                                fontSize: '0.75rem', 
+                                fontWeight: '600', 
+                                cursor: 'pointer' 
+                              }}
+                            >
+                              🗑️ Excluir
+                            </button>
+                          </div>
                         </td>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
+
+            {/* Modal de Nota */}
+            {showGradeModal && (
+              <>
+                <div onClick={() => setShowGradeModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
+                <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>
+                      {editingNote ? '✏️ Editar Nota' : '➕ Incluir Nota'}
+                    </h3>
+                    <button onClick={() => setShowGradeModal(false)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer', fontSize: '1.25rem' }}>✕</button>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {/* Turma */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#1e293b' }}>Turma *</label>
+                      <select 
+                        value={noteForm.classId} 
+                        onChange={(e) => handleClassChangeForNote(e.target.value)}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}
+                      >
+                        <option value="">Selecione uma turma</option>
+                        {classes.map((cls) => (
+                          <option key={cls.id} value={cls.id}>{cls.name}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Aluno */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#1e293b' }}>Aluno *</label>
+                      <select 
+                        value={noteForm.studentId} 
+                        onChange={(e) => setNoteForm({ ...noteForm, studentId: e.target.value })}
+                        disabled={!noteForm.classId}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem', opacity: !noteForm.classId ? 0.5 : 1 }}
+                      >
+                        <option value="">Selecione um aluno</option>
+                        {filteredStudentsForNote.map((student) => (
+                          <option key={student.id} value={student.id}>{student.name}</option>
+                        ))}
+                      </select>
+                      {!noteForm.classId && (
+                        <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Selecione uma turma primeiro</p>
+                      )}
+                    </div>
+
+                    {/* Disciplina */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#1e293b' }}>Disciplina *</label>
+                      <select 
+                        value={noteForm.disciplina} 
+                        onChange={(e) => setNoteForm({ ...noteForm, disciplina: e.target.value })}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}
+                      >
+                        <option value="">Selecione uma disciplina</option>
+                        <option value="Linguagem">Linguagem</option>
+                        <option value="Matemática">Matemática</option>
+                        <option value="Artes">Artes</option>
+                        <option value="Movimento">Movimento</option>
+                        <option value="Natureza e Sociedade">Natureza e Sociedade</option>
+                        <option value="Música">Música</option>
+                        <option value="Socialização">Socialização</option>
+                      </select>
+                    </div>
+
+                    {/* Data */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#1e293b' }}>Data *</label>
+                      <input 
+                        type="date" 
+                        value={noteForm.data} 
+                        onChange={(e) => setNoteForm({ ...noteForm, data: e.target.value })}
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}
+                      />
+                    </div>
+
+                    {/* Nota */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#1e293b' }}>Nota (0 a 10) *</label>
+                      <input 
+                        type="number" 
+                        min="0" 
+                        max="10" 
+                        step="0.1"
+                        value={noteForm.nota} 
+                        onChange={(e) => setNoteForm({ ...noteForm, nota: e.target.value })}
+                        placeholder="Ex: 8.5"
+                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}
+                      />
+                    </div>
+
+                    {/* Botões */}
+                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                      <button 
+                        onClick={() => setShowGradeModal(false)} 
+                        style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}
+                      >
+                        Cancelar
+                      </button>
+                      <button 
+                        onClick={handleSaveGrade} 
+                        style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}
+                      >
+                        {editingNote ? 'Salvar Alterações' : 'Cadastrar Nota'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </main>
         ) : currentScreen === 'notesReport' ? (
           <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
