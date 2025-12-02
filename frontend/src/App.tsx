@@ -113,7 +113,7 @@ function App() {
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring' | 'notes' | 'notesReport'>('home');
   const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<Student | null>(null);
   const [searchName, setSearchName] = useState('');
   const [searchId, setSearchId] = useState('');
@@ -121,6 +121,8 @@ function App() {
   const [albumCurrentSlide, setAlbumCurrentSlide] = useState(0);
   const [trainingScreenType, setTrainingScreenType] = useState<'training' | 'help'>('training');
   const [showGestorSubmenu, setShowGestorSubmenu] = useState(false);
+  const [showAdministracaoSubmenu, setShowAdministracaoSubmenu] = useState(false);
+  const [showRelatoriosSubmenu, setShowRelatoriosSubmenu] = useState(false);
   const [showStudentModal, setShowStudentModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
   const [studentForm, setStudentForm] = useState({
@@ -2484,6 +2486,172 @@ function App() {
               <span>Avatares</span>
             </button>
 
+            {/* Administração */}
+            <div>
+              <button
+                onClick={() => {
+                  setShowAdministracaoSubmenu(!showAdministracaoSubmenu);
+                }}
+                style={{
+                  width: '100%',
+                  padding: '1rem 1.5rem',
+                  background: 'white',
+                  border: 'none',
+                  borderLeft: '4px solid transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  transition: 'all 0.2s',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#f1f5f9';
+                  e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'white';
+                  e.currentTarget.style.borderLeftColor = 'transparent';
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>⚙️</span>
+                  <span>Administração</span>
+                </div>
+                <span style={{ fontSize: '1.2rem', transition: 'transform 0.2s', transform: showAdministracaoSubmenu ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+                  ▶
+                </span>
+              </button>
+
+              {/* Submenu Administração */}
+              {showAdministracaoSubmenu && (
+                <div style={{
+                  background: '#f8fafc',
+                  borderLeft: '4px solid #e2e8f0'
+                }}>
+                  {/* Notas */}
+                  <button
+                    onClick={() => {
+                      setShowSidebar(false);
+                      setCurrentScreen('notes');
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1.5rem 0.75rem 3rem',
+                      background: 'transparent',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      cursor: 'pointer',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      color: '#475569',
+                      transition: 'all 0.2s',
+                      textAlign: 'left'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#e2e8f0';
+                      e.currentTarget.style.color = '#1e293b';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>📝</span>
+                    <span>Notas</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Relatórios */}
+            <div>
+              <button
+                onClick={() => {
+                  setShowRelatoriosSubmenu(!showRelatoriosSubmenu);
+                }}
+                style={{
+                  width: '100%',
+                  padding: '1rem 1.5rem',
+                  background: 'white',
+                  border: 'none',
+                  borderLeft: '4px solid transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: '#1e293b',
+                  transition: 'all 0.2s',
+                  textAlign: 'left'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#f1f5f9';
+                  e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'white';
+                  e.currentTarget.style.borderLeftColor = 'transparent';
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>📊</span>
+                  <span>Relatórios</span>
+                </div>
+                <span style={{ fontSize: '1.2rem', transition: 'transform 0.2s', transform: showRelatoriosSubmenu ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+                  ▶
+                </span>
+              </button>
+
+              {/* Submenu Relatórios */}
+              {showRelatoriosSubmenu && (
+                <div style={{
+                  background: '#f8fafc',
+                  borderLeft: '4px solid #e2e8f0'
+                }}>
+                  {/* Relatório das Notas */}
+                  <button
+                    onClick={() => {
+                      setShowSidebar(false);
+                      setCurrentScreen('notesReport');
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1.5rem 0.75rem 3rem',
+                      background: 'transparent',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      cursor: 'pointer',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      color: '#475569',
+                      transition: 'all 0.2s',
+                      textAlign: 'left'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#e2e8f0';
+                      e.currentTarget.style.color = '#1e293b';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>📄</span>
+                    <span>Relatório das Notas</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
             {/* Divider */}
             <div style={{
               height: '1px',
@@ -3408,6 +3576,309 @@ function App() {
                     </span>
                   </div>
                 ))}
+              </div>
+            </div>
+          </main>
+        ) : currentScreen === 'notes' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>📝 Gerenciar Notas</h2>
+                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>Registro e gestão das avaliações dos alunos</p>
+              </div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+
+            {/* Filtros */}
+            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+              <select style={{ padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', background: 'white', cursor: 'pointer' }}>
+                <option>Todas as Turmas</option>
+                {classes.map((cls) => (
+                  <option key={cls.id} value={cls.id}>{cls.name}</option>
+                ))}
+              </select>
+              <select style={{ padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', background: 'white', cursor: 'pointer' }}>
+                <option>Todos os Períodos</option>
+                <option>1º Bimestre</option>
+                <option>2º Bimestre</option>
+                <option>3º Bimestre</option>
+                <option>4º Bimestre</option>
+              </select>
+              <select style={{ padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', color: '#1e293b', background: 'white', cursor: 'pointer' }}>
+                <option>Todas as Áreas</option>
+                <option>Linguagem</option>
+                <option>Matemática</option>
+                <option>Artes</option>
+                <option>Movimento</option>
+                <option>Natureza e Sociedade</option>
+              </select>
+            </div>
+
+            {/* Tabela de Notas */}
+            <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '5rem', overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #e2e8f0' }}>
+                    <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Aluno</th>
+                    <th style={{ padding: '1rem', textAlign: 'left', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Turma</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Linguagem</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Matemática</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Artes</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Movimento</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Média</th>
+                    <th style={{ padding: '1rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '600', color: '#64748b' }}>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {students.slice(0, 10).map((student, index) => {
+                    const grades = [
+                      [8.5, 9.0, 7.5, 8.0],
+                      [7.0, 7.5, 8.0, 7.5],
+                      [9.5, 9.0, 9.5, 9.0],
+                      [6.5, 7.0, 7.5, 8.0],
+                      [8.0, 8.5, 8.0, 8.5],
+                      [9.0, 8.5, 9.0, 8.5],
+                      [7.5, 8.0, 7.0, 7.5],
+                      [8.5, 8.0, 9.0, 8.5],
+                      [9.5, 9.5, 9.0, 9.5],
+                      [7.0, 7.5, 7.0, 8.0]
+                    ];
+                    const studentGrades = grades[index];
+                    const average = studentGrades.reduce((a, b) => a + b, 0) / studentGrades.length;
+                    return (
+                      <tr key={student.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#1e293b', fontWeight: '600' }}>{student.name}</td>
+                        <td style={{ padding: '1rem', fontSize: '0.875rem', color: '#64748b' }}>{student.class?.name || 'Sem turma'}</td>
+                        <td style={{ padding: '1rem', textAlign: 'center' }}>
+                          <span style={{ 
+                            background: studentGrades[0] >= 7 ? '#dcfce7' : '#fef3c7', 
+                            color: studentGrades[0] >= 7 ? '#166534' : '#92400e', 
+                            padding: '0.25rem 0.75rem', 
+                            borderRadius: '0.5rem', 
+                            fontSize: '0.875rem', 
+                            fontWeight: '600' 
+                          }}>
+                            {studentGrades[0].toFixed(1)}
+                          </span>
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'center' }}>
+                          <span style={{ 
+                            background: studentGrades[1] >= 7 ? '#dcfce7' : '#fef3c7', 
+                            color: studentGrades[1] >= 7 ? '#166534' : '#92400e', 
+                            padding: '0.25rem 0.75rem', 
+                            borderRadius: '0.5rem', 
+                            fontSize: '0.875rem', 
+                            fontWeight: '600' 
+                          }}>
+                            {studentGrades[1].toFixed(1)}
+                          </span>
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'center' }}>
+                          <span style={{ 
+                            background: studentGrades[2] >= 7 ? '#dcfce7' : '#fef3c7', 
+                            color: studentGrades[2] >= 7 ? '#166534' : '#92400e', 
+                            padding: '0.25rem 0.75rem', 
+                            borderRadius: '0.5rem', 
+                            fontSize: '0.875rem', 
+                            fontWeight: '600' 
+                          }}>
+                            {studentGrades[2].toFixed(1)}
+                          </span>
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'center' }}>
+                          <span style={{ 
+                            background: studentGrades[3] >= 7 ? '#dcfce7' : '#fef3c7', 
+                            color: studentGrades[3] >= 7 ? '#166534' : '#92400e', 
+                            padding: '0.25rem 0.75rem', 
+                            borderRadius: '0.5rem', 
+                            fontSize: '0.875rem', 
+                            fontWeight: '600' 
+                          }}>
+                            {studentGrades[3].toFixed(1)}
+                          </span>
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'center' }}>
+                          <span style={{ 
+                            background: average >= 7 ? '#dcfce7' : average >= 5 ? '#fef3c7' : '#fee2e2',
+                            color: average >= 7 ? '#166534' : average >= 5 ? '#92400e' : '#dc2626',
+                            padding: '0.5rem 1rem', 
+                            borderRadius: '0.5rem', 
+                            fontSize: '0.875rem', 
+                            fontWeight: '700' 
+                          }}>
+                            {average.toFixed(1)}
+                          </span>
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'center' }}>
+                          <button style={{ 
+                            background: '#8b5cf6', 
+                            color: 'white', 
+                            border: 'none', 
+                            padding: '0.5rem 1rem', 
+                            borderRadius: '0.5rem', 
+                            fontSize: '0.75rem', 
+                            fontWeight: '600', 
+                            cursor: 'pointer' 
+                          }}>
+                            ✏️ Editar
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </main>
+        ) : currentScreen === 'notesReport' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>📄 Relatório das Notas</h2>
+                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>Análise e visualização do desempenho acadêmico</p>
+              </div>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button style={{ background: '#10b981', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>📊 Exportar Excel</button>
+                <button style={{ background: '#ef4444', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>📄 Exportar PDF</button>
+                <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+              </div>
+            </div>
+
+            {/* Cards Resumo */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+              <div style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '2rem' }}>✅</span>
+                  <div>
+                    <p style={{ fontSize: '0.875rem', opacity: 0.9 }}>Média Geral</p>
+                    <p style={{ fontSize: '2rem', fontWeight: '700' }}>8.2</p>
+                  </div>
+                </div>
+                <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Acima da meta (7.0)</p>
+              </div>
+
+              <div style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '2rem' }}>🎯</span>
+                  <div>
+                    <p style={{ fontSize: '0.875rem', opacity: 0.9 }}>Taxa de Aprovação</p>
+                    <p style={{ fontSize: '2rem', fontWeight: '700' }}>96%</p>
+                  </div>
+                </div>
+                <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>{Math.floor(students.length * 0.96)} de {students.length} alunos</p>
+              </div>
+
+              <div style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '2rem' }}>⚠️</span>
+                  <div>
+                    <p style={{ fontSize: '0.875rem', opacity: 0.9 }}>Necessitam Reforço</p>
+                    <p style={{ fontSize: '2rem', fontWeight: '700' }}>{Math.floor(students.length * 0.08)}</p>
+                  </div>
+                </div>
+                <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Abaixo da média (7.0)</p>
+              </div>
+
+              <div style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '2rem' }}>⭐</span>
+                  <div>
+                    <p style={{ fontSize: '0.875rem', opacity: 0.9 }}>Destaque</p>
+                    <p style={{ fontSize: '2rem', fontWeight: '700' }}>{Math.floor(students.length * 0.15)}</p>
+                  </div>
+                </div>
+                <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Média acima de 9.0</p>
+              </div>
+            </div>
+
+            {/* Gráficos de Desempenho */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+              {/* Desempenho por Área */}
+              <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>📚</span>
+                  Desempenho por Área
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {[
+                    { area: 'Linguagem', grade: 8.5, color: '#8b5cf6' },
+                    { area: 'Matemática', grade: 8.0, color: '#3b82f6' },
+                    { area: 'Artes', grade: 8.8, color: '#ec4899' },
+                    { area: 'Movimento', grade: 8.3, color: '#10b981' },
+                    { area: 'Natureza', grade: 7.9, color: '#f59e0b' }
+                  ].map((item) => (
+                    <div key={item.area}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                        <span style={{ fontSize: '0.875rem', color: '#475569' }}>{item.area}</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1e293b' }}>{item.grade.toFixed(1)}</span>
+                      </div>
+                      <div style={{ background: '#e2e8f0', height: '0.5rem', borderRadius: '0.25rem', overflow: 'hidden' }}>
+                        <div style={{ background: item.color, height: '100%', width: `${(item.grade / 10) * 100}%`, transition: 'width 0.3s' }}></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Top 10 Alunos */}
+              <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>🏆</span>
+                  Top 10 Alunos
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  {students.slice(0, 10).map((student, index) => {
+                    const averages = [9.5, 9.2, 9.0, 8.8, 8.7, 8.5, 8.4, 8.3, 8.2, 8.1];
+                    return (
+                      <div key={student.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.5rem', background: '#f8fafc', borderRadius: '0.5rem' }}>
+                        <span style={{ fontSize: '1.25rem', fontWeight: '700', color: '#8b5cf6', minWidth: '30px' }}>#{index + 1}</span>
+                        <span style={{ flex: 1, fontSize: '0.875rem', color: '#1e293b', fontWeight: '600' }}>{student.name}</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#10b981', background: '#dcfce7', padding: '0.25rem 0.75rem', borderRadius: '0.5rem' }}>{averages[index]}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Análise Detalhada por Turma */}
+            <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '5rem' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>🎓</span>
+                Análise por Turma
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+                {classes.slice(0, 6).map((cls, index) => {
+                  const classAverages = [8.5, 8.2, 8.7, 7.9, 8.1, 8.4];
+                  const classAverage = classAverages[index];
+                  return (
+                    <div key={cls.id} style={{ padding: '1rem', background: '#f8fafc', borderRadius: '0.75rem', border: '2px solid #e2e8f0' }}>
+                      <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.75rem' }}>{cls.name}</h4>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                        <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Média Geral</span>
+                        <span style={{ 
+                          fontSize: '0.875rem', 
+                          fontWeight: '700',
+                          color: classAverage >= 8 ? '#10b981' : classAverage >= 7 ? '#f59e0b' : '#ef4444'
+                        }}>
+                          {classAverage.toFixed(1)}
+                        </span>
+                      </div>
+                      <div style={{ background: '#e2e8f0', height: '0.5rem', borderRadius: '0.25rem', overflow: 'hidden' }}>
+                        <div style={{ 
+                          background: classAverage >= 8 ? '#10b981' : classAverage >= 7 ? '#f59e0b' : '#ef4444',
+                          height: '100%', 
+                          width: `${(classAverage / 10) * 100}%` 
+                        }}></div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem', fontSize: '0.75rem' }}>
+                        <span style={{ background: '#dcfce7', color: '#166534', padding: '0.25rem 0.5rem', borderRadius: '0.25rem' }}>
+                          {Math.floor(Math.random() * 10 + 15)} alunos
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </main>
