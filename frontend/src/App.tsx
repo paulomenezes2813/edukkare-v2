@@ -113,7 +113,7 @@ function App() {
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring' | 'notes' | 'notesReport' | 'access'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring' | 'notes' | 'notesReport' | 'access' | 'pedagogicalDashboard'>('home');
   const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<Student | null>(null);
   const [searchName, setSearchName] = useState('');
   const [searchId, setSearchId] = useState('');
@@ -2195,6 +2195,40 @@ function App() {
                   >
                     <span style={{ fontSize: '1.2rem' }}>👁️</span>
                     <span>Monitoramento</span>
+                  </button>
+
+                  {/* Dashboard Pedagógico */}
+                  <button
+                    onClick={() => {
+                      setShowSidebar(false);
+                      setCurrentScreen('pedagogicalDashboard');
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1.5rem 0.75rem 3rem',
+                      background: 'transparent',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      cursor: 'pointer',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      color: '#475569',
+                      transition: 'all 0.2s',
+                      textAlign: 'left'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#e2e8f0';
+                      e.currentTarget.style.color = '#1e293b';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>🎓</span>
+                    <span>Dashboard Pedagógico</span>
                   </button>
                 </div>
               )}
@@ -4294,6 +4328,394 @@ function App() {
                     <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '0.875rem' }}>Sem Acesso</div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Funcionalidade não disponível</div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        ) : currentScreen === 'pedagogicalDashboard' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem', background: '#f8fafc' }}>
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>Dashboard Pedagógico - Rede Municipal Eubésio</h2>
+                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>Visão completa do desenvolvimento educacional • Setembro 2026</p>
+              </div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+
+            {/* Botões de Ação */}
+            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+              <button style={{ background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>➕</span> Nova Avaliação
+              </button>
+              <button style={{ background: 'white', color: '#64748b', border: '2px solid #e2e8f0', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>📊</span> Relatório CENSO
+              </button>
+              <button style={{ background: 'white', color: '#64748b', border: '2px solid #e2e8f0', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>👥</span> Reunião Pedagógica
+              </button>
+              <button style={{ background: 'white', color: '#64748b', border: '2px solid #e2e8f0', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>📢</span> Comunicado Rede
+              </button>
+              <button style={{ background: 'white', color: '#64748b', border: '2px solid #e2e8f0', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span>📤</span> Enviar SIOPE
+              </button>
+            </div>
+
+            {/* Cards de Métricas Principais */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+              {/* Alunos Matriculados */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderTop: '4px solid #8b5cf6' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#64748b', marginBottom: '0.5rem' }}>ALUNOS MATRICULADOS</div>
+                <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>4.786</div>
+                <div style={{ fontSize: '0.875rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <span>↗</span> 8.2% vs. 2025
+                </div>
+              </div>
+
+              {/* Compliance BNCC */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderTop: '4px solid #3b82f6' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#64748b', marginBottom: '0.5rem' }}>COMPLIANCE BNCC</div>
+                <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>96%</div>
+                <div style={{ fontSize: '0.875rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <span>↗</span> 4% vs. trimestre
+                </div>
+              </div>
+
+              {/* Taxa de Retenção */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderTop: '4px solid #10b981' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#64748b', marginBottom: '0.5rem' }}>TAXA DE RETENÇÃO</div>
+                <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>97.8%</div>
+                <div style={{ fontSize: '0.875rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <span>↗</span> Líder regional
+                </div>
+              </div>
+
+              {/* IDEB Projetado */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', borderTop: '4px solid #f59e0b' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#64748b', marginBottom: '0.5rem' }}>IDEB PROJETADO</div>
+                <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem' }}>5.8</div>
+                <div style={{ fontSize: '0.875rem', color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <span>🎯</span> Meta: 6.0
+                </div>
+              </div>
+            </div>
+
+            {/* Análise Preditiva */}
+            <div style={{ background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)', borderRadius: '1rem', padding: '1.5rem', marginBottom: '1.5rem', color: 'white' }}>
+              <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', flex: 1 }}>
+                  <div style={{ fontSize: '2.5rem' }}>🔍</div>
+                  <div>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: '700', marginBottom: '0.5rem' }}>Análise Preditiva - Rede Municipal</h3>
+                    <p style={{ fontSize: '0.875rem', opacity: 0.95, marginBottom: '0.5rem' }}>IA identificou 127 alunos em 18 escolas com risco de dificuldade em linguagem nos próximos 60 dias.</p>
+                    <p style={{ fontSize: '0.875rem', opacity: 0.95 }}>Creches (58 alunos) e Pré-Escolas (69 alunos) necessitam intervenção preventiva coordenada.</p>
+                  </div>
+                </div>
+                <button style={{ background: 'white', color: '#f59e0b', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                  Ver Plano Coordenado
+                </button>
+              </div>
+            </div>
+
+            {/* Destaques por Unidade Escolar */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1e293b' }}>Destaques por Unidade Escolar</h3>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button style={{ padding: '0.5rem 1rem', background: '#8b5cf6', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Todas Escolas</button>
+                  <button style={{ padding: '0.5rem 1rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Atenção</button>
+                  <button style={{ padding: '0.5rem 1rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Destaque</button>
+                  <button style={{ padding: '0.5rem 1rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Acompanhamento</button>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+                {/* Escola 1 */}
+                <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.5rem', fontWeight: '700' }}>E1</div>
+                    <div>
+                      <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#1e293b' }}>EMEI Arco-Íris</h4>
+                      <p style={{ fontSize: '0.75rem', color: '#64748b' }}>164 alunos</p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>📚</div>
+                      <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#10b981' }}>94%</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>🎯</div>
+                      <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#ef4444' }}>87%</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Escola 2 */}
+                <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.5rem', fontWeight: '700' }}>E2</div>
+                    <div>
+                      <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#1e293b' }}>EMEI Girassol</h4>
+                      <p style={{ fontSize: '0.75rem', color: '#64748b' }}>198 alunos</p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>📚</div>
+                      <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#10b981' }}>96%</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>🎯</div>
+                      <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#10b981' }}>93%</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Escola 3 */}
+                <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.5rem', fontWeight: '700' }}>E3</div>
+                    <div>
+                      <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#1e293b' }}>EMEI Pequenos Sonhos</h4>
+                      <p style={{ fontSize: '0.75rem', color: '#64748b' }}>89 alunos</p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>📚</div>
+                      <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#f59e0b' }}>82%</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>🎯</div>
+                      <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#f59e0b' }}>74%</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Escola 4 */}
+                <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.5rem', fontWeight: '700' }}>E4</div>
+                    <div>
+                      <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#1e293b' }}>EMEI Nova Esperança</h4>
+                      <p style={{ fontSize: '0.75rem', color: '#64748b' }}>142 alunos</p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>📚</div>
+                      <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#10b981' }}>91%</div>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.25rem' }}>🎯</div>
+                      <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#f59e0b' }}>89%</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Gráficos */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+              {/* Evolução da Rede Municipal */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b' }}>Evolução da Rede Municipal - 2026</h3>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button style={{ padding: '0.25rem 0.75rem', background: '#8b5cf6', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Mensal</button>
+                    <button style={{ padding: '0.25rem 0.75rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Trimestral</button>
+                    <button style={{ padding: '0.25rem 0.75rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Por Escola</button>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'end', gap: '0.5rem', height: '200px' }}>
+                  {[
+                    { month: 'Jan', value: 78 },
+                    { month: 'Fev', value: 82 },
+                    { month: 'Mar', value: 85 },
+                    { month: 'Abr', value: 88 },
+                    { month: 'Mai', value: 91 },
+                    { month: 'Jun', value: 93 },
+                    { month: 'Jul', value: 95 },
+                    { month: 'Ago', value: 96 },
+                    { month: 'Set', value: 97 }
+                  ].map((item) => (
+                    <div key={item.month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#8b5cf6' }}>{item.value}%</div>
+                      <div style={{ width: '100%', background: '#8b5cf6', borderRadius: '0.5rem 0.5rem 0 0', height: `${item.value * 2}px` }}></div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{item.month}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Áreas de Desenvolvimento */}
+              <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1.5rem' }}>Áreas de Desenvolvimento</h3>
+                <div style={{ display: 'flex', alignItems: 'end', gap: '1rem', height: '200px', justifyContent: 'space-around' }}>
+                  {[
+                    { area: 'Motor', value: 94, color: '#10b981' },
+                    { area: 'Cognitivo', value: 91, color: '#3b82f6' },
+                    { area: 'Linguagem', value: 87, color: '#f59e0b' },
+                    { area: 'Social', value: 96, color: '#ec4899' }
+                  ].map((item) => (
+                    <div key={item.area} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
+                      <div style={{ fontSize: '0.875rem', fontWeight: '700', color: item.color }}>{item.value}%</div>
+                      <div style={{ width: '60px', background: item.color, borderRadius: '0.5rem 0.5rem 0 0', height: `${item.value * 2}px` }}></div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', textAlign: 'center' }}>{item.area}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Gestão de Capacitação Continuada */}
+            <div style={{ marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1e293b' }}>Gestão de Capacitação Continuada</h3>
+                <button style={{ padding: '0.5rem 1rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>+ Ver Detalhes</button>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+                {/* Curso 1 */}
+                <div style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '4rem', opacity: 0.2 }}>🎓</div>
+                  <h4 style={{ fontSize: '1rem', fontWeight: '700', marginBottom: '0.75rem' }}>Gestão Municipal para Ed. Infantil</h4>
+                  <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', marginBottom: '1rem', opacity: 0.9 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span>⏱️</span> 36h
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span>👥</span> 28 inscritos
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span>📅</span> Set/2026
+                    </div>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '0.5rem', height: '8px', marginBottom: '0.5rem', overflow: 'hidden' }}>
+                    <div style={{ background: 'white', height: '100%', width: '75%' }}></div>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>75% concluído</div>
+                </div>
+
+                {/* Curso 2 */}
+                <div style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '4rem', opacity: 0.2 }}>🧠</div>
+                  <h4 style={{ fontSize: '1rem', fontWeight: '700', marginBottom: '0.75rem' }}>Formação para Profissionais Ed. Infantil</h4>
+                  <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', marginBottom: '1rem', opacity: 0.9 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span>⏱️</span> 200h
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span>👥</span> 285 inscritos
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span>📅</span> Ago/2026
+                    </div>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '0.5rem', height: '8px', marginBottom: '0.5rem', overflow: 'hidden' }}>
+                    <div style={{ background: 'white', height: '100%', width: '89%' }}></div>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>89% concluído</div>
+                </div>
+
+                {/* Curso 3 */}
+                <div style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '4rem', opacity: 0.2 }}>💡</div>
+                  <h4 style={{ fontSize: '1rem', fontWeight: '700', marginBottom: '0.75rem' }}>Saúde Mental no Ambiente Escolar</h4>
+                  <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', marginBottom: '1rem', opacity: 0.9' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span>⏱️</span> 60h
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span>👥</span> 156 inscritos
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span>📅</span> Set/2026
+                    </div>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '0.5rem', height: '8px', marginBottom: '0.5rem', overflow: 'hidden' }}>
+                    <div style={{ background: 'white', height: '100%', width: '67%' }}></div>
+                  </div>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.9 }}>67% concluído</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Gestão FUNDEB */}
+            <div style={{ background: 'linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)', borderRadius: '1rem', padding: '2rem', marginBottom: '1.5rem', color: 'white' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>💰</span> Gestão FUNDEB - Transparência Total
+                </h3>
+                <button style={{ background: 'white', color: '#1e40af', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>📊</span> Painel Completo
+                </button>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '0.75rem', padding: '1.5rem', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.9, marginBottom: '0.5rem' }}>Orçamento Total 2026</div>
+                  <div style={{ fontSize: '2rem', fontWeight: '700' }}>R$ 12.4M</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '0.75rem', padding: '1.5rem', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.9, marginBottom: '0.5rem' }}>Executado (87%)</div>
+                  <div style={{ fontSize: '2rem', fontWeight: '700' }}>R$ 10.8M</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '0.75rem', padding: '1.5rem', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.9, marginBottom: '0.5rem' }}>Profissionais (Meta: 60%)</div>
+                  <div style={{ fontSize: '2rem', fontWeight: '700' }}>62.3%</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '0.75rem', padding: '1.5rem', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.9, marginBottom: '0.5rem' }}>Formação Continuada</div>
+                  <div style={{ fontSize: '2rem', fontWeight: '700' }}>R$ 1.2M</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '0.75rem', padding: '1.5rem', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.9, marginBottom: '0.5rem' }}>Infraestrutura</div>
+                  <div style={{ fontSize: '2rem', fontWeight: '700' }}>R$ 890K</div>
+                </div>
+                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '0.75rem', padding: '1.5rem', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.9, marginBottom: '0.5rem' }}>Compliance TCE</div>
+                  <div style={{ fontSize: '2rem', fontWeight: '700' }}>94%</div>
+                  <div style={{ fontSize: '0.625rem', background: '#fbbf24', color: '#1e293b', padding: '0.25rem 0.5rem', borderRadius: '0.25rem', marginTop: '0.5rem', display: 'inline-block' }}>GESTOR EUBÉSIO</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Portal da Família */}
+            <div style={{ background: 'white', borderRadius: '1rem', padding: '2rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', marginBottom: '5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>👨‍👩‍👧</span> Portal da Família - Visão Geral
+                </h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', background: '#dcfce7', borderRadius: '0.5rem' }}>
+                  <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></div>
+                  <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#166534' }}>3.247 famílias ativas</span>
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1.5rem' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>91%</div>
+                  <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Taxa de Engajamento</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>4.7</div>
+                  <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Satisfação (5.0)</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>8.124</div>
+                  <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Mensagens/mês</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>87%</div>
+                  <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Presença Reuniões</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>892</div>
+                  <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Feedbacks Recebidos</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>18h</div>
+                  <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Tempo Resposta</div>
                 </div>
               </div>
             </div>
