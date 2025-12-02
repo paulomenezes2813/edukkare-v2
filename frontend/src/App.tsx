@@ -4657,7 +4657,7 @@ function App() {
                 <div style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', position: 'relative', overflow: 'hidden' }}>
                   <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '4rem', opacity: 0.2 }}>💡</div>
                   <h4 style={{ fontSize: '1rem', fontWeight: '700', marginBottom: '0.75rem' }}>Saúde Mental no Ambiente Escolar</h4>
-                  <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', marginBottom: '1rem', opacity: 0.9' }}>
+                  <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', marginBottom: '1rem', opacity: 0.9 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                       <span>⏱️</span> 60h
                     </div>
