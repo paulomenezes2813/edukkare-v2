@@ -127,7 +127,7 @@ export default function Users() {
   }
 
   return (
-    <div style={{ paddingBottom: '5rem' }}>
+    <div style={{ paddingBottom: '2rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>
@@ -137,6 +137,9 @@ export default function Users() {
             {users.length} usuários cadastrados
           </p>
         </div>
+        <Button variant="primary" onClick={() => openModal()}>
+          ➕ Novo Usuário
+        </Button>
       </div>
 
       {users.length === 0 ? (
@@ -219,40 +222,6 @@ export default function Users() {
           ))}
         </div>
       )}
-
-      <button
-        onClick={() => openModal()}
-        style={{
-          position: 'fixed',
-          bottom: '2rem',
-          right: '2rem',
-          width: '3.5rem',
-          height: '3.5rem',
-          background: COLORS.primary,
-          color: 'white',
-          border: 'none',
-          borderRadius: '50%',
-          fontSize: '1.5rem',
-          cursor: 'pointer',
-          boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          transition: 'all 0.2s',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.4)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
-        }}
-        title="Novo Usuário"
-      >
-        +
-      </button>
 
       <Modal
         isOpen={showModal}

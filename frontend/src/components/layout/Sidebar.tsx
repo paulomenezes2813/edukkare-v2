@@ -270,16 +270,54 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               Carregando menu...
             </div>
           ) : menuItems.length > 0 ? (
-            menuItems
-              .filter((item, index, self) => 
-                // Remover duplicatas baseado em menuItem
-                index === self.findIndex((t) => t.menuItem === item.menuItem)
-              )
-              .map((item, index) => renderMenuItem(item, 0))
+            <>
+              {menuItems
+                .filter((item, index, self) => 
+                  // Remover duplicatas baseado em menuItem
+                  index === self.findIndex((t) => t.menuItem === item.menuItem)
+                )
+                .filter((item) => item.menuItem !== 'help') // Excluir Ajuda da lista principal
+                .map((item, index) => renderMenuItem(item, 0))}
+            </>
           ) : (
             <div style={{ padding: '1rem 1.5rem', color: COLORS.textTertiary }}>
               Nenhum item de menu disponível
             </div>
+          )}
+
+          {/* Ajuda - sempre visível, acima de Sair */}
+          {menuItems.some((item) => item.menuItem === 'help') && (
+            <button
+              onClick={() => handleMenuClick('help')}
+              style={{
+                width: '100%',
+                padding: '1rem 1.5rem',
+                marginTop: '1rem',
+                background: 'white',
+                border: 'none',
+                borderTop: '2px solid #e2e8f0',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                fontWeight: '600',
+                color: COLORS.textSecondary,
+                transition: 'all 0.2s',
+                textAlign: 'left',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = COLORS.backgroundHover;
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.borderLeftColor = 'transparent';
+              }}
+            >
+              <span style={{ fontSize: '1.5rem' }}>❓</span>
+              <span>Ajuda</span>
+            </button>
           )}
 
           {/* Sair - sempre visível */}
