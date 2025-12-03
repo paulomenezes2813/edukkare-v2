@@ -1,14 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTeachers } from '../hooks/useTeachers';
-import { Loading } from '../components/common/Loading';
+import { TeacherList } from '../components/teachers/TeacherList';
+import { TeacherForm } from '../components/teachers/TeacherForm';
+import { Button } from '../components/common/Button';
 import { COLORS } from '../utils/constants';
+import type { Teacher } from '../types/teacher';
 
 export default function Teachers() {
-  const { teachers, loading, error } = useTeachers();
+  const { teachers, loading, error, createTeacher, updateTeacher, deleteTeacher } = useTeachers();
+  const [showForm, setShowForm] = useState(false);
+  const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
 
-  if (loading) {
-    return <Loading fullScreen text="Carregando professores..." />;
-  }
+  const handleSubmit = async (data: Partial<Teacher>) => {
+    if (editingTeacher) {
+      await updateTeacher(editingTeacher.id, data);
+    } else {
+      await createTeacher(data);
+    }
+    setShowForm(false);
+    setEditingTeacher(null);
+  };
+
+  const handleEdit = (teacher: Teacher) => {
+    setEditingTeacher(teacher);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (teacher: Teacher) => {
+    await deleteTeacher(teacher.id);
+  };
 
   if (error) {
     return (
@@ -20,15 +40,34 @@ export default function Teachers() {
 
   return (
     <div style={{ padding: '1rem' }}>
-      <h1 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1.5rem' }}>
-        👩‍🏫 Professores
-      </h1>
-      <div style={{ background: 'white', borderRadius: '0.5rem', padding: '1rem' }}>
-        <p style={{ color: COLORS.textTertiary }}>
-          Total de professores: {teachers.length}
-        </p>
-        {/* Lista de professores será implementada aqui */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: '700' }}>
+          👩‍🏫 Professores
+        </h1>
+        <Button onClick={() => {
+          setEditingTeacher(null);
+          setShowForm(true);
+        }}>
+          ➕ Novo Professor
+        </Button>
       </div>
+
+      <TeacherList
+        teachers={teachers}
+        loading={loading}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
+
+      <TeacherForm
+        isOpen={showForm}
+        onClose={() => {
+          setShowForm(false);
+          setEditingTeacher(null);
+        }}
+        onSubmit={handleSubmit}
+        teacher={editingTeacher}
+      />
     </div>
   );
 }
