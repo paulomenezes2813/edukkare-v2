@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authService } from '../services/auth.service';
+import { useAuth } from '../contexts/AuthContext';
+import { useMenu } from '../contexts/MenuContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -8,6 +9,8 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
+  const { loadUserMenu } = useMenu();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,10 +18,15 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await authService.login(email, password);
-      navigate('/dashboard');
+      const response = await login(email, password);
+      if (response.success) {
+        await loadUserMenu(response.data.user.role);
+        navigate('/');
+      } else {
+        setError(response.message || 'Email ou senha inválidos');
+      }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao fazer login');
+      setError(err.message || 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }
