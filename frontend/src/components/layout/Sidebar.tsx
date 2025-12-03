@@ -286,39 +286,51 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           )}
 
           {/* Ajuda - sempre visível, acima de Sair */}
-          {menuItems.some((item) => item.menuItem === 'help') && (
-            <button
-              onClick={() => handleMenuClick('help')}
-              style={{
-                width: '100%',
-                padding: '1rem 1.5rem',
-                marginTop: '1rem',
-                background: 'white',
-                border: 'none',
-                borderTop: '2px solid #e2e8f0',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem',
-                cursor: 'pointer',
-                fontSize: '1rem',
-                fontWeight: '600',
-                color: COLORS.textSecondary,
-                transition: 'all 0.2s',
-                textAlign: 'left',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = COLORS.backgroundHover;
-                e.currentTarget.style.borderLeftColor = COLORS.primary;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'white';
-                e.currentTarget.style.borderLeftColor = 'transparent';
-              }}
-            >
-              <span style={{ fontSize: '1.5rem' }}>❓</span>
-              <span>Ajuda</span>
-            </button>
-          )}
+          {(() => {
+            const helpItem = menuItems.find((item) => item.menuItem === 'help');
+            if (!helpItem) return null;
+            
+            // Verificar acesso apenas se não for ADMIN
+            if (user?.role !== 'ADMIN') {
+              if (!helpItem.active) return null;
+              if (!hasMenuAccess('help')) return null;
+            }
+            
+            return (
+              <button
+                onClick={() => handleMenuClick('help')}
+                style={{
+                  width: '100%',
+                  padding: '1rem 1.5rem',
+                  marginTop: '1rem',
+                  background: 'white',
+                  border: 'none',
+                  borderTop: '2px solid #e2e8f0',
+                  borderLeft: '4px solid transparent',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  color: COLORS.textSecondary,
+                  transition: 'all 0.2s',
+                  textAlign: 'left',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = COLORS.backgroundHover;
+                  e.currentTarget.style.borderLeftColor = COLORS.primary;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'white';
+                  e.currentTarget.style.borderLeftColor = 'transparent';
+                }}
+              >
+                <span style={{ fontSize: '1.5rem' }}>{helpItem.icon || '❓'}</span>
+                <span>{helpItem.menuLabel || 'Ajuda'}</span>
+              </button>
+            );
+          })()}
 
           {/* Sair - sempre visível */}
           <button
