@@ -8,7 +8,7 @@ import { COLORS } from '../utils/constants';
 import type { Avatar } from '../services/avatar.service';
 
 export default function Avatars() {
-  const { avatars, loading, error, createAvatar, updateAvatar, deleteAvatar } = useAvatars();
+  const { avatars, loading, error, createAvatar, updateAvatar, deleteAvatar, loadAvatars } = useAvatars();
   const [showModal, setShowModal] = useState(false);
   const [editingAvatar, setEditingAvatar] = useState<Avatar | null>(null);
   const [avatarForm, setAvatarForm] = useState({ avatar: '' });
@@ -61,10 +61,16 @@ export default function Avatars() {
   if (error) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <p style={{ color: COLORS.error }}>❌ {error}</p>
-        <Button variant="primary" onClick={() => window.location.reload()} style={{ marginTop: '1rem' }}>
-          Tentar novamente
-        </Button>
+        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠️</div>
+        <p style={{ color: COLORS.error, fontSize: '1.125rem', marginBottom: '0.5rem' }}>❌ {error}</p>
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '1rem' }}>
+          <Button variant="primary" onClick={() => loadAvatars()}>
+            🔄 Tentar novamente
+          </Button>
+          <Button variant="secondary" onClick={() => window.location.reload()}>
+            🔃 Recarregar página
+          </Button>
+        </div>
       </div>
     );
   }
@@ -77,9 +83,12 @@ export default function Avatars() {
             🎭 Gerenciar Avatares
           </h1>
           <p style={{ fontSize: '0.875rem', color: COLORS.textTertiary }}>
-            {avatars.length} avatares cadastrados
+            {loading ? 'Carregando...' : `${avatars.length} avatares cadastrados`}
           </p>
         </div>
+        <Button variant="secondary" onClick={() => loadAvatars()} disabled={loading}>
+          🔄 Atualizar
+        </Button>
       </div>
 
       {!loading && avatars.length === 0 ? (
