@@ -11,12 +11,18 @@ export const useAvatars = () => {
     setError(null);
     try {
       const response = await avatarService.getAll();
+      console.log('AvatarService response:', response);
       if (response.success) {
-        setAvatars(response.data || []);
+        const avatarsData = response.data || [];
+        console.log('Avatares carregados:', avatarsData);
+        setAvatars(avatarsData);
       } else {
-        setError(response.message || 'Erro ao carregar avatares');
+        const errorMsg = response.message || 'Erro ao carregar avatares';
+        console.error('Erro ao carregar avatares:', errorMsg);
+        setError(errorMsg);
       }
     } catch (err: any) {
+      console.error('Erro ao carregar avatares (catch):', err);
       setError(err.message || 'Erro ao carregar avatares');
     } finally {
       setLoading(false);

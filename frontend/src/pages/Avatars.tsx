@@ -13,6 +13,11 @@ export default function Avatars() {
   const [editingAvatar, setEditingAvatar] = useState<Avatar | null>(null);
   const [avatarForm, setAvatarForm] = useState({ avatar: '' });
 
+  // Debug
+  React.useEffect(() => {
+    console.log('Avatars page - avatars:', avatars, 'loading:', loading, 'error:', error);
+  }, [avatars, loading, error]);
+
   const openModal = (avatar?: Avatar) => {
     if (avatar) {
       setEditingAvatar(avatar);
