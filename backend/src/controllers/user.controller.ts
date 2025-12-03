@@ -20,6 +20,7 @@ export class UserController {
           name: true,
           email: true,
           role: true,
+          nivelAcesso: true,
           active: true,
           createdAt: true,
           updatedAt: true,
@@ -47,6 +48,7 @@ export class UserController {
           name: true,
           email: true,
           role: true,
+          nivelAcesso: true,
           active: true,
           createdAt: true,
           updatedAt: true,
@@ -66,7 +68,7 @@ export class UserController {
 
   async create(req: Request, res: Response) {
     try {
-      const { name, email, password, role } = req.body;
+      const { name, email, password, role, nivelAcesso } = req.body;
 
       // Validação básica
       if (!name || !email || !password) {
@@ -91,12 +93,14 @@ export class UserController {
           email,
           password: hashedPassword,
           role: role || 'PROFESSOR',
+          nivelAcesso: nivelAcesso || 'PEDAGOGICO',
         },
         select: {
           id: true,
           name: true,
           email: true,
           role: true,
+          nivelAcesso: true,
           active: true,
           createdAt: true,
           updatedAt: true,
@@ -112,7 +116,7 @@ export class UserController {
   async update(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { name, email, password, role, active } = req.body;
+      const { name, email, password, role, nivelAcesso, active } = req.body;
 
       // Verifica se usuário existe
       const existingUser = await prisma.user.findUnique({
@@ -138,6 +142,7 @@ export class UserController {
       if (name) updateData.name = name;
       if (email) updateData.email = email;
       if (role) updateData.role = role;
+      if (nivelAcesso) updateData.nivelAcesso = nivelAcesso;
       if (active !== undefined) updateData.active = active;
 
       // Se informou nova senha, faz o hash
@@ -153,6 +158,7 @@ export class UserController {
           name: true,
           email: true,
           role: true,
+          nivelAcesso: true,
           active: true,
           createdAt: true,
           updatedAt: true,

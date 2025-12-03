@@ -18,6 +18,14 @@ enum UserRole {
   ADMIN
 }
 
+enum NivelAcesso {
+  ESTRATEGICO
+  OPERACIONAL
+  PEDAGOGICO
+  NUCLEO_FAMILIAR
+  PROFISSIONAIS_EXTERNOS
+}
+
 enum StudentShift {
   MANHA
   TARDE
@@ -50,14 +58,15 @@ model Avatar {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  email         String    @unique
+  id            Int         @id @default(autoincrement())
+  email         String      @unique
   password      String
   name          String
-  role          UserRole  @default(PROFESSOR)
-  active        Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  role          UserRole    @default(PROFESSOR)
+  nivelAcesso   NivelAcesso @default(PEDAGOGICO)
+  active        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   evaluations   Evaluation[]
   evidences     Evidence[]
@@ -279,4 +288,21 @@ model Rubric {
   activity      Activity  @relation(fields: [activityId], references: [id])
   
   @@map("rubrics")
+}
+
+model MenuPermission {
+  id            Int         @id @default(autoincrement())
+  menuItem      String      // Identificador único do item (ex: 'home', 'gestor', 'gestor.dashboard')
+  menuLabel     String      // Nome exibido (ex: 'Início', 'Gestor', 'Dashboard')
+  parentItem    String?     // Item pai (null para itens raiz)
+  nivelAcesso   NivelAcesso // Nível de acesso necessário
+  order         Int         // Ordem de exibição
+  icon          String?     // Ícone do item
+  screen        String?     // Tela associada (ex: 'home', 'dashboard')
+  active        Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([menuItem, nivelAcesso])
+  @@map("menu_permissions")
 }

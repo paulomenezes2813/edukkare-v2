@@ -20,18 +20,22 @@ export class AuthController {
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
+      const { nivelAcesso } = req.body;
+
       const user = await prisma.user.create({
         data: {
           email,
           password: hashedPassword,
           name,
           role: role || 'PROFESSOR',
+          nivelAcesso: nivelAcesso || 'PEDAGOGICO',
         },
         select: {
           id: true,
           email: true,
           name: true,
           role: true,
+          nivelAcesso: true,
           createdAt: true,
         },
       });
@@ -74,6 +78,7 @@ export class AuthController {
           email: user.email,
           name: user.name,
           role: user.role,
+          nivelAcesso: user.nivelAcesso,
         },
         token,
       }, 'Login realizado com sucesso');
@@ -91,6 +96,7 @@ export class AuthController {
           email: true,
           name: true,
           role: true,
+          nivelAcesso: true,
           active: true,
           createdAt: true,
         },

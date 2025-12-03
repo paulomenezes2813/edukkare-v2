@@ -11,6 +11,7 @@ import avatarRoutes from './avatar.routes';
 import classRoutes from './class.routes';
 import userRoutes from './user.routes';
 import rubricRoutes from './rubric.routes';
+import menuPermissionRoutes from './menuPermission.routes';
 
 const router = Router();
 
@@ -26,6 +27,7 @@ router.use('/avatars', avatarRoutes);
 router.use('/classes', classRoutes);
 router.use('/users', userRoutes);
 router.use('/rubrics', rubricRoutes);
+router.use('/menu-permissions', menuPermissionRoutes);
 
 // Health check
 router.get('/health', (req, res) => {

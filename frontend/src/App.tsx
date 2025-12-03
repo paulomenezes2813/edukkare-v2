@@ -75,6 +75,31 @@ interface User {
   name: string;
   email: string;
   role: string;
+  nivelAcesso?: string;
+  active: boolean;
+}
+
+interface MenuItem {
+  id: string;
+  menuItem: string;
+  menuLabel: string;
+  parentItem?: string | null;
+  nivelAcesso: string;
+  order: number;
+  icon?: string | null;
+  screen?: string | null;
+  active: boolean;
+  children?: MenuItem[];
+}
+
+interface MenuPermission {
+  menuItem: string;
+  menuLabel: string;
+  parentItem?: string | null;
+  nivelAcesso: string;
+  order: number;
+  icon?: string | null;
+  screen?: string | null;
   active: boolean;
 }
 
@@ -172,7 +197,7 @@ function App() {
   const [showTranscriptionModal, setShowTranscriptionModal] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'rubrics' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring' | 'notes' | 'notesReport' | 'access' | 'pedagogicalDashboard' | 'integratedManagement'>('home');
+  const [currentScreen, setCurrentScreen] = useState<'home' | 'students' | 'teachers' | 'users' | 'schools' | 'activities' | 'rubrics' | 'avatars' | 'classes' | 'studentProfile' | 'studentPanel' | 'training' | 'dashboard' | 'monitoring' | 'notes' | 'notesReport' | 'access' | 'pedagogicalDashboard' | 'integratedManagement' | 'menuAccess'>('home');
   const [selectedStudentForProfile, setSelectedStudentForProfile] = useState<Student | null>(null);
   const [searchName, setSearchName] = useState('');
   const [searchId, setSearchId] = useState('');
@@ -228,8 +253,17 @@ function App() {
     name: '',
     email: '',
     password: '',
-    role: 'PROFESSOR' as 'PROFESSOR' | 'COORDENADOR' | 'GESTOR' | 'ADMIN'
+    role: 'PROFESSOR' as 'PROFESSOR' | 'COORDENADOR' | 'GESTOR' | 'ADMIN',
+    nivelAcesso: 'PEDAGOGICO' as 'ESTRATEGICO' | 'OPERACIONAL' | 'PEDAGOGICO' | 'NUCLEO_FAMILIAR' | 'PROFISSIONAIS_EXTERNOS'
   });
+
+  // Estados para Menu Permissions
+  const [menuPermissions, setMenuPermissions] = useState<MenuItem[]>([]);
+  const [userNivelAcesso, setUserNivelAcesso] = useState<string>('');
+  const [userRole, setUserRole] = useState<string>('');
+  const [expandedMenuItems, setExpandedMenuItems] = useState<Set<string>>(new Set());
+  const [selectedNivelAcesso, setSelectedNivelAcesso] = useState<string>('ESTRATEGICO');
+  const [menuPermissionsByNivel, setMenuPermissionsByNivel] = useState<Record<string, MenuPermission[]>>({});
 
   // Estados para Schools
   const [schools, setSchools] = useState<School[]>([]);
@@ -309,9 +343,12 @@ function App() {
         try {
           const user = JSON.parse(userStr);
           setUserName(user.name || '');
+          setUserNivelAcesso(user.nivelAcesso || 'PEDAGOGICO');
+          setUserRole(user.role || 'PROFESSOR');
           setIsLoggedIn(true);
           await loadActivities();
           await loadStudents();
+          await loadUserMenu();
         } catch (err) {
           // Token inválido, limpa localStorage
           console.log('❌ Token inválido, limpando sessão...');
@@ -329,6 +366,13 @@ function App() {
     
     validateToken();
   }, []);
+
+  // Carregar permissões quando a tela menuAccess for aberta ou nível mudar
+  useEffect(() => {
+    if (currentScreen === 'menuAccess' && !menuPermissionsByNivel[selectedNivelAcesso]) {
+      loadMenuPermissionsByNivel(selectedNivelAcesso);
+    }
+  }, [currentScreen, selectedNivelAcesso]);
 
   const loadAvatars = async () => {
     try {
@@ -479,8 +523,11 @@ function App() {
         localStorage.setItem('user', JSON.stringify(data.data.user));
         setIsLoggedIn(true);
         setUserName(data.data.user.name || '');
+        setUserNivelAcesso(data.data.user.nivelAcesso || 'PEDAGOGICO');
+        setUserRole(data.data.user.role || 'PROFESSOR');
         await loadActivities();
         await loadStudents();
+        await loadUserMenu();
       } else {
         setError('Email ou senha inválidos');
       }
@@ -1120,11 +1167,12 @@ function App() {
         name: user.name,
         email: user.email,
         password: '',
-        role: user.role as any
+        role: user.role as any,
+        nivelAcesso: (user.nivelAcesso || 'PEDAGOGICO') as any
       });
     } else {
       setEditingUser(null);
-      setUserForm({ name: '', email: '', password: '', role: 'PROFESSOR' });
+      setUserForm({ name: '', email: '', password: '', role: 'PROFESSOR', nivelAcesso: 'PEDAGOGICO' });
     }
     setShowUserModal(true);
   };
@@ -1162,7 +1210,8 @@ function App() {
           name: userForm.name,
           email: userForm.email,
           password: userForm.password || undefined,
-          role: userForm.role
+          role: userForm.role,
+          nivelAcesso: userForm.nivelAcesso
         })
       });
 
@@ -1208,6 +1257,188 @@ function App() {
     } catch (error: any) {
       alert(`❌ Erro ao desativar usuário: ${error.message}`);
     }
+  };
+
+  // CRUD de Menu Permissions
+  const loadUserMenu = async () => {
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      // ADMIN sempre tem acesso total
+      if (userRole === 'ADMIN') {
+        // Carrega todas as permissões
+        const response = await fetch(`${API_URL}/menu-permissions`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+        if (data.success) {
+          setMenuPermissions(data.data || []);
+        }
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/menu-permissions/user/me`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setMenuPermissions(data.data || []);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar menu do usuário:', error);
+      // Em caso de erro, mantém menu padrão
+    }
+  };
+
+  const loadMenuPermissionsByNivel = async (nivel: string) => {
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/menu-permissions/${nivel}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setMenuPermissionsByNivel(prev => ({
+          ...prev,
+          [nivel]: data.data || []
+        }));
+      }
+    } catch (error) {
+      console.error(`Erro ao carregar permissões para ${nivel}:`, error);
+    }
+  };
+
+  const toggleMenuPermission = async (menuItem: string, nivelAcesso: string) => {
+    try {
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const response = await fetch(`${API_URL}/menu-permissions/toggle`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ menuItem, nivelAcesso })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        // Recarrega permissões do nível
+        await loadMenuPermissionsByNivel(nivelAcesso);
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao atualizar permissão'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao atualizar permissão: ${error.message}`);
+    }
+  };
+
+  const toggleExpandedItem = (menuItem: string) => {
+    setExpandedMenuItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(menuItem)) {
+        newSet.delete(menuItem);
+      } else {
+        newSet.add(menuItem);
+      }
+      return newSet;
+    });
+  };
+
+  // Função auxiliar para construir árvore de menu (mantida para uso futuro)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const buildMenuTree = (permissions: MenuPermission[]): MenuItem[] => {
+    const map = new Map<string, MenuItem>();
+    const roots: MenuItem[] = [];
+
+    // Criar mapa de todos os itens
+    permissions.forEach(perm => {
+      map.set(perm.menuItem, {
+        id: perm.menuItem,
+        menuItem: perm.menuItem,
+        menuLabel: perm.menuLabel,
+        parentItem: perm.parentItem,
+        nivelAcesso: perm.nivelAcesso,
+        order: perm.order,
+        icon: perm.icon || undefined,
+        screen: perm.screen || undefined,
+        active: perm.active,
+        children: [],
+      });
+    });
+
+    // Construir árvore
+    permissions.forEach(perm => {
+      const node = map.get(perm.menuItem);
+      if (!node) return;
+      
+      if (perm.parentItem) {
+        const parent = map.get(perm.parentItem);
+        if (parent) {
+          if (!parent.children) parent.children = [];
+          parent.children.push(node);
+        } else {
+          roots.push(node);
+        }
+      } else {
+        roots.push(node);
+      }
+    });
+
+    // Ordenar raízes e filhos
+    const sortByOrder = (items: MenuItem[]) => {
+      items.sort((a, b) => a.order - b.order);
+      items.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          sortByOrder(item.children);
+        }
+      });
+    };
+
+    sortByOrder(roots);
+    return roots;
+  };
+
+  // Função para verificar se um item do menu deve ser exibido
+  const hasMenuAccess = (menuItem: string): boolean => {
+    // ADMIN sempre tem acesso total
+    if (userRole === 'ADMIN') return true;
+    
+    // Se não tem nivelAcesso definido, permite acesso (compatibilidade)
+    if (!userNivelAcesso) return true;
+    
+    // Se menuPermissions está vazio, ainda não carregou - permite acesso temporariamente
+    if (!menuPermissions || menuPermissions.length === 0) return true;
+    
+    // Verifica nas permissões carregadas
+    const checkAccess = (items: MenuItem[]): boolean => {
+      for (const item of items) {
+        if (item.menuItem === menuItem && item.active) {
+          return true;
+        }
+        if (item.children && item.children.length > 0) {
+          if (checkAccess(item.children)) return true;
+        }
+      }
+      return false;
+    };
+    
+    return checkAccess(menuPermissions);
   };
 
   // CRUD de Escolas
@@ -2436,6 +2667,7 @@ function App() {
             padding: '1rem 0'
           }}>
             {/* Início */}
+            {(userRole === 'ADMIN' || hasMenuAccess('home')) && (
             <button
               onClick={() => {
                 setShowSidebar(false);
@@ -2469,8 +2701,10 @@ function App() {
               <span style={{ fontSize: '1.5rem' }}>🏠</span>
               <span>Início</span>
             </button>
+            )}
 
             {/* Gestor */}
+            {(userRole === 'ADMIN' || hasMenuAccess('gestor')) && (
             <div>
               <button
                 onClick={() => {
@@ -2517,6 +2751,7 @@ function App() {
                   borderLeft: '4px solid #e2e8f0'
                 }}>
                   {/* Dashboard */}
+                  {(userRole === 'ADMIN' || hasMenuAccess('gestor.dashboard')) && (
                   <button
                     onClick={() => {
                       setShowSidebar(false);
@@ -2549,8 +2784,10 @@ function App() {
                     <span style={{ fontSize: '1.2rem' }}>📈</span>
                     <span>Dashboard</span>
                   </button>
+                  )}
 
                   {/* Monitoramento */}
+                  {(userRole === 'ADMIN' || hasMenuAccess('gestor.monitoring')) && (
                   <button
                     onClick={() => {
                       setShowSidebar(false);
@@ -2583,8 +2820,10 @@ function App() {
                     <span style={{ fontSize: '1.2rem' }}>👁️</span>
                     <span>Monitoramento</span>
                   </button>
+                  )}
 
                   {/* Dashboard Pedagógico */}
+                  {(userRole === 'ADMIN' || hasMenuAccess('gestor.pedagogical')) && (
                   <button
                     onClick={() => {
                       setShowSidebar(false);
@@ -2617,8 +2856,10 @@ function App() {
                     <span style={{ fontSize: '1.2rem' }}>🎓</span>
                     <span>Dashboard Pedagógico</span>
                   </button>
+                  )}
 
                   {/* Gestão Integrada */}
+                  {(userRole === 'ADMIN' || hasMenuAccess('gestor.integrated')) && (
                   <button
                     onClick={() => {
                       setShowSidebar(false);
@@ -2651,11 +2892,14 @@ function App() {
                     <span style={{ fontSize: '1.2rem' }}>🤝</span>
                     <span>Gestão Integrada</span>
                   </button>
+                  )}
                 </div>
               )}
             </div>
+            )}
 
             {/* Alunos */}
+            {(userRole === 'ADMIN' || hasMenuAccess('students')) && (
             <button
               onClick={() => {
                 setShowSidebar(false);
@@ -2689,8 +2933,10 @@ function App() {
               <span style={{ fontSize: '1.5rem' }}>👶</span>
               <span>Alunos</span>
             </button>
+            )}
 
             {/* Professores */}
+            {(userRole === 'ADMIN' || hasMenuAccess('teachers')) && (
             <button
               onClick={() => {
                 setShowSidebar(false);
@@ -2725,8 +2971,10 @@ function App() {
               <span style={{ fontSize: '1.5rem' }}>👩‍🏫</span>
               <span>Professores</span>
             </button>
+            )}
 
             {/* Treinamento */}
+            {(userRole === 'ADMIN' || hasMenuAccess('training')) && (
             <button
               onClick={async () => {
                 setShowSidebar(false);
@@ -2762,8 +3010,10 @@ function App() {
               <span style={{ fontSize: '1.5rem' }}>🎓</span>
               <span>Treinamento</span>
             </button>
+            )}
 
             {/* Usuários */}
+            {(userRole === 'ADMIN' || hasMenuAccess('users')) && (
             <button
               onClick={() => {
                 setShowSidebar(false);
@@ -2798,8 +3048,10 @@ function App() {
               <span style={{ fontSize: '1.5rem' }}>👥</span>
               <span>Usuários</span>
             </button>
+            )}
 
             {/* Escolas */}
+            {(userRole === 'ADMIN' || hasMenuAccess('schools')) && (
             <button
               onClick={() => {
                 setShowSidebar(false);
@@ -2834,8 +3086,10 @@ function App() {
               <span style={{ fontSize: '1.5rem' }}>🏫</span>
               <span>Escolas</span>
             </button>
+            )}
 
             {/* Atividades */}
+            {(userRole === 'ADMIN' || hasMenuAccess('activities')) && (
             <button
               onClick={() => {
                 setShowSidebar(false);
@@ -2869,8 +3123,10 @@ function App() {
               <span style={{ fontSize: '1.5rem' }}>📝</span>
               <span>Atividades</span>
             </button>
+            )}
 
             {/* Classes (Turmas) */}
+            {(userRole === 'ADMIN' || hasMenuAccess('classes')) && (
             <button
               onClick={() => {
                 setShowSidebar(false);
@@ -2905,8 +3161,10 @@ function App() {
               <span style={{ fontSize: '1.5rem' }}>🎓</span>
               <span>Turmas</span>
             </button>
+            )}
 
             {/* Avatares */}
+            {(userRole === 'ADMIN' || hasMenuAccess('avatars')) && (
             <button
               onClick={() => {
                 setShowSidebar(false);
@@ -2941,8 +3199,10 @@ function App() {
               <span style={{ fontSize: '1.5rem' }}>🎭</span>
               <span>Avatares</span>
             </button>
+            )}
 
             {/* Administração */}
+            {(userRole === 'ADMIN' || hasMenuAccess('administracao')) && (
             <div>
               <button
                 onClick={() => {
@@ -2989,6 +3249,7 @@ function App() {
                   borderLeft: '4px solid #e2e8f0'
                 }}>
                   {/* Notas */}
+                  {(userRole === 'ADMIN' || hasMenuAccess('administracao.notes')) && (
                   <button
                     onClick={() => {
                       setShowSidebar(false);
@@ -3021,11 +3282,14 @@ function App() {
                     <span style={{ fontSize: '1.2rem' }}>📝</span>
                     <span>Notas</span>
                   </button>
+                  )}
                 </div>
               )}
             </div>
+            )}
 
             {/* Relatórios */}
+            {(userRole === 'ADMIN' || hasMenuAccess('relatorios')) && (
             <div>
               <button
                 onClick={() => {
@@ -3072,6 +3336,7 @@ function App() {
                   borderLeft: '4px solid #e2e8f0'
                 }}>
                   {/* Relatório das Notas */}
+                  {(userRole === 'ADMIN' || hasMenuAccess('relatorios.notes')) && (
                   <button
                     onClick={() => {
                       setShowSidebar(false);
@@ -3104,11 +3369,14 @@ function App() {
                     <span style={{ fontSize: '1.2rem' }}>📄</span>
                     <span>Relatório das Notas</span>
                   </button>
+                  )}
                 </div>
               )}
             </div>
+            )}
 
             {/* Configuração */}
+            {(userRole === 'ADMIN' || hasMenuAccess('configuracao')) && (
             <div>
               <button
                 onClick={() => {
@@ -3155,6 +3423,7 @@ function App() {
                   borderLeft: '4px solid #e2e8f0'
                 }}>
                   {/* Acessos */}
+                  {(userRole === 'ADMIN' || hasMenuAccess('configuracao.access')) && (
                   <button
                     onClick={() => {
                       setShowSidebar(false);
@@ -3187,9 +3456,50 @@ function App() {
                     <span style={{ fontSize: '1.2rem' }}>🔐</span>
                     <span>Acessos</span>
                   </button>
+                  )}
+                  
+                  {/* Controle de Acesso aos Menus */}
+                  {(userRole === 'ADMIN' || hasMenuAccess('configuracao.menuAccess')) && (
+                  <button
+                    onClick={() => {
+                      setShowSidebar(false);
+                      setCurrentScreen('menuAccess');
+                      if (!menuPermissionsByNivel[selectedNivelAcesso]) {
+                        loadMenuPermissionsByNivel(selectedNivelAcesso);
+                      }
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1.5rem 0.75rem 3rem',
+                      background: 'transparent',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      cursor: 'pointer',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      color: '#475569',
+                      transition: 'all 0.2s',
+                      textAlign: 'left'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#e2e8f0';
+                      e.currentTarget.style.color = '#1e293b';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }}
+                  >
+                    <span style={{ fontSize: '1.2rem' }}>🎯</span>
+                    <span>Controle de Menus</span>
+                  </button>
+                  )}
                 </div>
               )}
             </div>
+            )}
 
             {/* Divider */}
             <div style={{
@@ -3199,6 +3509,7 @@ function App() {
             }} />
 
             {/* Ajuda */}
+            {(userRole === 'ADMIN' || hasMenuAccess('help')) && (
             <button
               onClick={() => {
                 setShowSidebar(false);
@@ -3233,8 +3544,9 @@ function App() {
               <span style={{ fontSize: '1.5rem' }}>❓</span>
               <span>Ajuda</span>
             </button>
+            )}
 
-            {/* Logout */}
+            {/* Logout - Sempre visível */}
             <button
               onClick={() => {
                 setShowSidebar(false);
@@ -4811,6 +5123,153 @@ function App() {
               </div>
             </div>
           </main>
+        ) : currentScreen === 'menuAccess' ? (
+          <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  🎯 Controle de Acesso aos Menus
+                </h2>
+                <p style={{ fontSize: '0.875rem', color: '#64748b' }}>Configure quais itens do menu cada nível de acesso pode visualizar</p>
+              </div>
+              <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
+            </div>
+
+            {/* Seletor de Nível de Acesso */}
+            <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', marginBottom: '1.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem', color: '#1e293b' }}>
+                Nível de Acesso:
+              </label>
+              <select 
+                value={selectedNivelAcesso} 
+                onChange={(e) => {
+                  setSelectedNivelAcesso(e.target.value);
+                  if (!menuPermissionsByNivel[e.target.value]) {
+                    loadMenuPermissionsByNivel(e.target.value);
+                  }
+                }}
+                style={{ 
+                  width: '100%', 
+                  maxWidth: '400px',
+                  padding: '0.75rem', 
+                  border: `1px solid ${COLORS.border}`, 
+                  borderRadius: '0.5rem', 
+                  fontSize: '1rem',
+                  background: 'white'
+                }}
+              >
+                <option value="ESTRATEGICO">🏢 Estratégico</option>
+                <option value="OPERACIONAL">🏫 Operacional</option>
+                <option value="PEDAGOGICO">👩‍🏫 Pedagógico</option>
+                <option value="NUCLEO_FAMILIAR">👨‍👩‍👧 Núcleo Familiar</option>
+                <option value="PROFISSIONAIS_EXTERNOS">🩺 Profissionais Externos</option>
+              </select>
+            </div>
+
+            {/* Árvore de Menu */}
+            <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b', marginBottom: '1rem' }}>
+                {selectedNivelAcesso === 'ESTRATEGICO' && '🏢 NÍVEL ESTRATÉGICO'}
+                {selectedNivelAcesso === 'OPERACIONAL' && '🏫 NÍVEL OPERACIONAL'}
+                {selectedNivelAcesso === 'PEDAGOGICO' && '👩‍🏫 NÍVEL PEDAGÓGICO'}
+                {selectedNivelAcesso === 'NUCLEO_FAMILIAR' && '👨‍👩‍👧 NÚCLEO FAMILIAR'}
+                {selectedNivelAcesso === 'PROFISSIONAIS_EXTERNOS' && '🩺 PROFISSIONAIS EXTERNOS'}
+              </h3>
+
+              {(() => {
+                const permissions = menuPermissionsByNivel[selectedNivelAcesso] || [];
+                
+                const renderMenuItem = (item: MenuPermission, level: number = 0) => {
+                  const hasChildren = permissions.some(p => p.parentItem === item.menuItem);
+                  const isExpanded = expandedMenuItems.has(item.menuItem);
+                  const children = permissions.filter(p => p.parentItem === item.menuItem).sort((a, b) => a.order - b.order);
+                  
+                  return (
+                    <div key={`${item.menuItem}-${item.nivelAcesso}`} style={{ marginLeft: `${level * 1.5}rem`, marginBottom: '0.5rem' }}>
+                      <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '0.75rem', 
+                        padding: '0.75rem',
+                        borderRadius: '0.5rem',
+                        background: level === 0 ? '#f8fafc' : 'transparent',
+                        border: level === 0 ? `1px solid ${COLORS.border}` : 'none'
+                      }}>
+                        {hasChildren && (
+                          <button
+                            onClick={() => toggleExpandedItem(item.menuItem)}
+                            style={{
+                              background: 'transparent',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontSize: '0.875rem',
+                              color: '#64748b',
+                              padding: '0.25rem',
+                              display: 'flex',
+                              alignItems: 'center'
+                            }}
+                          >
+                            {isExpanded ? '▼' : '▶'}
+                          </button>
+                        )}
+                        {!hasChildren && <div style={{ width: '1.5rem' }} />}
+                        
+                        <input
+                          type="checkbox"
+                          checked={item.active}
+                          onChange={() => toggleMenuPermission(item.menuItem, item.nivelAcesso)}
+                          style={{ width: '1.25rem', height: '1.25rem', cursor: 'pointer' }}
+                        />
+                        
+                        <span style={{ fontSize: '1.25rem' }}>{item.icon || '📄'}</span>
+                        
+                        <span style={{ 
+                          fontSize: level === 0 ? '1rem' : '0.875rem', 
+                          fontWeight: level === 0 ? '600' : '500',
+                          color: '#1e293b'
+                        }}>
+                          {item.menuLabel}
+                        </span>
+                        
+                        {item.screen && (
+                          <span style={{ 
+                            fontSize: '0.75rem', 
+                            color: '#64748b',
+                            marginLeft: 'auto',
+                            padding: '0.25rem 0.5rem',
+                            background: '#f1f5f9',
+                            borderRadius: '0.25rem'
+                          }}>
+                            {item.screen}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {hasChildren && isExpanded && (
+                        <div style={{ marginTop: '0.5rem' }}>
+                          {children.map(child => renderMenuItem(child, level + 1))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                };
+
+                const rootItems = permissions.filter(p => !p.parentItem).sort((a, b) => a.order - b.order);
+                
+                return (
+                  <div>
+                    {rootItems.length > 0 ? (
+                      rootItems.map(item => renderMenuItem(item))
+                    ) : (
+                      <div style={{ padding: '2rem', textAlign: 'center', color: '#64748b' }}>
+                        {permissions.length === 0 ? 'Carregando permissões...' : 'Nenhuma permissão encontrada'}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
+          </main>
         ) : currentScreen === 'pedagogicalDashboard' ? (
           <main style={{ padding: '1rem', paddingBottom: '2rem', background: '#f8fafc' }}>
             {/* Header */}
@@ -5622,6 +6081,7 @@ function App() {
                   <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Email *</label><input type="email" value={userForm.email} onChange={(e) => setUserForm({ ...userForm, email: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
                   <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Senha {!editingUser && '*'}</label><input type="password" value={userForm.password} onChange={(e) => setUserForm({ ...userForm, password: e.target.value })} placeholder={editingUser ? 'Deixe vazio para não alterar' : ''} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
                   <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Função *</label><select value={userForm.role} onChange={(e) => setUserForm({ ...userForm, role: e.target.value as any })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}><option value="PROFESSOR">Professor</option><option value="COORDENADOR">Coordenador</option><option value="GESTOR">Gestor</option><option value="ADMIN">Admin</option></select></div>
+                  <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Nível de Acesso *</label><select value={userForm.nivelAcesso} onChange={(e) => setUserForm({ ...userForm, nivelAcesso: e.target.value as any })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}><option value="ESTRATEGICO">🏢 Estratégico</option><option value="OPERACIONAL">🏫 Operacional</option><option value="PEDAGOGICO">👩‍🏫 Pedagógico</option><option value="NUCLEO_FAMILIAR">👨‍👩‍👧 Núcleo Familiar</option><option value="PROFISSIONAIS_EXTERNOS">🩺 Profissionais Externos</option></select></div>
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                     <button onClick={() => setShowUserModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
                     <button onClick={handleSaveUser} style={{ flex: 1, padding: '1rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingUser ? 'Salvar' : 'Cadastrar'}</button>
