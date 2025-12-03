@@ -20,8 +20,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     // Verificar se há usuário salvo no localStorage
     const savedUser = authService.getUser();
-    if (savedUser) {
+    if (savedUser && authService.isAuthenticated()) {
       setUser(savedUser);
+    } else {
+      setUser(null);
     }
     setIsLoading(false);
   }, []);

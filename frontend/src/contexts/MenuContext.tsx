@@ -179,8 +179,11 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   // Carregar menu quando usuário mudar
   useEffect(() => {
     if (user) {
-      loadUserMenu();
+      loadUserMenu(user.role);
+    } else {
+      setMenuItems([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const value: MenuContextType = {
