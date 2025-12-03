@@ -1,28 +1,28 @@
 import api from './api';
-import type { Student, ApiResponse } from '../types';
+import type { Student } from '../types/students';
 
 export const studentService = {
-  async getAll(filters?: { classId?: number; shift?: string; active?: boolean }) {
-    const response = await api.get<ApiResponse<Student[]>>('/students', { params: filters });
-    return response.data.data;
+  getAll: async (filters?: { classId?: number; shift?: string; active?: boolean }) => {
+    const response = await api.get('/students', { params: filters });
+    return response.data;
   },
 
-  async getById(id: number) {
-    const response = await api.get<ApiResponse<Student>>(`/students/${id}`);
-    return response.data.data;
+  getById: async (id: number) => {
+    const response = await api.get(`/students/${id}`);
+    return response.data;
   },
 
-  async create(data: Partial<Student>) {
-    const response = await api.post<ApiResponse<Student>>('/students', data);
-    return response.data.data;
+  create: async (data: Partial<Student>) => {
+    const response = await api.post('/students', data);
+    return response.data;
   },
 
-  async update(id: number, data: Partial<Student>) {
-    const response = await api.put<ApiResponse<Student>>(`/students/${id}`, data);
-    return response.data.data;
+  update: async (id: number, data: Partial<Student>) => {
+    const response = await api.put(`/students/${id}`, data);
+    return response.data;
   },
 
-  async delete(id: number) {
+  delete: async (id: number) => {
     const response = await api.delete(`/students/${id}`);
     return response.data;
   },

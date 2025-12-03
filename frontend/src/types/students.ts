@@ -1,6 +1,13 @@
-export type Student = {
-    id: string;
+export interface Student {
+  id: number;
+  name: string;
+  birthDate: string;
+  shift: string;
+  class?: {
     name: string;
-    classroom?: string;
-    birthDate?: string; // ISO
   };
+  avatar?: {
+    id: number;
+    avatar: string;
+  };
+}

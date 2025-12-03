@@ -304,7 +304,6 @@ function App() {
     content: '',
     duration: 30
   });
-  const [documentationFileInput, setDocumentationFileInput] = useState<HTMLInputElement | null>(null);
   const [uploadingDocumentation, setUploadingDocumentation] = useState<number | null>(null);
 
   // Estados para Rubricas
@@ -1760,6 +1759,7 @@ function App() {
 
   // CRUD de Rubricas
   const openRubricModal = (rubric?: Rubric, activity?: Activity) => {
+    console.log('🔓 openRubricModal chamado:', { rubric: !!rubric, activity: !!activity });
     if (rubric) {
       setEditingRubric(rubric);
       setRubricForm({
@@ -1807,10 +1807,12 @@ function App() {
         }
       });
     }
+    console.log('✅ Definindo showRubricModal como true');
     setShowRubricModal(true);
   };
 
   const openActivityRubricsModal = async (activity: Activity) => {
+    console.log('📊 Abrindo modal de rubricas para atividade:', activity.id, activity.title);
     // Recarrega a atividade para garantir que tem as rubricas atualizadas
     try {
       let API_URL = import.meta.env.VITE_API_URL || '/api';
@@ -1828,13 +1830,16 @@ function App() {
       const data = await response.json();
       
       if (data.success) {
+        console.log('✅ Atividade carregada com sucesso:', data.data);
         setSelectedActivityForRubrics(data.data);
         openRubricModal(undefined, data.data);
       } else {
+        console.warn('⚠️ Erro ao carregar atividade, usando dados locais');
         setSelectedActivityForRubrics(activity);
         openRubricModal(undefined, activity);
       }
-    } catch {
+    } catch (error) {
+      console.error('❌ Erro ao carregar atividade:', error);
       setSelectedActivityForRubrics(activity);
       openRubricModal(undefined, activity);
     }
@@ -6516,217 +6521,6 @@ function App() {
             </div>
             
             <button onClick={() => openRubricModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(245, 158, 11, 0.4)', zIndex: 100 }}>+</button>
-            
-            {showRubricModal && (
-              <>
-                <div onClick={closeRubricModal} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
-                <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '700px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', alignItems: 'center' }}>
-                    <div>
-                      <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>
-                        {editingRubric ? '✏️ Editar Rubrica' : selectedActivityForRubrics ? `📊 Rubricas da Atividade` : '➕ Nova Rubrica'}
-                      </h3>
-                      {selectedActivityForRubrics && !editingRubric && (
-                        <p style={{ fontSize: '0.875rem', color: '#64748b' }}>
-                          {selectedActivityForRubrics.activityCode} - {selectedActivityForRubrics.title}
-                        </p>
-                      )}
-                    </div>
-                    <button onClick={closeRubricModal} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer' }}>✕</button>
-                  </div>
-                  
-                  {selectedActivityForRubrics && !editingRubric && (
-                    <>
-                      {/* Lista de rubricas existentes */}
-                      {selectedActivityForRubrics.rubrics && selectedActivityForRubrics.rubrics.length > 0 && (
-                        <div style={{ marginBottom: '1.5rem' }}>
-                          <div style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.75rem', color: '#1e293b' }}>
-                            Rubricas Cadastradas ({selectedActivityForRubrics.rubrics.length}/4)
-                          </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            {selectedActivityForRubrics.rubrics.map((rubric) => (
-                              <div key={rubric.id} style={{ background: '#fef3c7', border: '2px solid #f59e0b', borderRadius: '0.5rem', padding: '1rem' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
-                                  <div>
-                                    <div style={{ fontWeight: '600', fontSize: '0.875rem', color: '#92400e' }}>{rubric.rubricCode}</div>
-                                    <div style={{ fontSize: '0.875rem', color: '#475569', marginTop: '0.25rem' }}>{rubric.name}</div>
-                                  </div>
-                                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                    <button 
-                                      onClick={() => openRubricModal(rubric)} 
-                                      style={{ background: '#3b82f6', color: 'white', border: 'none', padding: '0.5rem 0.75rem', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}
-                                    >
-                                      ✏️
-                                    </button>
-                                    <button 
-                                      onClick={() => handleDeleteRubric(rubric)} 
-                                      style={{ background: '#dc2626', color: 'white', border: 'none', padding: '0.5rem 0.75rem', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}
-                                    >
-                                      🗑️
-                                    </button>
-                                  </div>
-                                </div>
-                                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{rubric.description}</div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Verificar limite de 4 rubricas */}
-                      {selectedActivityForRubrics.rubrics && selectedActivityForRubrics.rubrics.length >= 4 ? (
-                        <div style={{ background: '#fef3c7', border: '2px solid #f59e0b', borderRadius: '0.5rem', padding: '1rem', textAlign: 'center' }}>
-                          <div style={{ fontSize: '0.875rem', color: '#92400e', fontWeight: '600' }}>
-                            ⚠️ Limite de 4 rubricas atingido
-                          </div>
-                          <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.5rem' }}>
-                            Esta atividade já possui o máximo de 4 rubricas. Exclua uma rubrica para adicionar outra.
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div style={{ borderTop: '2px solid #e2e8f0', paddingTop: '1.5rem', marginTop: selectedActivityForRubrics.rubrics && selectedActivityForRubrics.rubrics.length > 0 ? '0' : '0' }}>
-                            <div style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '1rem', color: '#1e293b' }}>
-                              ➕ Adicionar Nova Rubrica
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </>
-                  )}
-                  
-                  {/* Formulário de rubrica - só mostra se não atingiu limite ou está editando */}
-                  {(!selectedActivityForRubrics || editingRubric || (selectedActivityForRubrics.rubrics && selectedActivityForRubrics.rubrics.length < 4)) && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <div>
-                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>
-                        Código da Rubrica * <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 'normal' }}>(ex: RUB-E101CG01-001)</span>
-                      </label>
-                      <input 
-                        type="text" 
-                        value={rubricForm.rubricCode} 
-                        onChange={(e) => setRubricForm({ ...rubricForm, rubricCode: e.target.value })} 
-                        placeholder="RUB-E101CG01-001"
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} 
-                      />
-                    </div>
-                    
-                    <div>
-                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Nome da Rubrica *</label>
-                      <input 
-                        type="text" 
-                        value={rubricForm.name} 
-                        onChange={(e) => setRubricForm({ ...rubricForm, name: e.target.value })} 
-                        placeholder="Ex: Avaliação Circuito Motor"
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} 
-                      />
-                    </div>
-                    
-                    <div>
-                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Descrição *</label>
-                      <textarea 
-                        value={rubricForm.description} 
-                        onChange={(e) => setRubricForm({ ...rubricForm, description: e.target.value })} 
-                        rows={3} 
-                        placeholder="Descreva o objetivo desta rubrica..."
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} 
-                      />
-                    </div>
-                    
-                    <div>
-                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Atividade Associada *</label>
-                      <select 
-                        value={rubricForm.activityId} 
-                        onChange={(e) => {
-                          const selectedActivity = activities.find(a => a.id === parseInt(e.target.value));
-                          setRubricForm({ 
-                            ...rubricForm, 
-                            activityId: e.target.value,
-                            activityCode: selectedActivity?.activityCode || ''
-                          });
-                        }}
-                        disabled={!!selectedActivityForRubrics}
-                        style={{ 
-                          width: '100%', 
-                          padding: '0.75rem', 
-                          border: `1px solid ${COLORS.border}`, 
-                          borderRadius: '0.5rem', 
-                          fontSize: '1rem',
-                          background: selectedActivityForRubrics ? '#f8fafc' : 'white',
-                          cursor: selectedActivityForRubrics ? 'not-allowed' : 'pointer'
-                        }}
-                      >
-                        <option value="">Selecione uma atividade...</option>
-                        {activities.map(activity => (
-                          <option key={activity.id} value={activity.id}>
-                            {activity.activityCode ? `${activity.activityCode} - ` : ''}{activity.title}
-                          </option>
-                        ))}
-                      </select>
-                      {selectedActivityForRubrics && (
-                        <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.5rem', fontStyle: 'italic' }}>
-                          Atividade fixada para esta rubrica
-                        </p>
-                      )}
-                    </div>
-                    
-                    <div>
-                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>
-                        Critérios Adicionais <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 'normal' }}>(opcional)</span>
-                      </label>
-                      <textarea 
-                        value={rubricForm.criteria} 
-                        onChange={(e) => setRubricForm({ ...rubricForm, criteria: e.target.value })} 
-                        rows={3} 
-                        placeholder="Critérios específicos de avaliação..."
-                        style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem' }} 
-                      />
-                    </div>
-                    
-                    <div style={{ background: '#fef3c7', border: '2px solid #f59e0b', borderRadius: '0.5rem', padding: '1rem' }}>
-                      <div style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.75rem', color: '#92400e' }}>
-                        📊 Níveis de Avaliação
-                      </div>
-                      
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                        {['excelente', 'satisfatorio', 'desenvolvimento', 'iniciante'].map((nivel) => (
-                          <div key={nivel} style={{ background: 'white', borderRadius: '0.5rem', padding: '0.75rem' }}>
-                            <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>
-                              {nivel === 'excelente' ? '⭐⭐⭐ Excelente' : 
-                               nivel === 'satisfatorio' ? '⭐⭐ Satisfatório' : 
-                               nivel === 'desenvolvimento' ? '⭐ Em Desenvolvimento' : 
-                               '○ Iniciante'}
-                            </div>
-                            <textarea 
-                              value={rubricForm.levels[nivel as keyof typeof rubricForm.levels]?.description || ''} 
-                              onChange={(e) => setRubricForm({ 
-                                ...rubricForm, 
-                                levels: {
-                                  ...rubricForm.levels,
-                                  [nivel]: {
-                                    ...rubricForm.levels[nivel as keyof typeof rubricForm.levels],
-                                    description: e.target.value
-                                  }
-                                }
-                              })} 
-                              rows={2} 
-                              placeholder={`Descrição para ${nivel}...`}
-                              style={{ width: '100%', padding: '0.5rem', border: '1px solid #e2e8f0', borderRadius: '0.25rem', fontSize: '0.75rem' }} 
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    
-                      <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
-                        <button onClick={closeRubricModal} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
-                        <button onClick={handleSaveRubric} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingRubric ? 'Salvar' : 'Cadastrar'}</button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
           </main>
         ) : currentScreen === 'classes' ? (
           <main style={{ padding: '1rem', paddingBottom: '2rem' }}>
@@ -9592,6 +9386,218 @@ function App() {
           </ul>
         </div>
       </main>
+        )}
+
+        {/* Modal de Rubricas - Global (aparece em qualquer tela) */}
+        {showRubricModal && (
+          <>
+            <div onClick={closeRubricModal} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
+            <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '700px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem', alignItems: 'center' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>
+                    {editingRubric ? '✏️ Editar Rubrica' : selectedActivityForRubrics ? `📊 Rubricas da Atividade` : '➕ Nova Rubrica'}
+                  </h3>
+                  {selectedActivityForRubrics && !editingRubric && (
+                    <p style={{ fontSize: '0.875rem', color: '#64748b' }}>
+                      {selectedActivityForRubrics.activityCode} - {selectedActivityForRubrics.title}
+                    </p>
+                  )}
+                </div>
+                <button onClick={closeRubricModal} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', cursor: 'pointer' }}>✕</button>
+              </div>
+              
+              {selectedActivityForRubrics && !editingRubric && (
+                <>
+                  {/* Lista de rubricas existentes */}
+                  {selectedActivityForRubrics.rubrics && selectedActivityForRubrics.rubrics.length > 0 && (
+                    <div style={{ marginBottom: '1.5rem' }}>
+                      <div style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.75rem', color: '#1e293b' }}>
+                        Rubricas Cadastradas ({selectedActivityForRubrics.rubrics.length}/4)
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        {selectedActivityForRubrics.rubrics.map((rubric) => (
+                          <div key={rubric.id} style={{ background: '#fef3c7', border: '2px solid #f59e0b', borderRadius: '0.5rem', padding: '1rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
+                              <div>
+                                <div style={{ fontWeight: '600', fontSize: '0.875rem', color: '#92400e' }}>{rubric.rubricCode}</div>
+                                <div style={{ fontSize: '0.875rem', color: '#475569', marginTop: '0.25rem' }}>{rubric.name}</div>
+                              </div>
+                              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <button 
+                                  onClick={() => openRubricModal(rubric)} 
+                                  style={{ background: '#3b82f6', color: 'white', border: 'none', padding: '0.5rem 0.75rem', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}
+                                >
+                                  ✏️
+                                </button>
+                                <button 
+                                  onClick={() => handleDeleteRubric(rubric)} 
+                                  style={{ background: '#dc2626', color: 'white', border: 'none', padding: '0.5rem 0.75rem', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}
+                                >
+                                  🗑️
+                                </button>
+                              </div>
+                            </div>
+                            <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{rubric.description}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Verificar limite de 4 rubricas */}
+                  {selectedActivityForRubrics.rubrics && selectedActivityForRubrics.rubrics.length >= 4 ? (
+                    <div style={{ background: '#fef3c7', border: '2px solid #f59e0b', borderRadius: '0.5rem', padding: '1rem', textAlign: 'center' }}>
+                      <div style={{ fontSize: '0.875rem', color: '#92400e', fontWeight: '600' }}>
+                        ⚠️ Limite de 4 rubricas atingido
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.5rem' }}>
+                        Esta atividade já possui o máximo de 4 rubricas. Exclua uma rubrica para adicionar outra.
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div style={{ borderTop: '2px solid #e2e8f0', paddingTop: '1.5rem', marginTop: selectedActivityForRubrics.rubrics && selectedActivityForRubrics.rubrics.length > 0 ? '0' : '0' }}>
+                        <div style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '1rem', color: '#1e293b' }}>
+                          ➕ Adicionar Nova Rubrica
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+              
+              {/* Formulário de rubrica - só mostra se não atingiu limite ou está editando */}
+              {(!selectedActivityForRubrics || editingRubric || (selectedActivityForRubrics.rubrics && selectedActivityForRubrics.rubrics.length < 4)) && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>
+                    Código da Rubrica * <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 'normal' }}>(ex: RUB-E101CG01-001)</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    value={rubricForm.rubricCode} 
+                    onChange={(e) => setRubricForm({ ...rubricForm, rubricCode: e.target.value })} 
+                    placeholder="RUB-E101CG01-001"
+                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} 
+                  />
+                </div>
+                
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Nome da Rubrica *</label>
+                  <input 
+                    type="text" 
+                    value={rubricForm.name} 
+                    onChange={(e) => setRubricForm({ ...rubricForm, name: e.target.value })} 
+                    placeholder="Ex: Avaliação Circuito Motor"
+                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} 
+                  />
+                </div>
+                
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Descrição *</label>
+                  <textarea 
+                    value={rubricForm.description} 
+                    onChange={(e) => setRubricForm({ ...rubricForm, description: e.target.value })} 
+                    rows={3} 
+                    placeholder="Descreva o objetivo desta rubrica..."
+                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} 
+                  />
+                </div>
+                
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Atividade Associada *</label>
+                  <select 
+                    value={rubricForm.activityId} 
+                    onChange={(e) => {
+                      const selectedActivity = activities.find(a => a.id === parseInt(e.target.value));
+                      setRubricForm({ 
+                        ...rubricForm, 
+                        activityId: e.target.value,
+                        activityCode: selectedActivity?.activityCode || ''
+                      });
+                    }}
+                    disabled={!!selectedActivityForRubrics}
+                    style={{ 
+                      width: '100%', 
+                      padding: '0.75rem', 
+                      border: `1px solid ${COLORS.border}`, 
+                      borderRadius: '0.5rem', 
+                      fontSize: '1rem',
+                      background: selectedActivityForRubrics ? '#f8fafc' : 'white',
+                      cursor: selectedActivityForRubrics ? 'not-allowed' : 'pointer'
+                    }}
+                  >
+                    <option value="">Selecione uma atividade...</option>
+                    {activities.map(activity => (
+                      <option key={activity.id} value={activity.id}>
+                        {activity.activityCode ? `${activity.activityCode} - ` : ''}{activity.title}
+                      </option>
+                    ))}
+                  </select>
+                  {selectedActivityForRubrics && (
+                    <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.5rem', fontStyle: 'italic' }}>
+                      Atividade fixada para esta rubrica
+                    </p>
+                  )}
+                </div>
+                
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>
+                    Critérios Adicionais <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 'normal' }}>(opcional)</span>
+                  </label>
+                  <textarea 
+                    value={rubricForm.criteria} 
+                    onChange={(e) => setRubricForm({ ...rubricForm, criteria: e.target.value })} 
+                    rows={3} 
+                    placeholder="Critérios específicos de avaliação..."
+                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.875rem' }} 
+                  />
+                </div>
+                
+                <div style={{ background: '#fef3c7', border: '2px solid #f59e0b', borderRadius: '0.5rem', padding: '1rem' }}>
+                  <div style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.75rem', color: '#92400e' }}>
+                    📊 Níveis de Avaliação
+                  </div>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    {['excelente', 'satisfatorio', 'desenvolvimento', 'iniciante'].map((nivel) => (
+                      <div key={nivel} style={{ background: 'white', borderRadius: '0.5rem', padding: '0.75rem' }}>
+                        <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>
+                          {nivel === 'excelente' ? '⭐⭐⭐ Excelente' : 
+                           nivel === 'satisfatorio' ? '⭐⭐ Satisfatório' : 
+                           nivel === 'desenvolvimento' ? '⭐ Em Desenvolvimento' : 
+                           '○ Iniciante'}
+                        </div>
+                        <textarea 
+                          value={rubricForm.levels[nivel as keyof typeof rubricForm.levels]?.description || ''} 
+                          onChange={(e) => setRubricForm({ 
+                            ...rubricForm, 
+                            levels: {
+                              ...rubricForm.levels,
+                              [nivel]: {
+                                ...rubricForm.levels[nivel as keyof typeof rubricForm.levels],
+                                description: e.target.value
+                              }
+                            }
+                          })} 
+                          rows={2} 
+                          placeholder={`Descrição para ${nivel}...`}
+                          style={{ width: '100%', padding: '0.5rem', border: '1px solid #e2e8f0', borderRadius: '0.25rem', fontSize: '0.75rem' }} 
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
+                    <button onClick={closeRubricModal} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
+                    <button onClick={handleSaveRubric} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingRubric ? 'Salvar' : 'Cadastrar'}</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </>
         )}
     </div>
   );
