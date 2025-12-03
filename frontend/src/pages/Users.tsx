@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useUsers } from '../hooks/useUsers';
 import { Loading } from '../components/common/Loading';
 import { Modal } from '../components/common/Modal';
@@ -68,14 +68,26 @@ export default function Users() {
 
       if (editingUser) {
         await updateUser(editingUser.id, data);
+        alert('Usuário atualizado com sucesso!');
       } else {
         await createUser(data);
+        alert('Usuário criado com sucesso!');
       }
 
       setShowModal(false);
       setEditingUser(null);
-    } catch (err: any) {
-      alert(err.message || 'Erro ao salvar usuário');
+      setFormData({
+        name: '',
+        email: '',
+        password: '',
+        role: 'PROFESSOR',
+        nivelAcesso: 'ESTRATEGICO',
+      });
+    } catch (err: unknown) {
+      const errorMessage = (err as { response?: { data?: { message?: string }; message?: string }; message?: string })?.response?.data?.message || 
+                           (err as { message?: string })?.message || 
+                           'Erro ao salvar usuário';
+      alert(errorMessage);
     }
   };
 
@@ -83,8 +95,12 @@ export default function Users() {
     if (window.confirm(`Tem certeza que deseja desativar o usuário "${user.name}"?`)) {
       try {
         await deleteUser(user.id);
-      } catch (err: any) {
-        alert(err.message || 'Erro ao excluir usuário');
+        alert('Usuário desativado com sucesso!');
+      } catch (err: unknown) {
+        const errorMessage = (err as { response?: { data?: { message?: string }; message?: string }; message?: string })?.response?.data?.message || 
+                             (err as { message?: string })?.message || 
+                             'Erro ao excluir usuário';
+        alert(errorMessage);
       }
     }
   };
@@ -96,10 +112,16 @@ export default function Users() {
   if (error) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <p style={{ color: COLORS.error }}>❌ {error}</p>
-        <Button variant="primary" onClick={() => window.location.reload()} style={{ marginTop: '1rem' }}>
-          Tentar novamente
-        </Button>
+        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠️</div>
+        <p style={{ color: COLORS.error, fontSize: '1.125rem', marginBottom: '0.5rem' }}>❌ {error}</p>
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '1rem' }}>
+          <Button variant="primary" onClick={() => window.location.reload()}>
+            🔄 Tentar novamente
+          </Button>
+          <Button variant="secondary" onClick={() => window.location.reload()}>
+            🔃 Recarregar página
+          </Button>
+        </div>
       </div>
     );
   }
@@ -213,8 +235,21 @@ export default function Users() {
           fontSize: '1.5rem',
           cursor: 'pointer',
           boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
-          zIndex: 100,
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'all 0.2s',
         }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'scale(1.1)';
+          e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.4)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+          e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
+        }}
+        title="Novo Usuário"
       >
         +
       </button>
