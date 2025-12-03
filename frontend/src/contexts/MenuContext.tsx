@@ -83,10 +83,18 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return Array.from(uniqueRoots.values());
   };
 
+  const isHelpItem = (item?: MenuItem) => {
+    if (!item) return false;
+    const identifier = (item.menuItem || '').trim().toLowerCase();
+    const label = (item.menuLabel || '').trim().toLowerCase();
+    const screen = (item.screen || '').trim().toLowerCase();
+    return identifier === 'help' || label === 'ajuda' || screen === 'help';
+  };
+
   // Função para remover item "help" recursivamente
   const removeHelpItem = (items: MenuItem[]): MenuItem[] => {
     return items
-      .filter(item => item.menuItem !== 'help')
+      .filter(item => !isHelpItem(item))
       .map(item => ({
         ...item,
         children: item.children ? removeHelpItem(item.children) : undefined,

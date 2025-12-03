@@ -15,6 +15,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth();
   const [localExpanded, setLocalExpanded] = useState<Set<string>>(new Set());
 
+  const isHelpItem = (item?: { menuItem?: string | null; menuLabel?: string | null; screen?: string | null }) => {
+    if (!item) return false;
+    const identifier = (item.menuItem || '').trim().toLowerCase();
+    const label = (item.menuLabel || '').trim().toLowerCase();
+    const screen = (item.screen || '').trim().toLowerCase();
+    return identifier === 'help' || label === 'ajuda' || screen === 'help';
+  };
+
   const handleMenuClick = (screen?: string | null) => {
     onClose();
     if (screen) {
@@ -59,7 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const renderMenuItem = (item: any, level: number = 0) => {
     // Não renderizar item "Ajuda" em nenhum nível
-    if (item.menuItem === 'help') {
+    if (isHelpItem(item)) {
       return null;
     }
 
@@ -137,7 +145,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               }}
             >
               {item.children
-                .filter((child: any) => child.menuItem !== 'help') // Filtrar Ajuda dos filhos também
+                .filter((child: any) => !isHelpItem(child)) // Filtrar Ajuda dos filhos também
                 .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
                 .map((child: any, childIndex: number) => 
                   renderMenuItem(child, level + 1)
@@ -288,7 +296,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   // Remover duplicatas baseado em menuItem
                   index === self.findIndex((t) => t.menuItem === item.menuItem)
                 )
-                .filter((item) => item.menuItem !== 'help') // Excluir Ajuda completamente do menu
+                .filter((item) => !isHelpItem(item)) // Excluir Ajuda completamente do menu
                 .sort((a, b) => (a.order || 0) - (b.order || 0)) // Ordenar por order
                 .map((item, index) => renderMenuItem(item, 0))}
             </>
