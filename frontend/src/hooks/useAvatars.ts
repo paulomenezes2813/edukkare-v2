@@ -3,7 +3,7 @@ import { avatarService, type Avatar } from '../services/avatar.service';
 
 export const useAvatars = () => {
   const [avatars, setAvatars] = useState<Avatar[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const loadAvatars = useCallback(async () => {

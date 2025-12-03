@@ -9,11 +9,6 @@ import type { Avatar } from '../services/avatar.service';
 
 export default function Avatars() {
   const { avatars, loading, error, createAvatar, updateAvatar, deleteAvatar } = useAvatars();
-  
-  // Debug
-  React.useEffect(() => {
-    console.log('Avatars page - avatars:', avatars, 'loading:', loading, 'error:', error);
-  }, [avatars, loading, error]);
   const [showModal, setShowModal] = useState(false);
   const [editingAvatar, setEditingAvatar] = useState<Avatar | null>(null);
   const [avatarForm, setAvatarForm] = useState({ avatar: '' });
@@ -59,7 +54,7 @@ export default function Avatars() {
     }
   };
 
-  if (loading && avatars.length === 0) {
+  if (loading) {
     return <Loading fullScreen text="Carregando avatares..." />;
   }
 
@@ -67,12 +62,15 @@ export default function Avatars() {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
         <p style={{ color: COLORS.error }}>❌ {error}</p>
+        <Button variant="primary" onClick={() => window.location.reload()} style={{ marginTop: '1rem' }}>
+          Tentar novamente
+        </Button>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: '0', paddingBottom: '5rem', width: '100%', position: 'relative', zIndex: 1 }}>
+    <div style={{ paddingBottom: '5rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>
@@ -84,9 +82,11 @@ export default function Avatars() {
         </div>
       </div>
 
-      {avatars.length === 0 && !loading ? (
+      {avatars.length === 0 ? (
         <div style={{ background: COLORS.background, borderRadius: '0.5rem', padding: '2rem', textAlign: 'center' }}>
-          <p style={{ color: COLORS.textTertiary }}>Nenhum avatar cadastrado</p>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎭</div>
+          <p style={{ color: COLORS.textTertiary, fontSize: '1.125rem', marginBottom: '0.5rem' }}>Nenhum avatar cadastrado</p>
+          <p style={{ color: COLORS.textTertiary, fontSize: '0.875rem' }}>Clique no botão + para adicionar um novo avatar</p>
         </div>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>

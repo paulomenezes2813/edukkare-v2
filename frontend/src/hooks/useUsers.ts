@@ -4,7 +4,7 @@ import type { User } from '../types/auth';
 
 export const useUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const loadUsers = useCallback(async () => {
