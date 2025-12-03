@@ -57,22 +57,42 @@ export class MenuPermissionController {
 
       // ADMIN sempre tem acesso total
       if (user.role === 'ADMIN') {
-        const allPermissions = await prisma.menuPermission.findMany({
+        // Buscar apenas uma permissão por menuItem (pegar a primeira de cada)
+        const allPermissionsRaw = await prisma.menuPermission.findMany({
           where: { active: true },
-          orderBy: { order: 'asc' },
+          orderBy: [{ menuItem: 'asc' }, { order: 'asc' }],
         });
+        
+        // Remover duplicatas por menuItem, mantendo apenas a primeira
+        const uniquePermissions = new Map<string, any>();
+        allPermissionsRaw.forEach(perm => {
+          if (!uniquePermissions.has(perm.menuItem)) {
+            uniquePermissions.set(perm.menuItem, perm);
+          }
+        });
+        
+        const allPermissions = Array.from(uniquePermissions.values());
         const tree = this.buildMenuTree(allPermissions);
         return ApiResponse.success(res, tree);
       }
 
-      const permissions = await prisma.menuPermission.findMany({
+      const permissionsRaw = await prisma.menuPermission.findMany({
         where: {
           nivelAcesso: user.nivelAcesso,
           active: true,
         },
-        orderBy: { order: 'asc' },
+        orderBy: [{ menuItem: 'asc' }, { order: 'asc' }],
       });
 
+      // Remover duplicatas por menuItem
+      const uniquePermissions = new Map<string, any>();
+      permissionsRaw.forEach(perm => {
+        if (!uniquePermissions.has(perm.menuItem)) {
+          uniquePermissions.set(perm.menuItem, perm);
+        }
+      });
+      
+      const permissions = Array.from(uniquePermissions.values());
       const tree = this.buildMenuTree(permissions);
 
       return ApiResponse.success(res, tree);

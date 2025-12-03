@@ -270,7 +270,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               Carregando menu...
             </div>
           ) : menuItems.length > 0 ? (
-            menuItems.map((item, index) => renderMenuItem(item, 0))
+            menuItems
+              .filter((item, index, self) => 
+                // Remover duplicatas baseado em menuItem
+                index === self.findIndex((t) => t.menuItem === item.menuItem)
+              )
+              .map((item, index) => renderMenuItem(item, 0))
           ) : (
             <div style={{ padding: '1rem 1.5rem', color: COLORS.textTertiary }}>
               Nenhum item de menu disponível
