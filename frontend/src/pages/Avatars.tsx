@@ -33,14 +33,17 @@ export default function Avatars() {
     try {
       if (editingAvatar) {
         await updateAvatar(editingAvatar.id, avatarForm);
+        alert('Avatar atualizado com sucesso!');
       } else {
         await createAvatar(avatarForm);
+        alert('Avatar criado com sucesso!');
       }
       setShowModal(false);
       setEditingAvatar(null);
       setAvatarForm({ avatar: '' });
     } catch (err: any) {
-      alert(err.message || 'Erro ao salvar avatar');
+      const errorMessage = err.response?.data?.message || err.message || 'Erro ao salvar avatar';
+      alert(errorMessage);
     }
   };
 
@@ -48,8 +51,10 @@ export default function Avatars() {
     if (window.confirm(`Tem certeza que deseja excluir o avatar "${avatar.avatar}"?`)) {
       try {
         await deleteAvatar(avatar.id);
+        alert('Avatar excluído com sucesso!');
       } catch (err: any) {
-        alert(err.message || 'Erro ao excluir avatar');
+        const errorMessage = err.response?.data?.message || err.message || 'Erro ao excluir avatar';
+        alert(errorMessage);
       }
     }
   };

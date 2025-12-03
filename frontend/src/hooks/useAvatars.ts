@@ -43,11 +43,13 @@ export const useAvatars = () => {
         await loadAvatars();
         return response;
       } else {
-        setError(response.message || 'Erro ao criar avatar');
-        return response;
+        const errorMsg = response.message || 'Erro ao criar avatar';
+        setError(errorMsg);
+        throw new Error(errorMsg);
       }
     } catch (err: any) {
-      setError(err.message || 'Erro ao criar avatar');
+      const errorMessage = err.response?.data?.message || err.message || 'Erro ao criar avatar';
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
@@ -63,11 +65,13 @@ export const useAvatars = () => {
         await loadAvatars();
         return response;
       } else {
-        setError(response.message || 'Erro ao atualizar avatar');
-        return response;
+        const errorMsg = response.message || 'Erro ao atualizar avatar';
+        setError(errorMsg);
+        throw new Error(errorMsg);
       }
     } catch (err: any) {
-      setError(err.message || 'Erro ao atualizar avatar');
+      const errorMessage = err.response?.data?.message || err.message || 'Erro ao atualizar avatar';
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
@@ -83,11 +87,13 @@ export const useAvatars = () => {
         await loadAvatars();
         return response;
       } else {
-        setError(response.message || 'Erro ao excluir avatar');
-        return response;
+        const errorMsg = response.message || 'Erro ao excluir avatar';
+        setError(errorMsg);
+        throw new Error(errorMsg);
       }
     } catch (err: any) {
-      setError(err.message || 'Erro ao excluir avatar');
+      const errorMessage = err.response?.data?.message || err.message || 'Erro ao excluir avatar';
+      setError(errorMessage);
       throw err;
     } finally {
       setLoading(false);
