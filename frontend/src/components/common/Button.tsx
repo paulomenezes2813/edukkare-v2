@@ -2,7 +2,7 @@ import React from 'react';
 import { COLORS } from '../../utils/constants';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'danger';
   size?: 'small' | 'medium' | 'large';
   fullWidth?: boolean;
   isLoading?: boolean;
@@ -38,6 +38,11 @@ const variantStyles = {
     background: COLORS.info,
     color: 'white',
     hover: '#2563eb',
+  },
+  danger: {
+    background: COLORS.error,
+    color: 'white',
+    hover: '#dc2626',
   },
 };
 
