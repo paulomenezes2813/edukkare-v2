@@ -131,9 +131,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 borderLeft: level === 0 ? '4px solid #e2e8f0' : 'none',
               }}
             >
-              {item.children.map((child: any, childIndex: number) => 
-                renderMenuItem(child, level + 1)
-              )}
+              {item.children
+                .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
+                .map((child: any, childIndex: number) => 
+                  renderMenuItem(child, level + 1)
+                )}
             </div>
           )}
         </div>
@@ -143,7 +145,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     return (
       <button
         key={uniqueKey}
-        onClick={() => handleMenuClick(item.screen)}
+        onClick={() => {
+          if (item.screen) {
+            handleMenuClick(item.screen);
+          }
+        }}
         style={{
           width: '100%',
           padding: level === 0 ? '1rem 1.5rem' : '0.75rem 1.5rem',
