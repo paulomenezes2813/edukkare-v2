@@ -25,13 +25,29 @@ interface Note {
   nota: number;
 }
 
+interface ActivityDocument {
+  id: number;
+  filename: string;
+  originalName: string;
+  mimeType: string;
+  fileSize: number;
+  filePath: string;
+  description?: string;
+  createdAt: string;
+  uploadedBy?: {
+    id: number;
+    name: string;
+    email: string;
+  };
+}
+
 interface Activity {
   id: number;
   activityCode?: string;
   title: string;
   description: string;
   content?: string;
-  documentationPath?: string;
+  documentationPath?: string; // Mantido para compatibilidade
   duration: number;
   bnccCode?: {
     code: string;
@@ -39,6 +55,7 @@ interface Activity {
     field: string;
   };
   rubrics?: Rubric[];
+  documents?: ActivityDocument[];
 }
 
 interface Rubric {
@@ -6297,33 +6314,52 @@ function App() {
                     </button>
                     <button onClick={() => handleDeleteActivity(activity)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
                   </div>
-                  {activity.documentationPath && (
+                  {(activity.documents && activity.documents.length > 0) && (
                     <div style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid #e2e8f0' }}>
-                      <a 
-                        href={(() => {
-                          let API_URL = import.meta.env.VITE_API_URL || '/api';
-                          if (window.location.hostname.includes('railway.app')) {
-                            API_URL = 'https://edukkare-v2-production.up.railway.app/api';
-                          }
-                          // Remove /api se estiver no caminho, pois /uploads é servido diretamente
-                          const baseUrl = API_URL.replace('/api', '');
-                          return `${baseUrl}/${activity.documentationPath}`;
-                        })()}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          color: COLORS.primary,
-                          textDecoration: 'none',
-                          fontSize: '0.875rem',
-                          fontWeight: '500'
-                        }}
-                      >
-                        <span>📄</span>
-                        <span>Ver Documentação</span>
-                      </a>
+                      <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#64748b', marginBottom: '0.5rem' }}>
+                        Documentos Anexados ({activity.documents.length})
+                      </div>
+                      {activity.documents.map((doc) => (
+                        <a 
+                          key={doc.id}
+                          href={(() => {
+                            let API_URL = import.meta.env.VITE_API_URL || '/api';
+                            if (window.location.hostname.includes('railway.app')) {
+                              API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+                            }
+                            const baseUrl = API_URL.replace('/api', '');
+                            return `${baseUrl}/${doc.filePath}`;
+                          })()}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            color: COLORS.primary,
+                            textDecoration: 'none',
+                            fontSize: '0.875rem',
+                            fontWeight: '500',
+                            padding: '0.5rem',
+                            borderRadius: '0.5rem',
+                            background: '#f8fafc',
+                            marginBottom: '0.25rem',
+                            transition: 'all 0.2s'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = '#f1f5f9';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = '#f8fafc';
+                          }}
+                        >
+                          <span>📄</span>
+                          <span style={{ flex: 1 }}>{doc.originalName}</span>
+                          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                            {(doc.fileSize / 1024).toFixed(1)} KB
+                          </span>
+                        </a>
+                      ))}
                     </div>
                   )}
                 </div>

@@ -7,7 +7,9 @@ import {
   createActivity, 
   updateActivity, 
   deleteActivity,
-  uploadDocumentation
+  uploadDocumentation,
+  getActivityDocuments,
+  deleteActivityDocument
 } from '../controllers/activity.controller';
 
 const router = Router();
@@ -17,10 +19,12 @@ router.use(authMiddleware);
 
 router.get('/', getActivities);
 router.get('/:id', getActivityById);
+router.get('/:id/documents', getActivityDocuments);
 router.post('/', createActivity);
 router.put('/:id', updateActivity);
 router.post('/:id/documentation', documentUpload.single('document'), uploadDocumentation);
 router.delete('/:id', deleteActivity);
+router.delete('/:id/documents/:documentId', deleteActivityDocument);
 
 export default router;
 

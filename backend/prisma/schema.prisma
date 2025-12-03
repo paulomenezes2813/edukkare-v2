@@ -70,6 +70,7 @@ model User {
 
   evaluations   Evaluation[]
   evidences     Evidence[]
+  uploadedDocuments ActivityDocument[]
   
   @@map("users")
 }
@@ -183,6 +184,7 @@ model Activity {
   
   evaluations   Evaluation[]
   rubrics       Rubric[]
+  documents     ActivityDocument[]
   
   @@map("activities")
 }
@@ -289,6 +291,26 @@ model Rubric {
   activity      Activity  @relation(fields: [activityId], references: [id])
   
   @@map("rubrics")
+}
+
+model ActivityDocument {
+  id            Int       @id @default(autoincrement())
+  filename      String    // Nome do arquivo salvo no servidor
+  originalName  String    // Nome original do arquivo
+  mimeType      String    // Tipo MIME do arquivo
+  fileSize      Int       // Tamanho do arquivo em bytes
+  filePath      String    // Caminho completo do arquivo no servidor
+  description   String?   @db.Text // Descrição opcional do documento
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  activityId    Int
+  activity      Activity  @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  uploadedById  Int?
+  uploadedBy    User?     @relation(fields: [uploadedById], references: [id])
+
+  @@map("activity_documents")
 }
 
 model MenuPermission {

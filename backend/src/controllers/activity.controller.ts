@@ -27,6 +27,20 @@ export const getActivities = async (req: Request, res: Response) => {
             name: true,
             description: true
           }
+        },
+        documents: {
+          orderBy: {
+            createdAt: 'desc'
+          },
+          include: {
+            uploadedBy: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            }
+          }
         }
       },
       orderBy: {
@@ -54,7 +68,21 @@ export const getActivityById = async (req: Request, res: Response) => {
             students: true
           }
         },
-        rubrics: true
+        rubrics: true,
+        documents: {
+          orderBy: {
+            createdAt: 'desc'
+          },
+          include: {
+            uploadedBy: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            }
+          }
+        }
       }
     });
 
@@ -151,9 +179,10 @@ export const createActivity = async (req: Request, res: Response) => {
   }
 };
 
-export const uploadDocumentation = async (req: Request, res: Response) => {
+export const uploadDocumentation = async (req: any, res: Response) => {
   try {
     const { id } = req.params;
+    const { description } = req.body;
     const file = req.file;
 
     if (!file) {
@@ -168,13 +197,32 @@ export const uploadDocumentation = async (req: Request, res: Response) => {
       return ApiResponse.notFound(res, 'Atividade não encontrada');
     }
 
-    // Atualiza o caminho da documentação (relativo à pasta uploads)
-    const documentationPath = file.path.replace(/\\/g, '/'); // Normaliza caminho para Unix
-    const updatedActivity = await prisma.activity.update({
-      where: { id: Number(id) },
+    // Cria registro na tabela activity_documents
+    const document = await prisma.activityDocument.create({
       data: {
-        documentationPath: documentationPath,
+        filename: file.filename,
+        originalName: file.originalname,
+        mimeType: file.mimetype,
+        fileSize: file.size,
+        filePath: file.path.replace(/\\/g, '/'), // Normaliza caminho para Unix
+        description: description || null,
+        activityId: Number(id),
+        uploadedById: req.user?.id || null,
       },
+      include: {
+        uploadedBy: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      }
+    });
+
+    // Busca atividade atualizada com documentos
+    const updatedActivity = await prisma.activity.findUnique({
+      where: { id: Number(id) },
       include: {
         bnccCode: {
           select: {
@@ -190,6 +238,20 @@ export const uploadDocumentation = async (req: Request, res: Response) => {
             name: true,
             description: true
           }
+        },
+        documents: {
+          orderBy: {
+            createdAt: 'desc'
+          },
+          include: {
+            uploadedBy: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            }
+          }
         }
       }
     });
@@ -197,6 +259,64 @@ export const uploadDocumentation = async (req: Request, res: Response) => {
     return ApiResponse.success(res, updatedActivity, 'Documentação anexada com sucesso');
   } catch (error: any) {
     console.error('Erro ao fazer upload da documentação:', error);
+    return ApiResponse.serverError(res, error.message);
+  }
+};
+
+export const getActivityDocuments = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const documents = await prisma.activityDocument.findMany({
+      where: { activityId: Number(id) },
+      include: {
+        uploadedBy: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+
+    return ApiResponse.success(res, documents);
+  } catch (error: any) {
+    console.error('Erro ao buscar documentos da atividade:', error);
+    return ApiResponse.serverError(res, error.message);
+  }
+};
+
+export const deleteActivityDocument = async (req: Request, res: Response) => {
+  try {
+    const { id, documentId } = req.params;
+
+    const document = await prisma.activityDocument.findUnique({
+      where: { id: Number(documentId) },
+    });
+
+    if (!document) {
+      return ApiResponse.notFound(res, 'Documento não encontrado');
+    }
+
+    if (document.activityId !== Number(id)) {
+      return ApiResponse.badRequest(res, 'Documento não pertence a esta atividade');
+    }
+
+    // Deleta o arquivo físico (opcional - pode manter para histórico)
+    // fs.unlinkSync(document.filePath);
+
+    // Deleta registro do banco
+    await prisma.activityDocument.delete({
+      where: { id: Number(documentId) },
+    });
+
+    return ApiResponse.success(res, null, 'Documento excluído com sucesso');
+  } catch (error: any) {
+    console.error('Erro ao excluir documento:', error);
     return ApiResponse.serverError(res, error.message);
   }
 };
