@@ -202,29 +202,49 @@ export class MenuPermissionController {
 
   // Função auxiliar para construir árvore de menu
   private buildMenuTree(permissions: any[]): any[] {
+    if (!permissions || permissions.length === 0) return [];
+    
     const map = new Map();
     const roots: any[] = [];
+    const processed = new Set<string>();
 
-    // Criar mapa de todos os itens
+    // Criar mapa de todos os itens únicos (evitar duplicatas)
     permissions.forEach(perm => {
-      map.set(perm.menuItem, {
-        ...perm,
-        children: [],
-      });
+      if (!processed.has(perm.menuItem)) {
+        map.set(perm.menuItem, {
+          ...perm,
+          children: [],
+        });
+        processed.add(perm.menuItem);
+      }
     });
 
     // Construir árvore
     permissions.forEach(perm => {
       const node = map.get(perm.menuItem);
+      if (!node) return;
+      
       if (perm.parentItem) {
         const parent = map.get(perm.parentItem);
         if (parent) {
-          parent.children.push(node);
+          // Verificar se o filho já não foi adicionado
+          const alreadyAdded = parent.children.some((child: any) => child.menuItem === node.menuItem);
+          if (!alreadyAdded) {
+            parent.children.push(node);
+          }
         } else {
-          roots.push(node);
+          // Parent não encontrado, adicionar como raiz se ainda não foi adicionado
+          const alreadyInRoots = roots.some((root: any) => root.menuItem === node.menuItem);
+          if (!alreadyInRoots) {
+            roots.push(node);
+          }
         }
       } else {
-        roots.push(node);
+        // É um item raiz, verificar se já foi adicionado
+        const alreadyInRoots = roots.some((root: any) => root.menuItem === node.menuItem);
+        if (!alreadyInRoots) {
+          roots.push(node);
+        }
       }
     });
 
@@ -232,7 +252,7 @@ export class MenuPermissionController {
     const sortByOrder = (items: any[]) => {
       items.sort((a, b) => a.order - b.order);
       items.forEach(item => {
-        if (item.children.length > 0) {
+        if (item.children && item.children.length > 0) {
           sortByOrder(item.children);
         }
       });
