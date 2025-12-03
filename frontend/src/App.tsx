@@ -126,6 +126,29 @@ const getStudentAvatar = (student: { id: number; avatar?: { avatar: string } }):
   return `/avatares_edukkare/${AVATARS[avatarIndex]}`;
 };
 
+// Sistema de Cores - Design Clean e Moderno
+const COLORS = {
+  primary: '#2563eb',
+  primaryHover: '#1d4ed8',
+  secondary: '#64748b',
+  secondaryHover: '#475569',
+  success: '#10b981',
+  warning: '#f59e0b',
+  error: '#ef4444',
+  info: '#3b82f6',
+  background: '#ffffff',
+  backgroundSecondary: '#f8fafc',
+  backgroundHover: '#f1f5f9',
+  textPrimary: '#0f172a',
+  textSecondary: '#1e293b',
+  textTertiary: '#64748b',
+  border: '#e2e8f0',
+  borderHover: '#cbd5e1',
+  // Cores específicas mantidas para diferenciação
+  rubric: '#f59e0b', // Amarelo para rubricas
+  rubricHover: '#d97706',
+};
+
 function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -1791,7 +1814,7 @@ function App() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: COLORS.primary,
         fontFamily: 'system-ui, -apple-system, sans-serif',
         padding: '1rem'
       }}>
@@ -1805,7 +1828,7 @@ function App() {
           maxWidth: '400px'
         }}>
           <h1 style={{ fontSize: '3.5rem', marginBottom: '0.5rem' }}>🎓</h1>
-          <h2 style={{ color: '#8b5cf6', marginBottom: '0.5rem', fontSize: '1.75rem', fontWeight: '700' }}>
+          <h2 style={{ color: COLORS.textPrimary, marginBottom: '0.5rem', fontSize: '1.75rem', fontWeight: '700' }}>
             EDUKKARE
           </h2>
           <p style={{ color: '#64748b', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
@@ -1829,7 +1852,7 @@ function App() {
             style={{
               width: '100%',
               padding: '1rem',
-              background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+              background: COLORS.primary,
               color: 'white',
               border: 'none',
               borderRadius: '0.75rem',
@@ -1837,7 +1860,7 @@ function App() {
               fontWeight: '600',
               cursor: 'pointer',
               marginBottom: '1rem',
-              boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
             }}
           >
             🚀 Acessar Sistema
@@ -1852,7 +1875,7 @@ function App() {
             <p style={{ color: '#64748b', marginBottom: '0.5rem' }}>
               <strong>Login de Teste:</strong>
             </p>
-            <p style={{ color: '#8b5cf6', fontSize: '0.8rem' }}>
+            <p style={{ color: COLORS.primary, fontSize: '0.8rem' }}>
               admin@edukkare.com<br/>123456
             </p>
           </div>
@@ -1869,7 +1892,7 @@ function App() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: COLORS.primary,
         padding: '1rem'
       }}>
         <div style={{
@@ -1881,7 +1904,7 @@ function App() {
           maxWidth: '400px'
         }}>
           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-            <h1 style={{ color: '#8b5cf6', fontSize: '1.75rem', marginBottom: '0.25rem', fontWeight: '700' }}>
+            <h1 style={{ color: COLORS.textPrimary, fontSize: '1.75rem', marginBottom: '0.25rem', fontWeight: '700' }}>
               🎓 EDUKKARE
             </h1>
             <p style={{ color: '#64748b', fontSize: '0.85rem' }}>Entre com sua conta</p>
@@ -1913,7 +1936,7 @@ function App() {
                 style={{
                   width: '100%',
                   padding: '0.875rem',
-                  border: '2px solid #e2e8f0',
+                  border: `1px solid ${COLORS.border}`,
                   borderRadius: '0.75rem',
                   fontSize: '1rem',
                   boxSizing: 'border-box'
@@ -1934,7 +1957,7 @@ function App() {
                 style={{
                   width: '100%',
                   padding: '0.875rem',
-                  border: '2px solid #e2e8f0',
+                  border: `1px solid ${COLORS.border}`,
                   borderRadius: '0.75rem',
                   fontSize: '1rem',
                   boxSizing: 'border-box'
@@ -1949,14 +1972,14 @@ function App() {
               style={{
                 width: '100%',
                 padding: '1rem',
-                background: loading ? '#94a3b8' : 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                background: loading ? '#94a3b8' : COLORS.primary,
                 color: 'white',
                 border: 'none',
                 borderRadius: '0.75rem',
                 fontSize: '1.125rem',
                 fontWeight: '600',
                 cursor: loading ? 'not-allowed' : 'pointer',
-                boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
               }}
             >
               {loading ? 'Entrando...' : 'Entrar'}
@@ -1969,7 +1992,7 @@ function App() {
                 width: '100%',
                 padding: '0.875rem',
                 background: 'transparent',
-                color: '#8b5cf6',
+                color: COLORS.primary,
                 border: 'none',
                 fontSize: '0.9rem',
                 cursor: 'pointer',
@@ -1992,10 +2015,10 @@ function App() {
         <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
           {/* Header */}
           <header style={{
-            background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+            background: COLORS.primary,
             color: 'white',
             padding: '1rem',
-            boxShadow: '0 2px 10px rgba(139, 92, 246, 0.3)',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
             position: 'sticky',
             top: 0,
             zIndex: 100
@@ -2026,7 +2049,7 @@ function App() {
               background: 'white',
               padding: '1rem',
               borderRadius: '1rem',
-              border: '2px solid #e2e8f0',
+              border: `1px solid ${COLORS.border}`,
               marginBottom: '1rem',
               boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
             }}>
@@ -2059,7 +2082,7 @@ function App() {
               background: 'white',
               padding: '1rem',
               borderRadius: '1rem',
-              border: '2px solid #fbbf24',
+              border: `1px solid ${COLORS.warning}`,
               marginBottom: '1rem',
               boxShadow: '0 2px 8px rgba(251, 191, 36, 0.2)'
             }}>
@@ -2081,7 +2104,7 @@ function App() {
               background: 'white',
               padding: '1rem',
               borderRadius: '1rem',
-              border: '2px solid #10b981',
+              border: `1px solid ${COLORS.success}`,
               marginBottom: '1rem',
               boxShadow: '0 2px 8px rgba(16, 185, 129, 0.2)'
             }}>
@@ -2116,7 +2139,7 @@ function App() {
               background: 'white',
               padding: '1rem',
               borderRadius: '1rem',
-              border: '2px solid #6366f1',
+              border: `1px solid ${COLORS.info}`,
               marginBottom: '1.5rem',
               boxShadow: '0 2px 8px rgba(99, 102, 241, 0.2)'
             }}>
@@ -2166,7 +2189,7 @@ function App() {
                   padding: '1rem',
                   background: 'white',
                   color: '#64748b',
-                  border: '2px solid #e2e8f0',
+                  border: `1px solid ${COLORS.border}`,
                   borderRadius: '0.75rem',
                   fontSize: '0.95rem',
                   fontWeight: '700',
@@ -2185,10 +2208,10 @@ function App() {
       <div style={{ minHeight: '100vh', background: '#f8fafc' }}>
         {/* Mobile Header - Fixed */}
         <header style={{
-          background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+          background: COLORS.primary,
           color: 'white',
           padding: '1rem',
-          boxShadow: '0 2px 10px rgba(139, 92, 246, 0.3)',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
           position: 'sticky',
           top: 0,
           zIndex: 100
@@ -2374,7 +2397,7 @@ function App() {
         >
           {/* Sidebar Header */}
           <div style={{
-            background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+            background: COLORS.primary,
             color: 'white',
             padding: '1.5rem 1rem',
             display: 'flex',
@@ -2436,7 +2459,7 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
@@ -2471,7 +2494,7 @@ function App() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#f1f5f9';
-                  e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                  e.currentTarget.style.borderLeftColor = COLORS.primary;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'white';
@@ -2656,7 +2679,7 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
@@ -2692,7 +2715,7 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
@@ -2729,7 +2752,7 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
@@ -2765,7 +2788,7 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
@@ -2801,7 +2824,7 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
@@ -2836,7 +2859,7 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
@@ -2872,7 +2895,7 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
@@ -2908,7 +2931,7 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
@@ -2943,7 +2966,7 @@ function App() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#f1f5f9';
-                  e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                  e.currentTarget.style.borderLeftColor = COLORS.primary;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'white';
@@ -3026,7 +3049,7 @@ function App() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#f1f5f9';
-                  e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                  e.currentTarget.style.borderLeftColor = COLORS.primary;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'white';
@@ -3109,7 +3132,7 @@ function App() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#f1f5f9';
-                  e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                  e.currentTarget.style.borderLeftColor = COLORS.primary;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'white';
@@ -3200,7 +3223,7 @@ function App() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#f1f5f9';
-                e.currentTarget.style.borderLeftColor = '#8b5cf6';
+                e.currentTarget.style.borderLeftColor = COLORS.primary;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = 'white';
@@ -3314,15 +3337,15 @@ function App() {
                   key={student.id}
                   style={{
                     background: 'white',
-                    border: '2px solid #e2e8f0',
+                    border: `1px solid ${COLORS.border}`,
                     borderRadius: '1rem',
                     padding: '1.5rem',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                     transition: 'all 0.2s'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(139, 92, 246, 0.2)';
-                    e.currentTarget.style.borderColor = '#8b5cf6';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
+                    e.currentTarget.style.borderColor = COLORS.primary;
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
@@ -3344,7 +3367,7 @@ function App() {
                         height: '3.5rem',
                         borderRadius: '50%',
                         objectFit: 'cover',
-                        border: '3px solid #8b5cf6'
+                        border: `3px solid ${COLORS.primary}`
                       }}
                     />
                     <div style={{ flex: 1 }}>
@@ -3419,7 +3442,7 @@ function App() {
                     <button
                       onClick={() => openStudentModal(student)}
                       style={{
-                        background: '#8b5cf6',
+                        background: COLORS.primary,
                         color: 'white',
                         border: 'none',
                         padding: '0.75rem',
@@ -3466,14 +3489,14 @@ function App() {
                 right: '2rem',
                 width: '3.5rem',
                 height: '3.5rem',
-                background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                background: COLORS.primary,
                 color: 'white',
                 border: 'none',
                 borderRadius: '50%',
                 fontSize: '1.5rem',
                 fontWeight: '700',
                 cursor: 'pointer',
-                boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)',
+                boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -3583,7 +3606,7 @@ function App() {
                         style={{
                           width: '100%',
                           padding: '0.75rem',
-                          border: '2px solid #e2e8f0',
+                          border: `1px solid ${COLORS.border}`,
                           borderRadius: '0.5rem',
                           fontSize: '1rem',
                           fontFamily: 'inherit'
@@ -3609,7 +3632,7 @@ function App() {
                         style={{
                           width: '100%',
                           padding: '0.75rem',
-                          border: '2px solid #e2e8f0',
+                          border: `1px solid ${COLORS.border}`,
                           borderRadius: '0.5rem',
                           fontSize: '1rem',
                           fontFamily: 'inherit'
@@ -3636,7 +3659,7 @@ function App() {
                         style={{
                           width: '100%',
                           padding: '0.75rem',
-                          border: '2px solid #e2e8f0',
+                          border: `1px solid ${COLORS.border}`,
                           borderRadius: '0.5rem',
                           fontSize: '1rem',
                           fontFamily: 'inherit'
@@ -3663,7 +3686,7 @@ function App() {
                         style={{
                           width: '100%',
                           padding: '0.75rem',
-                          border: '2px solid #e2e8f0',
+                          border: `1px solid ${COLORS.border}`,
                           borderRadius: '0.5rem',
                           fontSize: '1rem',
                           fontFamily: 'inherit'
@@ -3688,7 +3711,7 @@ function App() {
                         style={{
                           width: '100%',
                           padding: '0.75rem',
-                          border: '2px solid #e2e8f0',
+                          border: `1px solid ${COLORS.border}`,
                           borderRadius: '0.5rem',
                           fontSize: '1rem',
                           fontFamily: 'inherit'
@@ -3717,7 +3740,7 @@ function App() {
                         style={{
                           width: '100%',
                           padding: '0.75rem',
-                          border: '2px solid #e2e8f0',
+                          border: `1px solid ${COLORS.border}`,
                           borderRadius: '0.5rem',
                           fontSize: '1rem',
                           fontFamily: 'inherit'
@@ -3740,7 +3763,7 @@ function App() {
                               height: '3rem',
                               borderRadius: '50%',
                               objectFit: 'cover',
-                              border: '2px solid #8b5cf6'
+                              border: `2px solid ${COLORS.primary}`
                             }}
                           />
                         </div>
@@ -3774,7 +3797,7 @@ function App() {
                         style={{
                           flex: 1,
                           padding: '1rem',
-                          background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                          background: COLORS.primary,
                           color: 'white',
                           border: 'none',
                           borderRadius: '0.5rem',
@@ -3804,7 +3827,7 @@ function App() {
             {/* Cards de Métricas */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
               {/* Total de Alunos */}
-              <div style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)' }}>
+              <div style={{ background: COLORS.primary, borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
                   <span style={{ fontSize: '2rem' }}>👶</span>
                   <div style={{ background: 'rgba(255,255,255,0.2)', padding: '0.5rem', borderRadius: '0.5rem' }}>
@@ -3870,7 +3893,7 @@ function App() {
                     </div>
                     <div style={{ background: '#e2e8f0', height: '0.5rem', borderRadius: '0.25rem', overflow: 'hidden' }}>
                       <div style={{ 
-                        background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)', 
+                        background: COLORS.primary, 
                         height: '100%', 
                         width: `${students.length > 0 ? (students.filter(s => s.shift === 'MANHA').length / students.length) * 100 : 0}%`,
                         transition: 'width 0.3s'
@@ -3921,19 +3944,19 @@ function App() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem' }}>
                     <span style={{ fontSize: '0.875rem', color: '#475569' }}>📚 Média de Atividades/Aluno</span>
-                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: COLORS.primary }}>
                       {students.length > 0 ? (activities.length / students.length).toFixed(1) : '0'}
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem' }}>
                     <span style={{ fontSize: '0.875rem', color: '#475569' }}>👥 Média de Alunos/Professor</span>
-                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: COLORS.primary }}>
                       {teachers.length > 0 ? (students.length / teachers.length).toFixed(1) : '0'}
                     </span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', background: '#f8fafc', borderRadius: '0.5rem' }}>
                     <span style={{ fontSize: '0.875rem', color: '#475569' }}>🎓 Média de Alunos/Turma</span>
-                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>
+                    <span style={{ fontSize: '0.875rem', fontWeight: '700', color: COLORS.primary }}>
                       {classes.length > 0 ? (students.length / classes.length).toFixed(1) : '0'}
                     </span>
                   </div>
@@ -3956,7 +3979,7 @@ function App() {
               {/* Atividades Hoje */}
               <div style={{ background: 'white', border: '2px solid #e2e8f0', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                  <div style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '1rem', borderRadius: '0.75rem' }}>
+                  <div style={{ background: COLORS.primary, padding: '1rem', borderRadius: '0.75rem' }}>
                     <span style={{ fontSize: '1.5rem' }}>📅</span>
                   </div>
                   <div>
@@ -4103,7 +4126,7 @@ function App() {
                 <p style={{ fontSize: '0.875rem', color: '#64748b' }}>{notes.length} notas cadastradas</p>
               </div>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button onClick={() => openNoteModal()} style={{ background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <button onClick={() => openNoteModal()} style={{ background: COLORS.primary, color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span>➕</span> Incluir Nota
                 </button>
                 <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.75rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
@@ -4294,7 +4317,7 @@ function App() {
                       </button>
                       <button 
                         onClick={handleSaveGrade} 
-                        style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}
+                        style={{ flex: 1, padding: '1rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}
                       >
                         {editingNote ? 'Salvar Alterações' : 'Cadastrar Nota'}
                       </button>
@@ -4353,7 +4376,7 @@ function App() {
                 <p style={{ fontSize: '0.75rem', opacity: 0.9 }}>Abaixo da média (7.0)</p>
               </div>
 
-              <div style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)' }}>
+              <div style={{ background: COLORS.primary, borderRadius: '1rem', padding: '1.5rem', color: 'white', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
                   <span style={{ fontSize: '2rem' }}>⭐</span>
                   <div>
@@ -4377,7 +4400,7 @@ function App() {
                   {[
                     { area: 'Linguagem', grade: 8.5, color: '#8b5cf6' },
                     { area: 'Matemática', grade: 8.0, color: '#3b82f6' },
-                    { area: 'Artes', grade: 8.8, color: '#ec4899' },
+                    { area: 'Artes', grade: 8.8, color: COLORS.info },
                     { area: 'Movimento', grade: 8.3, color: '#10b981' },
                     { area: 'Natureza', grade: 7.9, color: '#f59e0b' }
                   ].map((item) => (
@@ -4405,7 +4428,7 @@ function App() {
                     const averages = [9.5, 9.2, 9.0, 8.8, 8.7, 8.5, 8.4, 8.3, 8.2, 8.1];
                     return (
                       <div key={student.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.5rem', background: '#f8fafc', borderRadius: '0.5rem' }}>
-                        <span style={{ fontSize: '1.25rem', fontWeight: '700', color: '#8b5cf6', minWidth: '30px' }}>#{index + 1}</span>
+                        <span style={{ fontSize: '1.25rem', fontWeight: '700', color: COLORS.primary, minWidth: '30px' }}>#{index + 1}</span>
                         <span style={{ flex: 1, fontSize: '0.875rem', color: '#1e293b', fontWeight: '600' }}>{student.name}</span>
                         <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#10b981', background: '#dcfce7', padding: '0.25rem 0.75rem', borderRadius: '0.5rem' }}>{averages[index]}</span>
                       </div>
@@ -4801,7 +4824,7 @@ function App() {
 
             {/* Botões de Ação */}
             <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-              <button style={{ background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <button style={{ background: COLORS.primary, color: 'white', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span>➕</span> Nova Avaliação
               </button>
               <button style={{ background: 'white', color: '#64748b', border: '2px solid #e2e8f0', padding: '0.75rem 1.5rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -4879,7 +4902,7 @@ function App() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1e293b' }}>Destaques por Unidade Escolar</h3>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <button style={{ padding: '0.5rem 1rem', background: '#8b5cf6', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Todas Escolas</button>
+                  <button style={{ padding: '0.5rem 1rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Todas Escolas</button>
                   <button style={{ padding: '0.5rem 1rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Atenção</button>
                   <button style={{ padding: '0.5rem 1rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Destaque</button>
                   <button style={{ padding: '0.5rem 1rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Acompanhamento</button>
@@ -4890,7 +4913,7 @@ function App() {
                 {/* Escola 1 */}
                 <div style={{ background: 'white', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.5rem', fontWeight: '700' }}>E1</div>
+                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: COLORS.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '1.5rem', fontWeight: '700' }}>E1</div>
                     <div>
                       <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#1e293b' }}>EMEI Arco-Íris</h4>
                       <p style={{ fontSize: '0.75rem', color: '#64748b' }}>164 alunos</p>
@@ -4980,7 +5003,7 @@ function App() {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.125rem', fontWeight: '700', color: '#1e293b' }}>Evolução da Rede Municipal - 2026</h3>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button style={{ padding: '0.25rem 0.75rem', background: '#8b5cf6', color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Mensal</button>
+                    <button style={{ padding: '0.25rem 0.75rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Mensal</button>
                     <button style={{ padding: '0.25rem 0.75rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Trimestral</button>
                     <button style={{ padding: '0.25rem 0.75rem', background: 'white', color: '#64748b', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>Por Escola</button>
                   </div>
@@ -4998,8 +5021,8 @@ function App() {
                     { month: 'Set', value: 97 }
                   ].map((item) => (
                     <div key={item.month} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                      <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#8b5cf6' }}>{item.value}%</div>
-                      <div style={{ width: '100%', background: '#8b5cf6', borderRadius: '0.5rem 0.5rem 0 0', height: `${item.value * 2}px` }}></div>
+                      <div style={{ fontSize: '0.75rem', fontWeight: '600', color: COLORS.primary }}>{item.value}%</div>
+                      <div style={{ width: '100%', background: COLORS.primary, borderRadius: '0.5rem 0.5rem 0 0', height: `${item.value * 2}px` }}></div>
                       <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{item.month}</div>
                     </div>
                   ))}
@@ -5014,7 +5037,7 @@ function App() {
                     { area: 'Motor', value: 94, color: '#10b981' },
                     { area: 'Cognitivo', value: 91, color: '#3b82f6' },
                     { area: 'Linguagem', value: 87, color: '#f59e0b' },
-                    { area: 'Social', value: 96, color: '#ec4899' }
+                    { area: 'Social', value: 96, color: COLORS.info }
                   ].map((item) => (
                     <div key={item.area} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', flex: 1 }}>
                       <div style={{ fontSize: '0.875rem', fontWeight: '700', color: item.color }}>{item.value}%</div>
@@ -5034,7 +5057,7 @@ function App() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
                 {/* Curso 1 */}
-                <div style={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', borderRadius: '1rem', padding: '1.5rem', color: 'white', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ background: COLORS.primary, borderRadius: '1rem', padding: '1.5rem', color: 'white', position: 'relative', overflow: 'hidden' }}>
                   <div style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '4rem', opacity: 0.2 }}>🎓</div>
                   <h4 style={{ fontSize: '1rem', fontWeight: '700', marginBottom: '0.75rem' }}>Gestão Municipal para Ed. Infantil</h4>
                   <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', marginBottom: '1rem', opacity: 0.9 }}>
@@ -5150,27 +5173,27 @@ function App() {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1.5rem' }}>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>91%</div>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: COLORS.primary, marginBottom: '0.25rem' }}>91%</div>
                   <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Taxa de Engajamento</div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>4.7</div>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: COLORS.primary, marginBottom: '0.25rem' }}>4.7</div>
                   <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Satisfação (5.0)</div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>8.124</div>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: COLORS.primary, marginBottom: '0.25rem' }}>8.124</div>
                   <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Mensagens/mês</div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>87%</div>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: COLORS.primary, marginBottom: '0.25rem' }}>87%</div>
                   <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Presença Reuniões</div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>892</div>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: COLORS.primary, marginBottom: '0.25rem' }}>892</div>
                   <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Feedbacks Recebidos</div>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '3rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>18h</div>
+                  <div style={{ fontSize: '3rem', fontWeight: '700', color: COLORS.primary, marginBottom: '0.25rem' }}>18h</div>
                   <div style={{ fontSize: '0.875rem', color: '#64748b' }}>Tempo Resposta</div>
                 </div>
               </div>
@@ -5179,7 +5202,7 @@ function App() {
         ) : currentScreen === 'integratedManagement' ? (
           <main style={{ padding: '1rem', paddingBottom: '2rem', background: '#f8fafc' }}>
             {/* Header com gradiente */}
-            <div style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)', borderRadius: '1rem', padding: '2rem', marginBottom: '1.5rem', color: 'white', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ background: COLORS.primary, borderRadius: '1rem', padding: '2rem', marginBottom: '1.5rem', color: 'white', position: 'relative', overflow: 'hidden' }}>
               <div style={{ position: 'relative', zIndex: 1 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
                   <div>
@@ -5265,7 +5288,7 @@ function App() {
                 {/* Badge 2 - Fortalecimento da Governança */}
                 <div style={{ background: 'white', border: '3px solid #10b981', borderRadius: '1rem', padding: '1.5rem', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
                   <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-                    <div style={{ width: '80px', height: '80px', borderRadius: '1rem', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '80px', height: '80px', borderRadius: '1rem', background: COLORS.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <span style={{ fontSize: '2.5rem' }}>⚙️</span>
                     </div>
                   </div>
@@ -5276,7 +5299,7 @@ function App() {
                       <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#10b981' }}>100%</span>
                     </div>
                     <div style={{ background: '#e2e8f0', height: '8px', borderRadius: '0.5rem', overflow: 'hidden' }}>
-                      <div style={{ background: '#8b5cf6', height: '100%', width: '100%' }}></div>
+                      <div style={{ background: COLORS.primary, height: '100%', width: '100%' }}></div>
                     </div>
                   </div>
                   <div style={{ background: '#dcfce7', color: '#166534', padding: '0.75rem', borderRadius: '0.5rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
@@ -5333,7 +5356,7 @@ function App() {
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
                     <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#1e40af', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>🛡️</div>
-                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>⚙️</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: COLORS.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>⚙️</div>
                     <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>💰</div>
                   </div>
                   <div style={{ background: '#10b981', color: 'white', padding: '0.75rem', borderRadius: '0.5rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
@@ -5361,7 +5384,7 @@ function App() {
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
                     <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#1e40af', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>🛡️</div>
-                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>⚙️</div>
+                    <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: COLORS.primary, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>⚙️</div>
                     <div style={{ width: '50px', height: '50px', borderRadius: '0.75rem', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', opacity: 0.5 }}>💰</div>
                   </div>
                   <div style={{ background: '#f59e0b', color: 'white', padding: '0.75rem', borderRadius: '0.5rem', textAlign: 'center', fontSize: '0.875rem', fontWeight: '700', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
@@ -5541,13 +5564,13 @@ function App() {
                     {teacher.specialization && <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>🎓</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{teacher.specialization}</span></div>}
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => openTeacherModal(teacher)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => openTeacherModal(teacher)} style={{ flex: 1, background: COLORS.primary, color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
                     <button onClick={() => handleDeleteTeacher(teacher)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
                   </div>
                 </div>
               ))}
             </div>
-            <button onClick={() => openTeacherModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            <button onClick={() => openTeacherModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)', zIndex: 100 }}>+</button>
             {showTeacherModal && (
               <><div onClick={() => setShowTeacherModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
               <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
@@ -5559,7 +5582,7 @@ function App() {
                   <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Especialização</label><input type="text" value={teacherForm.specialization} onChange={(e) => setTeacherForm({ ...teacherForm, specialization: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                     <button onClick={() => setShowTeacherModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
-                    <button onClick={handleSaveTeacher} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingTeacher ? 'Salvar' : 'Cadastrar'}</button>
+                    <button onClick={handleSaveTeacher} style={{ flex: 1, padding: '1rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingTeacher ? 'Salvar' : 'Cadastrar'}</button>
                   </div>
                 </div>
               </div></>
@@ -5583,13 +5606,13 @@ function App() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>🎭</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{user.role}</span></div>
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => openUserModal(user)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => openUserModal(user)} style={{ flex: 1, background: COLORS.primary, color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
                     <button onClick={() => handleDeleteUser(user)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
                   </div>
                 </div>
               ))}
             </div>
-            <button onClick={() => openUserModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            <button onClick={() => openUserModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)', zIndex: 100 }}>+</button>
             {showUserModal && (
               <><div onClick={() => setShowUserModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
               <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
@@ -5601,7 +5624,7 @@ function App() {
                   <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Função *</label><select value={userForm.role} onChange={(e) => setUserForm({ ...userForm, role: e.target.value as any })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }}><option value="PROFESSOR">Professor</option><option value="COORDENADOR">Coordenador</option><option value="GESTOR">Gestor</option><option value="ADMIN">Admin</option></select></div>
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                     <button onClick={() => setShowUserModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
-                    <button onClick={handleSaveUser} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingUser ? 'Salvar' : 'Cadastrar'}</button>
+                    <button onClick={handleSaveUser} style={{ flex: 1, padding: '1rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingUser ? 'Salvar' : 'Cadastrar'}</button>
                   </div>
                 </div>
               </div></>
@@ -5623,13 +5646,13 @@ function App() {
                     {school.email && <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><span>📧</span><span style={{ fontSize: '0.875rem', color: '#475569' }}>{school.email}</span></div>}
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => openSchoolModal(school)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => openSchoolModal(school)} style={{ flex: 1, background: COLORS.primary, color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
                     <button onClick={() => handleDeleteSchool(school)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
                   </div>
                 </div>
               ))}
             </div>
-            <button onClick={() => openSchoolModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            <button onClick={() => openSchoolModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)', zIndex: 100 }}>+</button>
             {showSchoolModal && (
               <><div onClick={() => setShowSchoolModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
               <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
@@ -5641,7 +5664,7 @@ function App() {
                   <div><label style={{ display: 'block', fontSize: '0.875rem', fontWeight: '600', marginBottom: '0.5rem' }}>Email</label><input type="email" value={schoolForm.email} onChange={(e) => setSchoolForm({ ...schoolForm, email: e.target.value })} style={{ width: '100%', padding: '0.75rem', border: '2px solid #e2e8f0', borderRadius: '0.5rem', fontSize: '1rem' }} /></div>
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                     <button onClick={() => setShowSchoolModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
-                    <button onClick={handleSaveSchool} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingSchool ? 'Salvar' : 'Cadastrar'}</button>
+                    <button onClick={handleSaveSchool} style={{ flex: 1, padding: '1rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingSchool ? 'Salvar' : 'Cadastrar'}</button>
                   </div>
                 </div>
               </div></>
@@ -5652,7 +5675,7 @@ function App() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <div><h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1e293b' }}>📝 Gerenciar Atividades</h2><p style={{ fontSize: '0.875rem', color: '#64748b' }}>{activities.length} atividades cadastradas</p></div>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button onClick={() => openActivityModal()} style={{ background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <button onClick={() => openActivityModal()} style={{ background: COLORS.primary, color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   ➕ Incluir Atividade
                 </button>
                 <button onClick={() => setCurrentScreen('home')} style={{ background: '#e2e8f0', color: '#475569', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>← Voltar</button>
@@ -5679,7 +5702,7 @@ function App() {
                     )}
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => openActivityModal(activity)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => openActivityModal(activity)} style={{ flex: 1, background: COLORS.primary, color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
                     <button 
                       onClick={() => openActivityRubricsModal(activity)} 
                       style={{ 
@@ -5783,7 +5806,7 @@ function App() {
                   
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                     <button onClick={() => setShowActivityModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
-                    <button onClick={handleSaveActivity} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingActivity ? 'Salvar' : 'Cadastrar'}</button>
+                    <button onClick={handleSaveActivity} style={{ flex: 1, padding: '1rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingActivity ? 'Salvar' : 'Cadastrar'}</button>
                   </div>
                 </div>
               </div></>
@@ -5845,7 +5868,7 @@ function App() {
                   </div>
                   
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => openRubricModal(rubric)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => openRubricModal(rubric)} style={{ flex: 1, background: COLORS.primary, color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
                     <button onClick={() => handleDeleteRubric(rubric)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
                   </div>
                 </div>
@@ -5986,7 +6009,7 @@ function App() {
                         style={{ 
                           width: '100%', 
                           padding: '0.75rem', 
-                          border: '2px solid #e2e8f0', 
+                          border: `1px solid ${COLORS.border}`, 
                           borderRadius: '0.5rem', 
                           fontSize: '1rem',
                           background: selectedActivityForRubrics ? '#f8fafc' : 'white',
@@ -6096,7 +6119,7 @@ function App() {
                       <span style={{ fontSize: '0.875rem', color: '#475569' }}>
                         {classData.teacher.name}
                         {classData.teacher.specialization && (
-                          <span style={{ color: '#8b5cf6', fontSize: '0.75rem' }}> - {classData.teacher.specialization}</span>
+                          <span style={{ color: COLORS.primary, fontSize: '0.75rem' }}> - {classData.teacher.specialization}</span>
                         )}
                       </span>
                     </div>
@@ -6109,13 +6132,13 @@ function App() {
                     )}
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => openClassModal(classData)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => openClassModal(classData)} style={{ flex: 1, background: COLORS.primary, color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
                     <button onClick={() => handleDeleteClass(classData)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
                   </div>
                 </div>
               ))}
             </div>
-            <button onClick={() => openClassModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            <button onClick={() => openClassModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)', zIndex: 100 }}>+</button>
             {showClassModal && (
               <><div onClick={() => setShowClassModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
               <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
@@ -6159,7 +6182,7 @@ function App() {
                   </div>
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                     <button onClick={() => setShowClassModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
-                    <button onClick={handleSaveClass} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingClass ? 'Salvar' : 'Cadastrar'}</button>
+                    <button onClick={handleSaveClass} style={{ flex: 1, padding: '1rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingClass ? 'Salvar' : 'Cadastrar'}</button>
                   </div>
                 </div>
               </div></>
@@ -6172,7 +6195,7 @@ function App() {
               <button
                 onClick={() => setCurrentScreen('students')}
                 style={{
-                  background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                  background: COLORS.primary,
                   color: 'white',
                   border: 'none',
                   padding: '0.625rem 1.25rem',
@@ -6180,7 +6203,7 @@ function App() {
                   fontSize: '0.875rem',
                   fontWeight: '600',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)'
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
                 }}
               >
                 ← Voltar para Lista
@@ -6189,7 +6212,7 @@ function App() {
 
             {/* Student Profile Header */}
             <div style={{
-              background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+              background: COLORS.primary,
               color: 'white',
               borderRadius: '1.25rem',
               padding: '1.875rem',
@@ -6418,7 +6441,7 @@ function App() {
                     }
                   }}
                   style={{
-                    background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                    background: COLORS.primary,
                     color: 'white',
                     border: 'none',
                     padding: '0.875rem 1.75rem',
@@ -6426,7 +6449,7 @@ function App() {
                     fontSize: '1rem',
                     fontWeight: '600',
                     cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem'
@@ -6443,7 +6466,7 @@ function App() {
               <>
                 {/* Cabeçalho do Perfil - Ultra Compacto */}
                 <div style={{
-                  background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+                  background: COLORS.primary,
                   color: 'white',
                   borderRadius: '0.75rem',
                   padding: '0.75rem',
@@ -6542,7 +6565,7 @@ function App() {
                         🚨 Emergência
                       </h3>
                       <span style={{ 
-                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        background: COLORS.primary, 
                         color: 'white', 
                         padding: '0.375rem 0.75rem', 
                         borderRadius: '1rem', 
@@ -6639,7 +6662,7 @@ function App() {
                         🩺 Caderneta de Saúde
                       </h3>
                       <span style={{ 
-                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        background: COLORS.primary, 
                         color: 'white', 
                         padding: '0.25rem 0.5rem', 
                         borderRadius: '0.5rem', 
@@ -6683,7 +6706,7 @@ function App() {
                         🍽️ Cuidados de Hoje
                       </h3>
                       <span style={{ 
-                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        background: COLORS.primary, 
                         color: 'white', 
                         padding: '0.25rem 0.5rem', 
                         borderRadius: '0.5rem', 
@@ -6778,7 +6801,7 @@ function App() {
                         📚 Progresso BNCC
                       </h3>
                       <span style={{ 
-                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        background: COLORS.primary, 
                         color: 'white', 
                         padding: '0.375rem 0.75rem', 
                         borderRadius: '1rem', 
@@ -6793,13 +6816,13 @@ function App() {
                     <div style={{ marginBottom: '1.25rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                         <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>O Eu, o Outro e o Nós</span>
-                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>92%</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: COLORS.primary }}>92%</span>
                       </div>
                       <div style={{ height: '0.5rem', background: '#e5e7eb', borderRadius: '9999px', overflow: 'hidden' }}>
                         <div style={{ 
                           height: '100%', 
                           width: '92%', 
-                          background: 'linear-gradient(90deg, #8b5cf6, #ec4899)', 
+                          background: COLORS.primary, 
                           borderRadius: '9999px',
                           transition: 'width 1s ease'
                         }} />
@@ -6811,13 +6834,13 @@ function App() {
                     <div style={{ marginBottom: '1.25rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                         <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Corpo, Gestos e Movimentos</span>
-                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>88%</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: COLORS.primary }}>88%</span>
                       </div>
                       <div style={{ height: '0.5rem', background: '#e5e7eb', borderRadius: '9999px', overflow: 'hidden' }}>
                         <div style={{ 
                           height: '100%', 
                           width: '88%', 
-                          background: 'linear-gradient(90deg, #8b5cf6, #ec4899)', 
+                          background: COLORS.primary, 
                           borderRadius: '9999px',
                           transition: 'width 1s ease'
                         }} />
@@ -6829,13 +6852,13 @@ function App() {
                     <div style={{ marginBottom: '1.25rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                         <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Traços, Sons, Cores e Formas</span>
-                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>85%</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: COLORS.primary }}>85%</span>
                       </div>
                       <div style={{ height: '0.5rem', background: '#e5e7eb', borderRadius: '9999px', overflow: 'hidden' }}>
                         <div style={{ 
                           height: '100%', 
                           width: '85%', 
-                          background: 'linear-gradient(90deg, #8b5cf6, #ec4899)', 
+                          background: COLORS.primary, 
                           borderRadius: '9999px',
                           transition: 'width 1s ease'
                         }} />
@@ -6847,13 +6870,13 @@ function App() {
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                         <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#1f2937' }}>Escuta, Fala, Pensamento</span>
-                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: '#8b5cf6' }}>83%</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: '700', color: COLORS.primary }}>83%</span>
                       </div>
                       <div style={{ height: '0.5rem', background: '#e5e7eb', borderRadius: '9999px', overflow: 'hidden' }}>
                         <div style={{ 
                           height: '100%', 
                           width: '83%', 
-                          background: 'linear-gradient(90deg, #8b5cf6, #ec4899)', 
+                          background: COLORS.primary, 
                           borderRadius: '9999px',
                           transition: 'width 1s ease'
                         }} />
@@ -6869,7 +6892,7 @@ function App() {
                         🎯 Marcos de Desenvolvimento
                       </h3>
                       <span style={{ 
-                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        background: COLORS.primary, 
                         color: 'white', 
                         padding: '0.375rem 0.75rem', 
                         borderRadius: '1rem', 
@@ -6993,7 +7016,7 @@ function App() {
                         📸 Álbum de Aprendizagem
                       </h3>
                       <span style={{ 
-                        background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', 
+                        background: COLORS.primary, 
                         color: 'white', 
                         padding: '0.375rem 0.75rem', 
                         borderRadius: '1rem', 
@@ -7009,7 +7032,7 @@ function App() {
                       <div style={{ 
                         overflow: 'hidden', 
                         borderRadius: '0.75rem', 
-                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        background: COLORS.primary,
                         position: 'relative'
                       }}>
                         <div style={{ 
@@ -7024,7 +7047,7 @@ function App() {
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'center',
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            background: COLORS.primary,
                             color: 'white',
                             flexDirection: 'column',
                             gap: '0.5rem',
@@ -7253,15 +7276,15 @@ function App() {
                       gap: '0.75rem'
                     }}>
                       <div style={{ textAlign: 'center', flex: '1 1 80px', minWidth: '80px' }}>
-                        <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>47</div>
+                        <div style={{ fontSize: '1.25rem', fontWeight: '700', color: COLORS.primary, marginBottom: '0.25rem' }}>47</div>
                         <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Fotos Este Mês</div>
                       </div>
                       <div style={{ textAlign: 'center', flex: '1 1 80px', minWidth: '80px' }}>
-                        <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>12</div>
+                        <div style={{ fontSize: '1.25rem', fontWeight: '700', color: COLORS.primary, marginBottom: '0.25rem' }}>12</div>
                         <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Vídeos</div>
                       </div>
                       <div style={{ textAlign: 'center', flex: '1 1 80px', minWidth: '80px' }}>
-                        <div style={{ fontSize: '1.25rem', fontWeight: '700', color: '#8b5cf6', marginBottom: '0.25rem' }}>23</div>
+                        <div style={{ fontSize: '1.25rem', fontWeight: '700', color: COLORS.primary, marginBottom: '0.25rem' }}>23</div>
                         <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Atividades</div>
                       </div>
                     </div>
@@ -7271,7 +7294,7 @@ function App() {
             )}
           </main>
         ) : currentScreen === 'training' ? (
-          <main style={{ padding: '1.5rem', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', minHeight: '100vh' }}>
+          <main style={{ padding: '1.5rem', background: COLORS.backgroundSecondary, minHeight: '100vh' }}>
             {/* Header */}
             <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
               <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: 'white', marginBottom: '0.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
@@ -7966,13 +7989,13 @@ function App() {
                   <h3 style={{ fontSize: '0.875rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.5rem', wordBreak: 'break-word' }}>{avatar.avatar}</h3>
                   <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '1rem' }}>ID: {avatar.id}</div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => openAvatarModal(avatar)} style={{ flex: 1, background: '#8b5cf6', color: 'white', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
+                    <button onClick={() => openAvatarModal(avatar)} style={{ flex: 1, background: COLORS.primary, color: 'white', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
                     <button onClick={() => handleDeleteAvatar(avatar)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.5rem', borderRadius: '0.5rem', fontSize: '0.75rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
                   </div>
                 </div>
               ))}
             </div>
-            <button onClick={() => openAvatarModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 16px rgba(139, 92, 246, 0.4)', zIndex: 100 }}>+</button>
+            <button onClick={() => openAvatarModal()} style={{ position: 'fixed', bottom: '2rem', right: '2rem', width: '3.5rem', height: '3.5rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '50%', fontSize: '1.5rem', cursor: 'pointer', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)', zIndex: 100 }}>+</button>
             {showAvatarModal && (
               <><div onClick={() => setShowAvatarModal(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.5)', zIndex: 400 }} />
               <div style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'white', borderRadius: '1rem', padding: '2rem', maxWidth: '500px', width: '90%', maxHeight: '90vh', overflowY: 'auto', zIndex: 500 }}>
@@ -8003,7 +8026,7 @@ function App() {
                   </div>
                   <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
                     <button onClick={() => setShowAvatarModal(false)} style={{ flex: 1, padding: '1rem', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>Cancelar</button>
-                    <button onClick={handleSaveAvatar} style={{ flex: 1, padding: '1rem', background: 'linear-gradient(135deg, #8b5cf6, #ec4899)', color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingAvatar ? 'Salvar' : 'Cadastrar'}</button>
+                    <button onClick={handleSaveAvatar} style={{ flex: 1, padding: '1rem', background: COLORS.primary, color: 'white', border: 'none', borderRadius: '0.5rem', fontWeight: '600', cursor: 'pointer' }}>{editingAvatar ? 'Salvar' : 'Cadastrar'}</button>
                   </div>
                 </div>
               </div></>
@@ -8050,7 +8073,7 @@ function App() {
                         padding: '1rem',
                         fontSize: '0.9rem',
                         fontWeight: '600',
-                        border: '2px solid #e2e8f0',
+                        border: `1px solid ${COLORS.border}`,
                         borderRadius: '0.75rem',
                         background: 'white',
                         color: '#1e293b',
@@ -8137,7 +8160,7 @@ function App() {
                     padding: '1rem',
                     fontSize: '0.9rem',
                     fontWeight: '600',
-                    border: '2px solid #e2e8f0',
+                    border: `1px solid ${COLORS.border}`,
                     borderRadius: '0.75rem',
                     background: selectedActivity ? 'white' : '#f8fafc',
                     color: selectedActivity ? '#1e293b' : '#94a3b8',
@@ -8220,14 +8243,14 @@ function App() {
                   }}
                   style={{
                     padding: '0.5rem',
-                    background: selectedStudent?.id === student.id ? 'linear-gradient(135deg, #8b5cf6, #ec4899)' : 'white',
+                    background: selectedStudent?.id === student.id ? COLORS.primary : 'white',
                     color: selectedStudent?.id === student.id ? 'white' : '#1e293b',
                     border: selectedStudent?.id === student.id ? 'none' : '2px solid #e2e8f0',
                     borderRadius: '0.75rem',
                     cursor: 'pointer',
                     textAlign: 'center',
                     transition: 'all 0.2s',
-                    boxShadow: selectedStudent?.id === student.id ? '0 2px 8px rgba(139, 92, 246, 0.4)' : '0 1px 3px rgba(0,0,0,0.05)'
+                    boxShadow: selectedStudent?.id === student.id ? '0 2px 8px rgba(37, 99, 235, 0.3)' : '0 1px 3px rgba(0,0,0,0.05)'
                   }}
                 >
                   <img 
@@ -8765,7 +8788,7 @@ function App() {
                     style={{
                       width: '100%',
                       padding: '1rem',
-                      border: '2px solid #e2e8f0',
+                      border: `1px solid ${COLORS.border}`,
                       borderRadius: '0.75rem',
                       fontSize: '1rem',
                       fontFamily: 'inherit',
@@ -8876,7 +8899,7 @@ function App() {
                         style={{
                           width: '100%',
                           padding: '1rem',
-                          border: '2px solid #e2e8f0',
+                          border: `1px solid ${COLORS.border}`,
                           borderRadius: '0.75rem',
                           fontSize: '1rem',
                           fontFamily: 'inherit',
