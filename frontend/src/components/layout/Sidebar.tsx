@@ -11,7 +11,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
-  const { menuItems, hasMenuAccess } = useMenu();
+  const { menuItems, hasMenuAccess, isLoading } = useMenu();
   const { user, logout } = useAuth();
   const [localExpanded, setLocalExpanded] = useState<Set<string>>(new Set());
 
@@ -62,19 +62,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     const isExpanded = localExpanded.has(item.menuItem);
     const isActive = item.active !== false;
 
-    if (!isActive && user?.role !== 'ADMIN') {
-      return null;
-    }
-
-    if (!hasMenuAccess(item.menuItem) && user?.role !== 'ADMIN') {
-      return null;
+    // Verificar acesso apenas se não for ADMIN
+    if (user?.role !== 'ADMIN') {
+      if (!isActive) return null;
+      if (!hasMenuAccess(item.menuItem)) return null;
     }
 
     const paddingLeft = level === 0 ? '1.5rem' : `${3 + level * 1.5}rem`;
+    const uniqueKey = `${item.menuItem}-${level}-${item.id || ''}`;
 
     if (hasChildren) {
       return (
-        <div key={item.id || item.menuItem}>
+        <div key={uniqueKey}>
           <button
             onClick={() => toggleLocalExpanded(item.menuItem)}
             style={{
@@ -125,23 +124,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               ▶
             </span>
           </button>
-          {isExpanded && (
+          {isExpanded && item.children && item.children.length > 0 && (
             <div
               style={{
                 background: level === 0 ? COLORS.backgroundSecondary : 'transparent',
                 borderLeft: level === 0 ? '4px solid #e2e8f0' : 'none',
               }}
             >
-              {item.children.map((child: any) => renderMenuItem(child, level + 1))}
+              {item.children.map((child: any, childIndex: number) => 
+                renderMenuItem(child, level + 1)
+              )}
             </div>
           )}
         </div>
       );
     }
 
+    const uniqueKey = `${item.menuItem}-${level}-${item.id || ''}`;
+    
     return (
       <button
-        key={item.id || item.menuItem}
+        key={uniqueKey}
         onClick={() => handleMenuClick(item.screen)}
         style={{
           width: '100%',
@@ -264,11 +267,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             padding: '1rem 0',
           }}
         >
-          {menuItems.length > 0 ? (
-            menuItems.map((item) => renderMenuItem(item))
-          ) : (
+          {isLoading ? (
             <div style={{ padding: '1rem 1.5rem', color: COLORS.textTertiary }}>
               Carregando menu...
+            </div>
+          ) : menuItems.length > 0 ? (
+            menuItems.map((item, index) => renderMenuItem(item, 0))
+          ) : (
+            <div style={{ padding: '1rem 1.5rem', color: COLORS.textTertiary }}>
+              Nenhum item de menu disponível
             </div>
           )}
 

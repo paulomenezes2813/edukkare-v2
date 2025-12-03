@@ -27,81 +27,17 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [selectedNivelAcesso, setSelectedNivelAcesso] = useState<string>('ESTRATEGICO');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Função auxiliar para construir árvore de menu
-  const buildMenuTree = (permissions: MenuPermission[]): MenuItem[] => {
-    if (!permissions || permissions.length === 0) return [];
-    
-    const map = new Map<string, MenuItem>();
-    const roots: MenuItem[] = [];
-
-    // Criar mapa de todos os itens
-    permissions.forEach(perm => {
-      map.set(perm.menuItem, {
-        id: perm.menuItem,
-        menuItem: perm.menuItem,
-        menuLabel: perm.menuLabel,
-        parentItem: perm.parentItem,
-        nivelAcesso: perm.nivelAcesso,
-        order: perm.order,
-        icon: perm.icon || undefined,
-        screen: perm.screen || undefined,
-        active: perm.active,
-        children: [],
-      });
-    });
-
-    // Construir árvore
-    permissions.forEach(perm => {
-      const node = map.get(perm.menuItem);
-      if (!node) return;
-      
-      if (perm.parentItem) {
-        const parent = map.get(perm.parentItem);
-        if (parent) {
-          if (!parent.children) parent.children = [];
-          parent.children.push(node);
-        } else {
-          roots.push(node);
-        }
-      } else {
-        roots.push(node);
-      }
-    });
-
-    // Ordenar por ordem
-    const sortByOrder = (items: MenuItem[]) => {
-      items.sort((a, b) => a.order - b.order);
-      items.forEach(item => {
-        if (item.children && item.children.length > 0) {
-          sortByOrder(item.children);
-        }
-      });
-    };
-
-    sortByOrder(roots);
-    return roots;
-  };
 
   const loadUserMenu = async (role?: string) => {
     setIsLoading(true);
     try {
-      const currentRole = role || user?.role || 'PROFESSOR';
-
-      // ADMIN sempre tem acesso total
-      if (currentRole === 'ADMIN') {
-        const response = await menuService.getAll();
-        if (response.success) {
-          const permissions = response.data || [];
-          const menuTree = buildMenuTree(permissions);
-          setMenuItems(menuTree);
-        }
-        return;
-      }
-
+      // Sempre usar getMyMenu que já trata ADMIN corretamente no backend
       const response = await menuService.getMyMenu();
       if (response.success) {
         const menuTree = response.data || [];
-        setMenuItems(menuTree);
+        // Garantir que não há duplicatas e que está em formato de array
+        const cleanMenu = Array.isArray(menuTree) ? menuTree : [];
+        setMenuItems(cleanMenu);
       } else {
         setMenuItems([]);
       }
@@ -150,24 +86,21 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const hasMenuAccess = (menuItem: string): boolean => {
+    // ADMIN sempre tem acesso
     if (user?.role === 'ADMIN') return true;
-    if (!user?.nivelAcesso) return true;
+    
+    // Se não há menuItems carregados, não bloquear (pode estar carregando)
     if (!menuItems || menuItems.length === 0) return true;
     
-    const checkAccess = (items: MenuItem[] | MenuPermission[]): boolean => {
+    // Verificar recursivamente se o item está no menu do usuário
+    const checkAccess = (items: MenuItem[]): boolean => {
       for (const item of items) {
-        const itemId = (item as MenuItem).menuItem || (item as MenuPermission).menuItem;
-        const isActive = (item as MenuItem).active !== undefined 
-          ? (item as MenuItem).active 
-          : (item as MenuPermission).active;
-        
-        if (itemId === menuItem && isActive) {
+        if (item.menuItem === menuItem && item.active !== false) {
           return true;
         }
         
-        const children = (item as MenuItem).children;
-        if (children && children.length > 0) {
-          if (checkAccess(children)) return true;
+        if (item.children && item.children.length > 0) {
+          if (checkAccess(item.children)) return true;
         }
       }
       return false;
