@@ -14,8 +14,17 @@ import Users from '../pages/Users';
 import Schools from '../pages/Schools';
 import Classes from '../pages/Classes';
 import Notes from '../pages/Notes';
+import NotesReport from '../pages/NotesReport';
 import Training from '../pages/Training';
 import Help from '../pages/Help';
+import Dashboard from '../pages/Dashboard';
+import Monitoring from '../pages/Monitoring';
+import PedagogicalDashboard from '../pages/PedagogicalDashboard';
+import IntegratedManagement from '../pages/IntegratedManagement';
+import AccessControl from '../pages/AccessControl';
+import MenuAccess from '../pages/MenuAccess';
+import Rubrics from '../pages/Rubrics';
+import Avatars from '../pages/Avatars';
 
 // Componente de rota protegida
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -113,6 +122,78 @@ export const AppRoutes: React.FC = () => {
         element={
           <ProtectedRoute>
             <Help />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/monitoring"
+        element={
+          <ProtectedRoute>
+            <Monitoring />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/pedagogical-dashboard"
+        element={
+          <ProtectedRoute>
+            <PedagogicalDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/integrated-management"
+        element={
+          <ProtectedRoute>
+            <IntegratedManagement />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/notes-report"
+        element={
+          <ProtectedRoute>
+            <NotesReport />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/access"
+        element={
+          <ProtectedRoute>
+            <AccessControl />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/menu-access"
+        element={
+          <ProtectedRoute>
+            <MenuAccess />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/rubrics"
+        element={
+          <ProtectedRoute>
+            <Rubrics />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/avatars"
+        element={
+          <ProtectedRoute>
+            <Avatars />
           </ProtectedRoute>
         }
       />

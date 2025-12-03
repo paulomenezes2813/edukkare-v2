@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useMenu } from '../../contexts/MenuContext';
-import { useApp } from '../../contexts/AppContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { COLORS } from '../../utils/constants';
 
@@ -10,15 +10,38 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const { menuItems, hasMenuAccess } = useMenu();
-  const { setCurrentScreen } = useApp();
   const { user, logout } = useAuth();
   const [localExpanded, setLocalExpanded] = useState<Set<string>>(new Set());
 
   const handleMenuClick = (screen?: string | null) => {
     onClose();
     if (screen) {
-      setCurrentScreen(screen);
+      // Mapear screen para route
+      const screenToRoute: Record<string, string> = {
+        home: '/',
+        students: '/students',
+        teachers: '/teachers',
+        activities: '/activities',
+        classes: '/classes',
+        notes: '/notes',
+        users: '/users',
+        schools: '/schools',
+        training: '/training',
+        help: '/help',
+        dashboard: '/dashboard',
+        monitoring: '/monitoring',
+        pedagogicalDashboard: '/pedagogical-dashboard',
+        integratedManagement: '/integrated-management',
+        notesReport: '/notes-report',
+        access: '/access',
+        menuAccess: '/menu-access',
+        rubrics: '/rubrics',
+        avatars: '/avatars',
+      };
+      const route = screenToRoute[screen] || '/';
+      navigate(route);
     }
   };
 
@@ -253,6 +276,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <button
             onClick={() => {
               logout();
+              navigate('/login');
             }}
             style={{
               width: '100%',
