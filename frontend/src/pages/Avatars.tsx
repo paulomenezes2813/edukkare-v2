@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAvatars } from '../hooks/useAvatars';
 import { Loading } from '../components/common/Loading';
 import { Modal } from '../components/common/Modal';
@@ -41,8 +41,10 @@ export default function Avatars() {
       setShowModal(false);
       setEditingAvatar(null);
       setAvatarForm({ avatar: '' });
-    } catch (err: any) {
-      const errorMessage = err.response?.data?.message || err.message || 'Erro ao salvar avatar';
+    } catch (err: unknown) {
+      const errorMessage = (err as { response?: { data?: { message?: string }; message?: string }; message?: string })?.response?.data?.message || 
+                           (err as { message?: string })?.message || 
+                           'Erro ao salvar avatar';
       alert(errorMessage);
     }
   };
@@ -52,8 +54,10 @@ export default function Avatars() {
       try {
         await deleteAvatar(avatar.id);
         alert('Avatar excluído com sucesso!');
-      } catch (err: any) {
-        const errorMessage = err.response?.data?.message || err.message || 'Erro ao excluir avatar';
+      } catch (err: unknown) {
+        const errorMessage = (err as { response?: { data?: { message?: string }; message?: string }; message?: string })?.response?.data?.message || 
+                             (err as { message?: string })?.message || 
+                             'Erro ao excluir avatar';
         alert(errorMessage);
       }
     }
