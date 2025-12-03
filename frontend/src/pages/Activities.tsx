@@ -1,14 +1,16 @@
 import React from 'react';
 import { useActivities } from '../hooks/useActivities';
-import { Loading } from '../components/common/Loading';
+import { ActivityList } from '../components/activities/ActivityList';
+import { Button } from '../components/common/Button';
 import { COLORS } from '../utils/constants';
+import type { Activity } from '../types/activity';
 
 export default function Activities() {
-  const { activities, loading, error } = useActivities();
+  const { activities, loading, error, deleteActivity } = useActivities();
 
-  if (loading) {
-    return <Loading fullScreen text="Carregando atividades..." />;
-  }
+  const handleDelete = async (activity: Activity) => {
+    await deleteActivity(activity.id);
+  };
 
   if (error) {
     return (
@@ -20,15 +22,23 @@ export default function Activities() {
 
   return (
     <div style={{ padding: '1rem' }}>
-      <h1 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1.5rem' }}>
-        📚 Atividades
-      </h1>
-      <div style={{ background: 'white', borderRadius: '0.5rem', padding: '1rem' }}>
-        <p style={{ color: COLORS.textTertiary }}>
-          Total de atividades: {activities.length}
-        </p>
-        {/* Lista de atividades será implementada aqui */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: '700' }}>
+          📚 Atividades
+        </h1>
+        <Button onClick={() => {
+          // TODO: Implementar modal de criação de atividade
+          alert('Funcionalidade de criação será implementada em breve');
+        }}>
+          ➕ Nova Atividade
+        </Button>
       </div>
+
+      <ActivityList
+        activities={activities}
+        loading={loading}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }
