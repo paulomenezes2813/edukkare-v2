@@ -37,7 +37,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         users: '/users',
         schools: '/schools',
         training: '/training',
-        help: '/help',
         dashboard: '/dashboard',
         monitoring: '/monitoring',
         pedagogicalDashboard: '/pedagogical-dashboard',

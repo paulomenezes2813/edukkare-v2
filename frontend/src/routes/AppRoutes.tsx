@@ -16,7 +16,6 @@ import Classes from '../pages/Classes';
 import Notes from '../pages/Notes';
 import NotesReport from '../pages/NotesReport';
 import Training from '../pages/Training';
-import Help from '../pages/Help';
 import Dashboard from '../pages/Dashboard';
 import Monitoring from '../pages/Monitoring';
 import PedagogicalDashboard from '../pages/PedagogicalDashboard';
@@ -116,14 +115,7 @@ export const AppRoutes: React.FC = () => {
             <Training />
           </ProtectedRoute>
         }
-      />
-      <Route
-        path="/help"
-        element={
-          <ProtectedRoute>
-            <Help />
-          </ProtectedRoute>
-        }
+
       />
       <Route
         path="/dashboard"
