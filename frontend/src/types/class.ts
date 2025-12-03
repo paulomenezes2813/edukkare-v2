@@ -10,5 +10,8 @@ export interface Class {
     email: string;
   };
   students?: Array<{ id: number; name: string }>;
+  _count?: {
+    students?: number;
+  };
 }
 

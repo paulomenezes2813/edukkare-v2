@@ -3,6 +3,9 @@ export interface Student {
   name: string;
   birthDate: string;
   shift: string;
+  responsavel?: string;
+  telefone?: string;
+  email?: string;
   class?: {
     name: string;
   };
