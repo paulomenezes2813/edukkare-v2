@@ -282,7 +282,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   // Remover duplicatas baseado em menuItem
                   index === self.findIndex((t) => t.menuItem === item.menuItem)
                 )
-                .filter((item) => item.menuItem !== 'help') // Excluir Ajuda da lista principal
+                .filter((item) => item.menuItem !== 'help') // Excluir Ajuda completamente do menu
                 .sort((a, b) => (a.order || 0) - (b.order || 0)) // Ordenar por order
                 .map((item, index) => renderMenuItem(item, 0))}
             </>
@@ -291,53 +291,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               Nenhum item de menu disponível
             </div>
           )}
-
-          {/* Ajuda - sempre visível, acima de Sair */}
-          {(() => {
-            const helpItem = menuItems.find((item) => item.menuItem === 'help');
-            if (!helpItem) return null;
-            
-            // Verificar acesso apenas se não for ADMIN
-            if (user?.role !== 'ADMIN') {
-              if (!helpItem.active) return null;
-              if (!hasMenuAccess('help')) return null;
-            }
-            
-            return (
-              <button
-                onClick={() => handleMenuClick('help')}
-                style={{
-                  width: '100%',
-                  padding: '1rem 1.5rem',
-                  marginTop: '1rem',
-                  background: 'white',
-                  border: 'none',
-                  borderTop: '2px solid #e2e8f0',
-                  borderLeft: '4px solid transparent',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  cursor: 'pointer',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  color: COLORS.textSecondary,
-                  transition: 'all 0.2s',
-                  textAlign: 'left',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = COLORS.backgroundHover;
-                  e.currentTarget.style.borderLeftColor = COLORS.primary;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'white';
-                  e.currentTarget.style.borderLeftColor = 'transparent';
-                }}
-              >
-                <span style={{ fontSize: '1.5rem' }}>{helpItem.icon || '❓'}</span>
-                <span>{helpItem.menuLabel || 'Ajuda'}</span>
-              </button>
-            );
-          })()}
 
           {/* Sair - sempre visível */}
           <button
