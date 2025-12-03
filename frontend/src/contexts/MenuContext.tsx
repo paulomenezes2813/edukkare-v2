@@ -83,6 +83,16 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return Array.from(uniqueRoots.values());
   };
 
+  // Função para remover item "help" recursivamente
+  const removeHelpItem = (items: MenuItem[]): MenuItem[] => {
+    return items
+      .filter(item => item.menuItem !== 'help')
+      .map(item => ({
+        ...item,
+        children: item.children ? removeHelpItem(item.children) : undefined,
+      }));
+  };
+
   const loadUserMenu = async (role?: string) => {
     setIsLoading(true);
     try {
@@ -94,7 +104,9 @@ export const MenuProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const cleanMenu = Array.isArray(menuTree) ? menuTree : [];
         // Remover duplicatas recursivamente
         const uniqueMenu = removeDuplicates(cleanMenu);
-        setMenuItems(uniqueMenu);
+        // Remover item "help" completamente
+        const menuWithoutHelp = removeHelpItem(uniqueMenu);
+        setMenuItems(menuWithoutHelp);
       } else {
         setMenuItems([]);
       }
