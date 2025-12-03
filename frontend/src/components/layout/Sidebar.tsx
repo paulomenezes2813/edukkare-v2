@@ -283,6 +283,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   index === self.findIndex((t) => t.menuItem === item.menuItem)
                 )
                 .filter((item) => item.menuItem !== 'help') // Excluir Ajuda da lista principal
+                .sort((a, b) => (a.order || 0) - (b.order || 0)) // Ordenar por order
                 .map((item, index) => renderMenuItem(item, 0))}
             </>
           ) : (
