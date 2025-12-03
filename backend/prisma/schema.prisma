@@ -162,17 +162,18 @@ model BNCCCode {
 }
 
 model Activity {
-  id            Int       @id @default(autoincrement())
-  activityCode  String?   @unique // Ex: "E101CG01" - Nullable por enquanto para migração
-  title         String
-  description   String
-  content       String?   @db.Text // Conteúdo completo em markdown/texto
-  duration      Int       // em minutos
-  materials     String?   // JSON com lista de materiais
-  objectives    String    // JSON com objetivos
-  active        Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                Int       @id @default(autoincrement())
+  activityCode      String?   @unique // Ex: "E101CG01" - Nullable por enquanto para migração
+  title             String
+  description       String
+  content           String?   @db.Text // Conteúdo completo em markdown/texto
+  documentationPath String?   // Caminho do arquivo de documentação anexado
+  duration          Int       // em minutos
+  materials         String?   // JSON com lista de materiais
+  objectives        String    // JSON com objetivos
+  active            Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   bnccCodeId    Int
   bnccCode      BNCCCode  @relation(fields: [bnccCodeId], references: [id])

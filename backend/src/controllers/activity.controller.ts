@@ -151,6 +151,56 @@ export const createActivity = async (req: Request, res: Response) => {
   }
 };
 
+export const uploadDocumentation = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const file = req.file;
+
+    if (!file) {
+      return ApiResponse.badRequest(res, 'Nenhum arquivo foi enviado');
+    }
+
+    const activity = await prisma.activity.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!activity) {
+      return ApiResponse.notFound(res, 'Atividade não encontrada');
+    }
+
+    // Atualiza o caminho da documentação (relativo à pasta uploads)
+    const documentationPath = file.path.replace(/\\/g, '/'); // Normaliza caminho para Unix
+    const updatedActivity = await prisma.activity.update({
+      where: { id: Number(id) },
+      data: {
+        documentationPath: documentationPath,
+      },
+      include: {
+        bnccCode: {
+          select: {
+            code: true,
+            name: true,
+            field: true
+          }
+        },
+        rubrics: {
+          select: {
+            id: true,
+            rubricCode: true,
+            name: true,
+            description: true
+          }
+        }
+      }
+    });
+
+    return ApiResponse.success(res, updatedActivity, 'Documentação anexada com sucesso');
+  } catch (error: any) {
+    console.error('Erro ao fazer upload da documentação:', error);
+    return ApiResponse.serverError(res, error.message);
+  }
+};
+
 export const updateActivity = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;

@@ -6,7 +6,8 @@ export const ensureUploadDirectories = () => {
     'uploads',
     'uploads/fotos',
     'uploads/audios',
-    'uploads/videos'
+    'uploads/videos',
+    'uploads/documentos'
   ];
 
   uploadDirs.forEach(dir => {

@@ -31,6 +31,7 @@ interface Activity {
   title: string;
   description: string;
   content?: string;
+  documentationPath?: string;
   duration: number;
   bnccCode?: {
     code: string;
@@ -286,6 +287,8 @@ function App() {
     content: '',
     duration: 30
   });
+  const [documentationFileInput, setDocumentationFileInput] = useState<HTMLInputElement | null>(null);
+  const [uploadingDocumentation, setUploadingDocumentation] = useState<number | null>(null);
 
   // Estados para Rubricas
   const [rubrics, setRubrics] = useState<Rubric[]>([]);
@@ -342,13 +345,19 @@ function App() {
       if (token && userStr && token !== 'fake-token-dev') {
         try {
           const user = JSON.parse(userStr);
+          const userRoleValue = user.role || 'PROFESSOR';
+          const userNivelAcessoValue = user.nivelAcesso || 'PEDAGOGICO';
+          
           setUserName(user.name || '');
-          setUserNivelAcesso(user.nivelAcesso || 'PEDAGOGICO');
-          setUserRole(user.role || 'PROFESSOR');
+          setUserNivelAcesso(userNivelAcessoValue);
+          setUserRole(userRoleValue);
           setIsLoggedIn(true);
+          
+          // Carrega menu ANTES de outras coisas para garantir que está disponível
+          await loadUserMenu(userRoleValue);
+          
           await loadActivities();
           await loadStudents();
-          await loadUserMenu();
         } catch (err) {
           // Token inválido, limpa localStorage
           console.log('❌ Token inválido, limpando sessão...');
@@ -522,12 +531,18 @@ function App() {
         localStorage.setItem('token', data.data.token);
         localStorage.setItem('user', JSON.stringify(data.data.user));
         setIsLoggedIn(true);
+        const userRoleValue = data.data.user.role || 'PROFESSOR';
+        const userNivelAcessoValue = data.data.user.nivelAcesso || 'PEDAGOGICO';
+        
         setUserName(data.data.user.name || '');
-        setUserNivelAcesso(data.data.user.nivelAcesso || 'PEDAGOGICO');
-        setUserRole(data.data.user.role || 'PROFESSOR');
+        setUserNivelAcesso(userNivelAcessoValue);
+        setUserRole(userRoleValue);
+        
+        // Carrega menu ANTES de outras coisas para garantir que está disponível
+        await loadUserMenu(userRoleValue);
+        
         await loadActivities();
         await loadStudents();
-        await loadUserMenu();
       } else {
         setError('Email ou senha inválidos');
       }
@@ -1260,23 +1275,32 @@ function App() {
   };
 
   // CRUD de Menu Permissions
-  const loadUserMenu = async () => {
+  const loadUserMenu = async (role?: string) => {
     try {
       let API_URL = import.meta.env.VITE_API_URL || '/api';
       if (window.location.hostname.includes('railway.app')) {
         API_URL = 'https://edukkare-v2-production.up.railway.app/api';
       }
       const token = localStorage.getItem('token');
+      
+      // Usa o role passado como parâmetro ou o estado atual
+      const currentRole = role || userRole;
 
       // ADMIN sempre tem acesso total
-      if (userRole === 'ADMIN') {
+      if (currentRole === 'ADMIN') {
         // Carrega todas as permissões
         const response = await fetch(`${API_URL}/menu-permissions`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await response.json();
         if (data.success) {
-          setMenuPermissions(data.data || []);
+          // Para ADMIN, retorna array plano de todas as permissões
+          // Mas precisamos converter para árvore para usar na verificação
+          const permissions = data.data || [];
+          // Converte array plano em árvore usando buildMenuTree
+          const menuTree = buildMenuTree(permissions);
+          setMenuPermissions(menuTree);
+          console.log('✅ Menu carregado para ADMIN:', menuTree.length, 'itens principais');
         }
         return;
       }
@@ -1287,11 +1311,18 @@ function App() {
 
       const data = await response.json();
       if (data.success) {
-        setMenuPermissions(data.data || []);
+        // A API retorna árvore hierárquica já formatada
+        const menuTree = data.data || [];
+        setMenuPermissions(menuTree);
+        console.log('✅ Menu carregado para usuário:', menuTree.length, 'itens principais');
+      } else {
+        console.warn('⚠️ Não foi possível carregar menu:', data.message);
+        setMenuPermissions([]);
       }
     } catch (error) {
-      console.error('Erro ao carregar menu do usuário:', error);
-      // Em caso de erro, mantém menu padrão
+      console.error('❌ Erro ao carregar menu do usuário:', error);
+      // Em caso de erro, limpa permissões para forçar verificação
+      setMenuPermissions([]);
     }
   };
 
@@ -1360,9 +1391,11 @@ function App() {
     });
   };
 
-  // Função auxiliar para construir árvore de menu (mantida para uso futuro)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // Função auxiliar para construir árvore de menu
+  // Converte array plano de MenuPermission em árvore hierárquica de MenuItem
   const buildMenuTree = (permissions: MenuPermission[]): MenuItem[] => {
+    if (!permissions || permissions.length === 0) return [];
+    
     const map = new Map<string, MenuItem>();
     const roots: MenuItem[] = [];
 
@@ -1393,14 +1426,16 @@ function App() {
           if (!parent.children) parent.children = [];
           parent.children.push(node);
         } else {
+          // Parent não encontrado, adiciona como raiz
           roots.push(node);
         }
       } else {
+        // Item raiz
         roots.push(node);
       }
     });
 
-    // Ordenar raízes e filhos
+    // Ordenar raízes e filhos por ordem
     const sortByOrder = (items: MenuItem[]) => {
       items.sort((a, b) => a.order - b.order);
       items.forEach(item => {
@@ -1423,16 +1458,28 @@ function App() {
     if (!userNivelAcesso) return true;
     
     // Se menuPermissions está vazio, ainda não carregou - permite acesso temporariamente
-    if (!menuPermissions || menuPermissions.length === 0) return true;
+    // Isso evita que o menu desapareça enquanto carrega
+    if (!menuPermissions || menuPermissions.length === 0) {
+      return true;
+    }
     
-    // Verifica nas permissões carregadas
-    const checkAccess = (items: MenuItem[]): boolean => {
+    // Verifica nas permissões carregadas (pode ser array plano ou árvore)
+    const checkAccess = (items: MenuItem[] | MenuPermission[]): boolean => {
       for (const item of items) {
-        if (item.menuItem === menuItem && item.active) {
+        // Verifica se é MenuItem (com menuItem) ou MenuPermission (com menuItem também)
+        const itemId = (item as MenuItem).menuItem || (item as MenuPermission).menuItem;
+        const isActive = (item as MenuItem).active !== undefined 
+          ? (item as MenuItem).active 
+          : (item as MenuPermission).active;
+        
+        if (itemId === menuItem && isActive) {
           return true;
         }
-        if (item.children && item.children.length > 0) {
-          if (checkAccess(item.children)) return true;
+        
+        // Verifica filhos se existirem
+        const children = (item as MenuItem).children;
+        if (children && children.length > 0) {
+          if (checkAccess(children)) return true;
         }
       }
       return false;
@@ -1613,6 +1660,55 @@ function App() {
     } catch (error: any) {
       alert(`❌ Erro ao salvar atividade: ${error.message}`);
     }
+  };
+
+  const handleUploadDocumentation = async (activity: Activity, file: File) => {
+    try {
+      setUploadingDocumentation(activity.id);
+      
+      let API_URL = import.meta.env.VITE_API_URL || '/api';
+      if (window.location.hostname.includes('railway.app')) {
+        API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+      }
+      const token = localStorage.getItem('token');
+
+      const formData = new FormData();
+      formData.append('document', file);
+
+      const response = await fetch(`${API_URL}/activities/${activity.id}/documentation`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        alert('✅ Documentação anexada com sucesso!');
+        await loadActivities(); // Recarrega atividades para atualizar a lista
+      } else {
+        alert(`❌ Erro: ${data.message || 'Erro ao anexar documentação'}`);
+      }
+    } catch (error: any) {
+      alert(`❌ Erro ao anexar documentação: ${error.message}`);
+    } finally {
+      setUploadingDocumentation(null);
+    }
+  };
+
+  const handleDocumentationClick = (activity: Activity) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.pdf,.doc,.docx,.txt,.md,.html,.xls,.xlsx';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        handleUploadDocumentation(activity, file);
+      }
+    };
+    input.click();
   };
 
   const handleDeleteActivity = async (activity: Activity) => {
@@ -6164,6 +6260,25 @@ function App() {
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <button onClick={() => openActivityModal(activity)} style={{ flex: 1, background: COLORS.primary, color: 'white', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>✏️ Editar</button>
                     <button 
+                      onClick={() => handleDocumentationClick(activity)}
+                      disabled={uploadingDocumentation === activity.id}
+                      style={{ 
+                        background: uploadingDocumentation === activity.id ? '#cbd5e1' : 'linear-gradient(135deg, #3b82f6, #2563eb)', 
+                        color: 'white', 
+                        border: 'none', 
+                        padding: '0.75rem', 
+                        borderRadius: '0.5rem', 
+                        fontSize: '0.875rem', 
+                        fontWeight: '600', 
+                        cursor: uploadingDocumentation === activity.id ? 'not-allowed' : 'pointer',
+                        minWidth: '2.5rem',
+                        opacity: uploadingDocumentation === activity.id ? 0.6 : 1
+                      }}
+                      title="Anexar Documentação"
+                    >
+                      {uploadingDocumentation === activity.id ? '⏳' : '📎'}
+                    </button>
+                    <button 
                       onClick={() => openActivityRubricsModal(activity)} 
                       style={{ 
                         background: 'linear-gradient(135deg, #f59e0b, #d97706)', 
@@ -6182,6 +6297,35 @@ function App() {
                     </button>
                     <button onClick={() => handleDeleteActivity(activity)} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', padding: '0.75rem', borderRadius: '0.5rem', fontSize: '0.875rem', fontWeight: '600', cursor: 'pointer' }}>🗑️</button>
                   </div>
+                  {activity.documentationPath && (
+                    <div style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid #e2e8f0' }}>
+                      <a 
+                        href={(() => {
+                          let API_URL = import.meta.env.VITE_API_URL || '/api';
+                          if (window.location.hostname.includes('railway.app')) {
+                            API_URL = 'https://edukkare-v2-production.up.railway.app/api';
+                          }
+                          // Remove /api se estiver no caminho, pois /uploads é servido diretamente
+                          const baseUrl = API_URL.replace('/api', '');
+                          return `${baseUrl}/${activity.documentationPath}`;
+                        })()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          color: COLORS.primary,
+                          textDecoration: 'none',
+                          fontSize: '0.875rem',
+                          fontWeight: '500'
+                        }}
+                      >
+                        <span>📄</span>
+                        <span>Ver Documentação</span>
+                      </a>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
