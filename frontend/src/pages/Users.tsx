@@ -10,6 +10,11 @@ import type { User } from '../types/auth';
 
 export default function Users() {
   const { users, loading, error, createUser, updateUser, deleteUser } = useUsers();
+  
+  // Debug
+  React.useEffect(() => {
+    console.log('Users page - users:', users, 'loading:', loading, 'error:', error);
+  }, [users, loading, error]);
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [formData, setFormData] = useState({
@@ -102,7 +107,7 @@ export default function Users() {
   }
 
   return (
-    <div style={{ padding: '1rem', paddingBottom: '5rem' }}>
+    <div style={{ padding: '0', paddingBottom: '5rem', width: '100%', position: 'relative', zIndex: 1 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>
@@ -114,8 +119,13 @@ export default function Users() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-        {users.map((user) => (
+      {users.length === 0 && !loading ? (
+        <div style={{ background: COLORS.background, borderRadius: '0.5rem', padding: '2rem', textAlign: 'center' }}>
+          <p style={{ color: COLORS.textTertiary }}>Nenhum usuário cadastrado</p>
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+          {users.map((user) => (
           <div
             key={user.id}
             style={{
@@ -184,8 +194,9 @@ export default function Users() {
               </Button>
             </div>
           </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <button
         onClick={() => openModal()}

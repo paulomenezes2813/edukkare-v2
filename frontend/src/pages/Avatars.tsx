@@ -9,6 +9,11 @@ import type { Avatar } from '../services/avatar.service';
 
 export default function Avatars() {
   const { avatars, loading, error, createAvatar, updateAvatar, deleteAvatar } = useAvatars();
+  
+  // Debug
+  React.useEffect(() => {
+    console.log('Avatars page - avatars:', avatars, 'loading:', loading, 'error:', error);
+  }, [avatars, loading, error]);
   const [showModal, setShowModal] = useState(false);
   const [editingAvatar, setEditingAvatar] = useState<Avatar | null>(null);
   const [avatarForm, setAvatarForm] = useState({ avatar: '' });
@@ -67,7 +72,7 @@ export default function Avatars() {
   }
 
   return (
-    <div style={{ padding: '1rem', paddingBottom: '5rem' }}>
+    <div style={{ padding: '0', paddingBottom: '5rem', width: '100%', position: 'relative', zIndex: 1 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '0.25rem' }}>
@@ -79,8 +84,13 @@ export default function Avatars() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-        {avatars.map((avatar) => (
+      {avatars.length === 0 && !loading ? (
+        <div style={{ background: COLORS.background, borderRadius: '0.5rem', padding: '2rem', textAlign: 'center' }}>
+          <p style={{ color: COLORS.textTertiary }}>Nenhum avatar cadastrado</p>
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+          {avatars.map((avatar) => (
           <div
             key={avatar.id}
             style={{
@@ -131,8 +141,9 @@ export default function Avatars() {
               </Button>
             </div>
           </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <button
         onClick={() => openModal()}

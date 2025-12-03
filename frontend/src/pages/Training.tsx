@@ -6,6 +6,11 @@ import type { Activity } from '../types/activity';
 
 export default function Training() {
   const { activities, loading, error } = useActivities();
+  
+  // Debug
+  React.useEffect(() => {
+    console.log('Training page - activities:', activities, 'loading:', loading, 'error:', error);
+  }, [activities, loading, error]);
 
   if (loading) {
     return <Loading fullScreen text="Carregando treinamentos..." />;
@@ -20,7 +25,7 @@ export default function Training() {
   }
 
   return (
-    <div style={{ padding: '1.5rem', background: COLORS.backgroundSecondary, minHeight: '100vh' }}>
+    <div style={{ padding: '1.5rem', background: COLORS.backgroundSecondary, minHeight: '100vh', width: '100%', position: 'relative', zIndex: 1 }}>
       {/* Header */}
       <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
         <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: COLORS.textPrimary, marginBottom: '0.5rem' }}>

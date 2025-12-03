@@ -19,6 +19,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           padding: '1rem',
           marginTop: '0',
           minHeight: 'calc(100vh - 80px)',
+          position: 'relative',
+          zIndex: 1,
+          overflow: 'visible',
         }}
       >
         {children}

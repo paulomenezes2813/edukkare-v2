@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useApp } from '../../contexts/AppContext';
 import { COLORS } from '../../utils/constants';
 
 interface HeaderProps {
@@ -9,7 +8,6 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const { user } = useAuth();
-  const { currentScreen, setCurrentScreen } = useApp();
 
   return (
     <header
