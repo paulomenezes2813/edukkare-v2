@@ -58,6 +58,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   };
 
   const renderMenuItem = (item: any, level: number = 0) => {
+    // Não renderizar item "Ajuda" em nenhum nível
+    if (item.menuItem === 'help') {
+      return null;
+    }
+
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = localExpanded.has(item.menuItem);
     const isActive = item.active !== false;
@@ -132,6 +137,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               }}
             >
               {item.children
+                .filter((child: any) => child.menuItem !== 'help') // Filtrar Ajuda dos filhos também
                 .sort((a: any, b: any) => (a.order || 0) - (b.order || 0))
                 .map((child: any, childIndex: number) => 
                   renderMenuItem(child, level + 1)
