@@ -13,11 +13,6 @@ export default function Avatars() {
   const [editingAvatar, setEditingAvatar] = useState<Avatar | null>(null);
   const [avatarForm, setAvatarForm] = useState({ avatar: '' });
 
-  // Debug
-  React.useEffect(() => {
-    console.log('Avatars page - avatars:', avatars, 'loading:', loading, 'error:', error);
-  }, [avatars, loading, error]);
-
   const openModal = (avatar?: Avatar) => {
     if (avatar) {
       setEditingAvatar(avatar);
@@ -87,7 +82,7 @@ export default function Avatars() {
         </div>
       </div>
 
-      {avatars.length === 0 ? (
+      {!loading && avatars.length === 0 ? (
         <div style={{ background: COLORS.background, borderRadius: '0.5rem', padding: '2rem', textAlign: 'center' }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎭</div>
           <p style={{ color: COLORS.textTertiary, fontSize: '1.125rem', marginBottom: '0.5rem' }}>Nenhum avatar cadastrado</p>

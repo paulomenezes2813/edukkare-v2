@@ -11,19 +11,24 @@ export const useAvatars = () => {
     setError(null);
     try {
       const response = await avatarService.getAll();
-      console.log('AvatarService response:', response);
-      if (response.success) {
-        const avatarsData = response.data || [];
-        console.log('Avatares carregados:', avatarsData);
-        setAvatars(avatarsData);
-      } else {
-        const errorMsg = response.message || 'Erro ao carregar avatares';
-        console.error('Erro ao carregar avatares:', errorMsg);
-        setError(errorMsg);
+      
+      // A resposta da API vem no formato { success: true, data: [...] }
+      let avatarsData: Avatar[] = [];
+      
+      if (response && response.success) {
+        avatarsData = Array.isArray(response.data) ? response.data : [];
+      } else if (Array.isArray(response)) {
+        // Fallback: se a resposta é um array direto
+        avatarsData = response;
+      } else if (response && response.data) {
+        // Fallback: se tem data mas não tem success
+        avatarsData = Array.isArray(response.data) ? response.data : [];
       }
+      
+      setAvatars(avatarsData);
     } catch (err: any) {
-      console.error('Erro ao carregar avatares (catch):', err);
-      setError(err.message || 'Erro ao carregar avatares');
+      const errorMessage = err.response?.data?.message || err.message || 'Erro ao carregar avatares';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
